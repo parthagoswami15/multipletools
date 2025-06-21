@@ -1,4 +1,3 @@
-
 /* Custom styles for Multi-Tools Website */
 .ad-placeholder {
     display: flex;
@@ -18,4 +17,8 @@
 header .navbar {
     position: relative;
     z-index: 1050; /* Higher than default Bootstrap components */
+}
+
+body {
+    padding-top: 70px; /* Adjust this value based on the actual height of your sticky header */
 } 
