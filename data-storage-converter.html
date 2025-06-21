@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Storage Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-hdd"></i> Data Storage Converter</h1>
+                        <p>Convert between different data storage units quickly and accurately</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit" class="form-label">From Unit</label>
+                                    <select class="form-select" id="fromUnit" onchange="convert()">
+                                        <option value="bit">Bit (b)</option>
+                                        <option value="byte">Byte (B)</option>
+                                        <option value="kilobyte">Kilobyte (KB)</option>
+                                        <option value="megabyte">Megabyte (MB)</option>
+                                        <option value="gigabyte">Gigabyte (GB)</option>
+                                        <option value="terabyte">Terabyte (TB)</option>
+                                        <option value="petabyte">Petabyte (PB)</option>
+                                        <option value="exabyte">Exabyte (EB)</option>
+                                        <option value="zettabyte">Zettabyte (ZB)</option>
+                                        <option value="yottabyte">Yottabyte (YB)</option>
+                                        <option value="kibibyte">Kibibyte (KiB)</option>
+                                        <option value="mebibyte">Mebibyte (MiB)</option>
+                                        <option value="gibibyte">Gibibyte (GiB)</option>
+                                        <option value="tebibyte">Tebibyte (TiB)</option>
+                                        <option value="pebibyte">Pebibyte (PiB)</option>
+                                        <option value="exbibyte">Exbibyte (EiB)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit" class="form-label">To Unit</label>
+                                    <select class="form-select" id="toUnit" onchange="convert()">
+                                        <option value="bit">Bit (b)</option>
+                                        <option value="byte">Byte (B)</option>
+                                        <option value="kilobyte" selected>Kilobyte (KB)</option>
+                                        <option value="megabyte">Megabyte (MB)</option>
+                                        <option value="gigabyte">Gigabyte (GB)</option>
+                                        <option value="terabyte">Terabyte (TB)</option>
+                                        <option value="petabyte">Petabyte (PB)</option>
+                                        <option value="exabyte">Exabyte (EB)</option>
+                                        <option value="zettabyte">Zettabyte (ZB)</option>
+                                        <option value="yottabyte">Yottabyte (YB)</option>
+                                        <option value="kibibyte">Kibibyte (KiB)</option>
+                                        <option value="mebibyte">Mebibyte (MiB)</option>
+                                        <option value="gibibyte">Gibibyte (GiB)</option>
+                                        <option value="tebibyte">Tebibyte (TiB)</option>
+                                        <option value="pebibyte">Pebibyte (PiB)</option>
+                                        <option value="exbibyte">Exbibyte (EiB)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromValue" class="form-label">From Value</label>
+                                    <input type="number" class="form-control" id="fromValue" value="1" oninput="convert()" step="any">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toValue" class="form-label">To Value</label>
+                                    <input type="number" class="form-control" id="toValue" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="swapUnits()">
+                                        <i class="fas fa-exchange-alt"></i> Swap Units
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearConverter()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> All Units Conversion</h4>
+                                    <div class="row" id="allConversions">
+                                        <!-- All conversions will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Unit Information</h4>
+                                    <div id="unitInfo">
+                                        <p class="text-muted">Select a unit to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Conversion History</h4>
+                                    <div id="conversionHistory">
+                                        <p class="text-muted">Recent conversions will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            convert();
+        });
+
+        // Conversion factors to bytes (decimal)
+        const dataUnits = {
+            'bit': 0.125,
+            'byte': 1,
+            'kilobyte': 1000,
+            'megabyte': 1000000,
+            'gigabyte': 1000000000,
+            'terabyte': 1000000000000,
+            'petabyte': 1000000000000000,
+            'exabyte': 1000000000000000000,
+            'zettabyte': 1000000000000000000000,
+            'yottabyte': 1000000000000000000000000,
+            'kibibyte': 1024,
+            'mebibyte': 1048576,
+            'gibibyte': 1073741824,
+            'tebibyte': 1099511627776,
+            'pebibyte': 1125899906842624,
+            'exbibyte': 1152921504606846976
+        };
+
+        const unitNames = {
+            'bit': 'Bit',
+            'byte': 'Byte',
+            'kilobyte': 'Kilobyte',
+            'megabyte': 'Megabyte',
+            'gigabyte': 'Gigabyte',
+            'terabyte': 'Terabyte',
+            'petabyte': 'Petabyte',
+            'exabyte': 'Exabyte',
+            'zettabyte': 'Zettabyte',
+            'yottabyte': 'Yottabyte',
+            'kibibyte': 'Kibibyte',
+            'mebibyte': 'Mebibyte',
+            'gibibyte': 'Gibibyte',
+            'tebibyte': 'Tebibyte',
+            'pebibyte': 'Pebibyte',
+            'exbibyte': 'Exbibyte'
+        };
+
+        const unitSymbols = {
+            'bit': 'b',
+            'byte': 'B',
+            'kilobyte': 'KB',
+            'megabyte': 'MB',
+            'gigabyte': 'GB',
+            'terabyte': 'TB',
+            'petabyte': 'PB',
+            'exabyte': 'EB',
+            'zettabyte': 'ZB',
+            'yottabyte': 'YB',
+            'kibibyte': 'KiB',
+            'mebibyte': 'MiB',
+            'gibibyte': 'GiB',
+            'tebibyte': 'TiB',
+            'pebibyte': 'PiB',
+            'exbibyte': 'EiB'
+        };
+
+        const unitInfo = {
+            'bit': 'The smallest unit of digital information. 8 bits = 1 byte.',
+            'byte': 'The basic unit of digital information. Equal to 8 bits.',
+            'kilobyte': 'Equal to 1,000 bytes (decimal) or 1,024 bytes (binary).',
+            'megabyte': 'Equal to 1,000,000 bytes (decimal) or 1,048,576 bytes (binary).',
+            'gigabyte': 'Equal to 1,000,000,000 bytes (decimal) or 1,073,741,824 bytes (binary).',
+            'terabyte': 'Equal to 1,000,000,000,000 bytes (decimal) or 1,099,511,627,776 bytes (binary).',
+            'petabyte': 'Equal to 1,000,000,000,000,000 bytes (decimal).',
+            'exabyte': 'Equal to 1,000,000,000,000,000,000 bytes (decimal).',
+            'zettabyte': 'Equal to 1,000,000,000,000,000,000,000 bytes (decimal).',
+            'yottabyte': 'Equal to 1,000,000,000,000,000,000,000,000 bytes (decimal).',
+            'kibibyte': 'Equal to 1,024 bytes (binary). Used in computing.',
+            'mebibyte': 'Equal to 1,048,576 bytes (binary). Used in computing.',
+            'gibibyte': 'Equal to 1,073,741,824 bytes (binary). Used in computing.',
+            'tebibyte': 'Equal to 1,099,511,627,776 bytes (binary). Used in computing.',
+            'pebibyte': 'Equal to 1,125,899,906,842,624 bytes (binary). Used in computing.',
+            'exbibyte': 'Equal to 1,152,921,504,606,846,976 bytes (binary). Used in computing.'
+        };
+
+        let conversionHistory = [];
+
+        function convert() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
+
+            // Convert to bytes first, then to target unit
+            const bytes = fromValue * dataUnits[fromUnit];
+            const result = bytes / dataUnits[toUnit];
+
+            document.getElementById('toValue').value = result.toFixed(6);
+
+            // Update all conversions
+            updateAllConversions(fromValue, fromUnit);
+            
+            // Update unit info
+            updateUnitInfo(fromUnit);
+            
+            // Add to history
+            addToHistory(fromValue, fromUnit, result, toUnit);
+        }
+
+        function updateAllConversions(value, fromUnit) {
+            const container = document.getElementById('allConversions');
+            let html = '';
+
+            Object.keys(dataUnits).forEach(unit => {
+                if (unit !== fromUnit) {
+                    const bytes = value * dataUnits[fromUnit];
+                    const converted = bytes / dataUnits[unit];
+                    const symbol = unitSymbols[unit];
+                    const name = unitNames[unit];
+                    
+                    html += `
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="conversion-item">
+                                <strong>${name}</strong><br>
+                                <span class="conversion-value">${converted.toFixed(6)} ${symbol}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateUnitInfo(unit) {
+            const info = document.getElementById('unitInfo');
+            info.innerHTML = `
+                <h5>${unitNames[unit]} (${unitSymbols[unit]})</h5>
+                <p>${unitInfo[unit]}</p>
+                <p><strong>In bytes:</strong> ${dataUnits[unit]} B</p>
+            `;
+        }
+
+        function addToHistory(fromValue, fromUnit, toValue, toUnit) {
+            const conversion = {
+                from: `${fromValue} ${unitSymbols[fromUnit]}`,
+                to: `${toValue.toFixed(6)} ${unitSymbols[toUnit]}`,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            conversionHistory.unshift(conversion);
+            if (conversionHistory.length > 5) {
+                conversionHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('conversionHistory');
+            if (conversionHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No conversions yet</p>';
+                return;
+            }
+
+            let html = '';
+            conversionHistory.forEach(conv => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${conv.timestamp}</small><br>
+                        ${conv.from} → ${conv.to}
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = document.getElementById('fromValue').value;
+            const toValue = document.getElementById('toValue').value;
+
+            document.getElementById('fromUnit').value = toUnit;
+            document.getElementById('toUnit').value = fromUnit;
+            document.getElementById('fromValue').value = toValue;
+            document.getElementById('toValue').value = fromValue;
+
+            convert();
+        }
+
+        function clearConverter() {
+            document.getElementById('fromValue').value = '';
+            document.getElementById('toValue').value = '';
+            document.getElementById('allConversions').innerHTML = '';
+            document.getElementById('unitInfo').innerHTML = '<p class="text-muted">Select a unit to see information</p>';
+        }
+
+        function loadSample() {
+            document.getElementById('fromUnit').value = 'gigabyte';
+            document.getElementById('toUnit').value = 'megabyte';
+            document.getElementById('fromValue').value = '1';
+            convert();
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversion-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .conversion-value {
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

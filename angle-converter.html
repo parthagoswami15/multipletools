@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angle Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-compass"></i> Angle Converter</h1>
+                        <p>Convert between different angle units quickly and accurately</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit" class="form-label">From Unit</label>
+                                    <select class="form-select" id="fromUnit" onchange="convert()">
+                                        <option value="degree">Degree (°)</option>
+                                        <option value="radian">Radian (rad)</option>
+                                        <option value="gradian">Gradian (grad)</option>
+                                        <option value="arcminute">Arcminute (′)</option>
+                                        <option value="arcsecond">Arcsecond (″)</option>
+                                        <option value="mil">Mil (mil)</option>
+                                        <option value="revolution">Revolution (rev)</option>
+                                        <option value="quadrant">Quadrant (quad)</option>
+                                        <option value="sextant">Sextant (sextant)</option>
+                                        <option value="octant">Octant (octant)</option>
+                                        <option value="sign">Sign (sign)</option>
+                                        <option value="point">Point (point)</option>
+                                        <option value="hour">Hour (h)</option>
+                                        <option value="minute">Minute (min)</option>
+                                        <option value="second">Second (s)</option>
+                                        <option value="turn">Turn (turn)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit" class="form-label">To Unit</label>
+                                    <select class="form-select" id="toUnit" onchange="convert()">
+                                        <option value="degree">Degree (°)</option>
+                                        <option value="radian" selected>Radian (rad)</option>
+                                        <option value="gradian">Gradian (grad)</option>
+                                        <option value="arcminute">Arcminute (′)</option>
+                                        <option value="arcsecond">Arcsecond (″)</option>
+                                        <option value="mil">Mil (mil)</option>
+                                        <option value="revolution">Revolution (rev)</option>
+                                        <option value="quadrant">Quadrant (quad)</option>
+                                        <option value="sextant">Sextant (sextant)</option>
+                                        <option value="octant">Octant (octant)</option>
+                                        <option value="sign">Sign (sign)</option>
+                                        <option value="point">Point (point)</option>
+                                        <option value="hour">Hour (h)</option>
+                                        <option value="minute">Minute (min)</option>
+                                        <option value="second">Second (s)</option>
+                                        <option value="turn">Turn (turn)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromValue" class="form-label">From Value</label>
+                                    <input type="number" class="form-control" id="fromValue" value="90" oninput="convert()" step="any">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toValue" class="form-label">To Value</label>
+                                    <input type="number" class="form-control" id="toValue" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="swapUnits()">
+                                        <i class="fas fa-exchange-alt"></i> Swap Units
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearConverter()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> All Units Conversion</h4>
+                                    <div class="row" id="allConversions">
+                                        <!-- All conversions will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Unit Information</h4>
+                                    <div id="unitInfo">
+                                        <p class="text-muted">Select a unit to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Conversion History</h4>
+                                    <div id="conversionHistory">
+                                        <p class="text-muted">Recent conversions will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            convert();
+        });
+
+        const unitNames = {
+            'degree': 'Degree',
+            'radian': 'Radian',
+            'gradian': 'Gradian',
+            'arcminute': 'Arcminute',
+            'arcsecond': 'Arcsecond',
+            'mil': 'Mil',
+            'revolution': 'Revolution',
+            'quadrant': 'Quadrant',
+            'sextant': 'Sextant',
+            'octant': 'Octant',
+            'sign': 'Sign',
+            'point': 'Point',
+            'hour': 'Hour',
+            'minute': 'Minute',
+            'second': 'Second',
+            'turn': 'Turn'
+        };
+
+        const unitSymbols = {
+            'degree': '°',
+            'radian': 'rad',
+            'gradian': 'grad',
+            'arcminute': '′',
+            'arcsecond': '″',
+            'mil': 'mil',
+            'revolution': 'rev',
+            'quadrant': 'quad',
+            'sextant': 'sextant',
+            'octant': 'octant',
+            'sign': 'sign',
+            'point': 'point',
+            'hour': 'h',
+            'minute': 'min',
+            'second': 's',
+            'turn': 'turn'
+        };
+
+        const unitInfo = {
+            'degree': 'The most common unit of angle measurement. 360 degrees = 1 full circle.',
+            'radian': 'The SI unit of angle. 2π radians = 1 full circle. Used in mathematics and physics.',
+            'gradian': 'A unit where 400 gradians = 1 full circle. Used in surveying.',
+            'arcminute': 'Equal to 1/60 of a degree. Used in astronomy and navigation.',
+            'arcsecond': 'Equal to 1/60 of an arcminute or 1/3600 of a degree.',
+            'mil': 'Equal to 1/6400 of a full circle. Used in military applications.',
+            'revolution': 'One complete turn around a circle. Equal to 360 degrees.',
+            'quadrant': 'One quarter of a circle. Equal to 90 degrees.',
+            'sextant': 'One sixth of a circle. Equal to 60 degrees.',
+            'octant': 'One eighth of a circle. Equal to 45 degrees.',
+            'sign': 'One twelfth of a circle. Equal to 30 degrees.',
+            'point': 'One thirty-second of a circle. Equal to 11.25 degrees.',
+            'hour': 'One twenty-fourth of a circle. Equal to 15 degrees.',
+            'minute': 'One sixtieth of an hour. Equal to 0.25 degrees.',
+            'second': 'One sixtieth of a minute. Equal to 0.004167 degrees.',
+            'turn': 'One complete rotation. Equal to 360 degrees.'
+        };
+
+        let conversionHistory = [];
+
+        function convert() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
+
+            // Convert to degrees first, then to target unit
+            const degrees = toDegrees(fromValue, fromUnit);
+            const result = fromDegrees(degrees, toUnit);
+
+            document.getElementById('toValue').value = result.toFixed(6);
+
+            // Update all conversions
+            updateAllConversions(fromValue, fromUnit);
+            
+            // Update unit info
+            updateUnitInfo(fromUnit);
+            
+            // Add to history
+            addToHistory(fromValue, fromUnit, result, toUnit);
+        }
+
+        function toDegrees(value, unit) {
+            switch(unit) {
+                case 'degree': return value;
+                case 'radian': return value * 180 / Math.PI;
+                case 'gradian': return value * 0.9;
+                case 'arcminute': return value / 60;
+                case 'arcsecond': return value / 3600;
+                case 'mil': return value * 0.05625;
+                case 'revolution': return value * 360;
+                case 'quadrant': return value * 90;
+                case 'sextant': return value * 60;
+                case 'octant': return value * 45;
+                case 'sign': return value * 30;
+                case 'point': return value * 11.25;
+                case 'hour': return value * 15;
+                case 'minute': return value * 0.25;
+                case 'second': return value * 0.004167;
+                case 'turn': return value * 360;
+                default: return value;
+            }
+        }
+
+        function fromDegrees(degrees, unit) {
+            switch(unit) {
+                case 'degree': return degrees;
+                case 'radian': return degrees * Math.PI / 180;
+                case 'gradian': return degrees / 0.9;
+                case 'arcminute': return degrees * 60;
+                case 'arcsecond': return degrees * 3600;
+                case 'mil': return degrees / 0.05625;
+                case 'revolution': return degrees / 360;
+                case 'quadrant': return degrees / 90;
+                case 'sextant': return degrees / 60;
+                case 'octant': return degrees / 45;
+                case 'sign': return degrees / 30;
+                case 'point': return degrees / 11.25;
+                case 'hour': return degrees / 15;
+                case 'minute': return degrees / 0.25;
+                case 'second': return degrees / 0.004167;
+                case 'turn': return degrees / 360;
+                default: return degrees;
+            }
+        }
+
+        function updateAllConversions(value, fromUnit) {
+            const container = document.getElementById('allConversions');
+            let html = '';
+
+            const units = ['degree', 'radian', 'gradian', 'arcminute', 'arcsecond', 'revolution'];
+            
+            units.forEach(unit => {
+                if (unit !== fromUnit) {
+                    const degrees = toDegrees(value, fromUnit);
+                    const converted = fromDegrees(degrees, unit);
+                    const symbol = unitSymbols[unit];
+                    const name = unitNames[unit];
+                    
+                    html += `
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="conversion-item">
+                                <strong>${name}</strong><br>
+                                <span class="conversion-value">${converted.toFixed(6)} ${symbol}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateUnitInfo(unit) {
+            const info = document.getElementById('unitInfo');
+            info.innerHTML = `
+                <h5>${unitNames[unit]} (${unitSymbols[unit]})</h5>
+                <p>${unitInfo[unit]}</p>
+            `;
+        }
+
+        function addToHistory(fromValue, fromUnit, toValue, toUnit) {
+            const conversion = {
+                from: `${fromValue} ${unitSymbols[fromUnit]}`,
+                to: `${toValue.toFixed(6)} ${unitSymbols[toUnit]}`,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            conversionHistory.unshift(conversion);
+            if (conversionHistory.length > 5) {
+                conversionHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('conversionHistory');
+            if (conversionHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No conversions yet</p>';
+                return;
+            }
+
+            let html = '';
+            conversionHistory.forEach(conv => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${conv.timestamp}</small><br>
+                        ${conv.from} → ${conv.to}
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = document.getElementById('fromValue').value;
+            const toValue = document.getElementById('toValue').value;
+
+            document.getElementById('fromUnit').value = toUnit;
+            document.getElementById('toUnit').value = fromUnit;
+            document.getElementById('fromValue').value = toValue;
+            document.getElementById('toValue').value = fromValue;
+
+            convert();
+        }
+
+        function clearConverter() {
+            document.getElementById('fromValue').value = '';
+            document.getElementById('toValue').value = '';
+            document.getElementById('allConversions').innerHTML = '';
+            document.getElementById('unitInfo').innerHTML = '<p class="text-muted">Select a unit to see information</p>';
+        }
+
+        function loadSample() {
+            document.getElementById('fromUnit').value = 'degree';
+            document.getElementById('toUnit').value = 'radian';
+            document.getElementById('fromValue').value = '90';
+            convert();
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversion-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .conversion-value {
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

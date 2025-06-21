@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTACCESS Redirect Generator - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-exchange-alt"></i> HTACCESS Redirect Generator</h1>
+                        <p>Generate Apache .htaccess redirect rules for various scenarios</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="redirectType" class="form-label">Redirect Type</label>
+                                    <select class="form-select" id="redirectType" onchange="updateForm()">
+                                        <option value="301">301 (Permanent Redirect)</option>
+                                        <option value="302">302 (Temporary Redirect)</option>
+                                        <option value="307">307 (Temporary Redirect - Preserve Method)</option>
+                                        <option value="308">308 (Permanent Redirect - Preserve Method)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="redirectScenario" class="form-label">Redirect Scenario</label>
+                                    <select class="form-select" id="redirectScenario" onchange="updateForm()">
+                                        <option value="simple">Simple URL Redirect</option>
+                                        <option value="www">WWW to Non-WWW</option>
+                                        <option value="nonwww">Non-WWW to WWW</option>
+                                        <option value="https">HTTP to HTTPS</option>
+                                        <option value="trailing">Remove Trailing Slash</option>
+                                        <option value="addtrailing">Add Trailing Slash</option>
+                                        <option value="custom">Custom Redirect</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="formFields">
+                            <!-- Dynamic form fields will be loaded here -->
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="generateRedirect()">
+                                        <i class="fas fa-magic"></i> Generate Redirect
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="copyRedirect()">
+                                        <i class="fas fa-copy"></i> Copy to Clipboard
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearForm()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="htaccessOutput" class="form-label">Generated .htaccess Code</label>
+                                    <textarea class="form-control" id="htaccessOutput" rows="10" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Redirect Information</h4>
+                                    <div id="redirectInfo">
+                                        <p class="text-muted">Generate a redirect to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-lightbulb"></i> Tips & Best Practices</h4>
+                                    <div id="tipsSection">
+                                        <ul>
+                                            <li>Use 301 for permanent redirects</li>
+                                            <li>Use 302 for temporary redirects</li>
+                                            <li>Test redirects in a staging environment first</li>
+                                            <li>Keep redirects simple and efficient</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            updateForm();
+        });
+
+        function updateForm() {
+            const scenario = document.getElementById('redirectScenario').value;
+            const formFields = document.getElementById('formFields');
+            
+            let html = '<div class="row mb-4">';
+            
+            switch(scenario) {
+                case 'simple':
+                    html += `
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fromUrl" class="form-label">From URL</label>
+                                <input type="text" class="form-control" id="fromUrl" placeholder="/old-page">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="toUrl" class="form-label">To URL</label>
+                                <input type="text" class="form-control" id="toUrl" placeholder="/new-page">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'www':
+                case 'nonwww':
+                    html += `
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="domain" class="form-label">Domain</label>
+                                <input type="text" class="form-control" id="domain" placeholder="example.com">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'https':
+                    html += `
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="domain" class="form-label">Domain</label>
+                                <input type="text" class="form-control" id="domain" placeholder="example.com">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'trailing':
+                case 'addtrailing':
+                    html += `
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="directory" class="form-label">Directory (optional)</label>
+                                <input type="text" class="form-control" id="directory" placeholder="/blog">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'custom':
+                    html += `
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="customRule" class="form-label">Custom Rule</label>
+                                <input type="text" class="form-control" id="customRule" placeholder="RewriteRule ^old/(.*)$ /new/$1 [R=301,L]">
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            html += '</div>';
+            formFields.innerHTML = html;
+        }
+
+        function generateRedirect() {
+            const type = document.getElementById('redirectType').value;
+            const scenario = document.getElementById('redirectScenario').value;
+            let output = '';
+            let info = '';
+            
+            switch(scenario) {
+                case 'simple':
+                    const fromUrl = document.getElementById('fromUrl').value.trim();
+                    const toUrl = document.getElementById('toUrl').value.trim();
+                    
+                    if (!fromUrl || !toUrl) {
+                        alert('Please enter both From and To URLs');
+                        return;
+                    }
+                    
+                    output = `RewriteEngine On
+RewriteRule ^${fromUrl.replace(/^\//, '')}$ ${toUrl} [R=${type},L]`;
+                    
+                    info = `Redirects ${fromUrl} to ${toUrl} with ${type} status code`;
+                    break;
+                    
+                case 'www':
+                    const domain1 = document.getElementById('domain').value.trim();
+                    if (!domain1) {
+                        alert('Please enter a domain');
+                        return;
+                    }
+                    
+                    output = `RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.${domain1.replace(/^www\./, '')} [NC]
+RewriteRule ^(.*)$ http://${domain1.replace(/^www\./, '')}/$1 [R=${type},L]`;
+                    
+                    info = `Redirects www.${domain1.replace(/^www\./, '')} to ${domain1.replace(/^www\./, '')}`;
+                    break;
+                    
+                case 'nonwww':
+                    const domain2 = document.getElementById('domain').value.trim();
+                    if (!domain2) {
+                        alert('Please enter a domain');
+                        return;
+                    }
+                    
+                    output = `RewriteEngine On
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^(.*)$ http://www.${domain2.replace(/^www\./, '')}/$1 [R=${type},L]`;
+                    
+                    info = `Redirects ${domain2.replace(/^www\./, '')} to www.${domain2.replace(/^www\./, '')}`;
+                    break;
+                    
+                case 'https':
+                    const domain3 = document.getElementById('domain').value.trim();
+                    if (!domain3) {
+                        alert('Please enter a domain');
+                        return;
+                    }
+                    
+                    output = `RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://${domain3}/$1 [R=${type},L]`;
+                    
+                    info = `Redirects HTTP to HTTPS for ${domain3}`;
+                    break;
+                    
+                case 'trailing':
+                    const directory1 = document.getElementById('directory').value.trim();
+                    const path1 = directory1 ? directory1 : '';
+                    
+                    output = `RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [R=${type},L]`;
+                    
+                    info = `Removes trailing slashes from URLs${path1 ? ` in ${path1}` : ''}`;
+                    break;
+                    
+                case 'addtrailing':
+                    const directory2 = document.getElementById('directory').value.trim();
+                    const path2 = directory2 ? directory2 : '';
+                    
+                    output = `RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !(.*)/$
+RewriteRule ^(.*)$ $1/ [R=${type},L]`;
+                    
+                    info = `Adds trailing slashes to URLs${path2 ? ` in ${path2}` : ''}`;
+                    break;
+                    
+                case 'custom':
+                    const customRule = document.getElementById('customRule').value.trim();
+                    if (!customRule) {
+                        alert('Please enter a custom rule');
+                        return;
+                    }
+                    
+                    output = `RewriteEngine On
+${customRule}`;
+                    
+                    info = 'Custom redirect rule applied';
+                    break;
+            }
+            
+            document.getElementById('htaccessOutput').value = output;
+            document.getElementById('redirectInfo').innerHTML = `<p>${info}</p>`;
+        }
+
+        function copyRedirect() {
+            const output = document.getElementById('htaccessOutput').value;
+            if (!output) {
+                alert('No redirect code to copy');
+                return;
+            }
+            
+            navigator.clipboard.writeText(output).then(() => {
+                alert('Redirect code copied to clipboard!');
+            }).catch(() => {
+                alert('Failed to copy to clipboard');
+            });
+        }
+
+        function clearForm() {
+            document.getElementById('htaccessOutput').value = '';
+            document.getElementById('redirectInfo').innerHTML = '<p class="text-muted">Generate a redirect to see information</p>';
+            
+            // Clear input fields
+            const inputs = document.querySelectorAll('#formFields input');
+            inputs.forEach(input => input.value = '');
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

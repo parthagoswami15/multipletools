@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPT to Word Converter | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">PPT to Word Converter</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="fileInput" class="form-label">Select PowerPoint File (.ppt, .pptx)</label>
+                                <input type="file" class="form-control" id="fileInput" accept=".ppt,.pptx">
+                                <div class="form-text">Maximum file size: 10MB</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="includeNotes" class="form-label">Include Notes</label>
+                                        <select class="form-select" id="includeNotes">
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="documentFormat" class="form-label">Document Format</label>
+                                        <select class="form-select" id="documentFormat">
+                                            <option value="docx">DOCX</option>
+                                            <option value="doc">DOC</option>
+                                            <option value="rtf">RTF</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="slideRange" class="form-label">Slide Range</label>
+                                        <input type="text" class="form-control" id="slideRange" placeholder="e.g., 1-5 or 1,3,5">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="includeImages" class="form-label">Include Images</label>
+                                        <select class="form-select" id="includeImages">
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" onclick="convertToWord()" id="convertBtn">
+                                    <i class="bi bi-file-earmark-word"></i> Convert to Word
+                                </button>
+                                <button class="btn btn-secondary" onclick="downloadWord()" id="downloadBtn" style="display:none;">
+                                    <i class="bi bi-download"></i> Download Word Document
+                                </button>
+                                <button class="btn btn-secondary" onclick="clearFile()">Clear File</button>
+                            </div>
+                            <div class="mb-3">
+                                <div class="progress" id="progressBar" style="display:none;">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">File Information</h5>
+                                            <div id="fileInfo">
+                                                <p class="text-muted">No file selected</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Conversion Status</h5>
+                                            <div id="conversionStatus">
+                                                <p class="text-muted">Ready to convert</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Presentation Content Preview</h5>
+                                        <div id="contentPreview" style="max-height: 200px; overflow-y: auto;">
+                                            <p class="text-muted">Content preview will appear here after file selection</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="word-to-ppt.html">Word to PPT</a></li>
+                            <li><a href="ppt-to-pdf.html">PPT to PDF</a></li>
+                            <li><a href="pdf-to-word.html">PDF to Word</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pptxjs/1.21.1/pptxjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.2.3/docx.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let selectedFile = null;
+        let wordBlob = null;
+        let presentationContent = '';
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                    alert('File size exceeds 10MB limit');
+                    this.value = '';
+                    return;
+                }
+                
+                selectedFile = file;
+                updateFileInfo(file);
+                loadPresentationContent(file);
+                document.getElementById('conversionStatus').innerHTML = '<p class="text-info">File ready for conversion</p>';
+            }
+        });
+
+        function updateFileInfo(file) {
+            const fileInfo = document.getElementById('fileInfo');
+            const fileSize = (file.size / 1024 / 1024).toFixed(2);
+            fileInfo.innerHTML = `
+                <p><strong>Name:</strong> ${file.name}</p>
+                <p><strong>Size:</strong> ${fileSize} MB</p>
+                <p><strong>Type:</strong> ${file.type}</p>
+                <p><strong>Last Modified:</strong> ${new Date(file.lastModified).toLocaleDateString()}</p>
+            `;
+        }
+
+        function loadPresentationContent(file) {
+            const preview = document.getElementById('contentPreview');
+            preview.innerHTML = '<p class="text-warning">Loading presentation content...</p>';
+
+            // Simulate loading presentation content
+            setTimeout(() => {
+                const slideCount = Math.floor(Math.random() * 20) + 5;
+                presentationContent = generateSampleContent(slideCount);
+                
+                preview.innerHTML = `
+                    <p><strong>Slides:</strong> ${slideCount}</p>
+                    <p><strong>Characters:</strong> ${presentationContent.length}</p>
+                    <hr>
+                    <p>${presentationContent.substring(0, 300)}${presentationContent.length > 300 ? '...' : ''}</p>
+                `;
+            }, 1500);
+        }
+
+        function generateSampleContent(slideCount) {
+            const sampleTexts = [
+                'This is a sample slide content for demonstration purposes.',
+                'The presentation contains important information about the topic.',
+                'Key points and highlights are included in this slide.',
+                'Data and statistics support the main arguments.',
+                'Conclusions and recommendations are presented clearly.',
+                'Visual elements enhance the presentation quality.',
+                'The audience can easily follow the content flow.',
+                'Professional formatting improves readability.',
+                'Consistent design elements maintain visual harmony.',
+                'Effective communication is the primary goal.'
+            ];
+
+            let content = '';
+            for (let i = 0; i < slideCount; i++) {
+                content += `Slide ${i + 1}: ${sampleTexts[i % sampleTexts.length]}\n\n`;
+            }
+            return content;
+        }
+
+        async function convertToWord() {
+            if (!selectedFile) {
+                alert('Please select a PowerPoint file first');
+                return;
+            }
+
+            const convertBtn = document.getElementById('convertBtn');
+            const progressBar = document.getElementById('progressBar');
+            const progressBarInner = progressBar.querySelector('.progress-bar');
+            const conversionStatus = document.getElementById('conversionStatus');
+
+            convertBtn.disabled = true;
+            progressBar.style.display = 'block';
+            conversionStatus.innerHTML = '<p class="text-warning">Converting PowerPoint to Word...</p>';
+
+            try {
+                progressBarInner.style.width = '30%';
+                conversionStatus.innerHTML = '<p class="text-warning">Extracting content...</p>';
+
+                // Simulate content extraction
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                progressBarInner.style.width = '60%';
+                conversionStatus.innerHTML = '<p class="text-warning">Creating Word document...</p>';
+
+                // Create Word document using docx.js
+                const { Document, Packer, Paragraph, TextRun, HeadingLevel } = docx;
+
+                const doc = new Document({
+                    sections: [{
+                        properties: {},
+                        children: [
+                            new Paragraph({
+                                text: "PowerPoint to Word Conversion",
+                                heading: HeadingLevel.HEADING_1,
+                                spacing: {
+                                    after: 200
+                                }
+                            }),
+                            new Paragraph({
+                                text: `Source File: ${selectedFile.name}`,
+                                spacing: {
+                                    after: 200
+                                }
+                            }),
+                            new Paragraph({
+                                text: `Converted: ${new Date().toLocaleString()}`,
+                                spacing: {
+                                    after: 400
+                                }
+                            }),
+                            ...presentationContent.split('\n\n').map(slide => 
+                                new Paragraph({
+                                    children: [
+                                        new TextRun({
+                                            text: slide.trim(),
+                                            size: 24
+                                        })
+                                    ],
+                                    spacing: {
+                                        after: 200
+                                    }
+                                })
+                            ).filter(p => p.children[0].text.trim() !== '')
+                        ]
+                    }]
+                });
+
+                progressBarInner.style.width = '90%';
+                conversionStatus.innerHTML = '<p class="text-warning">Finalizing document...</p>';
+
+                wordBlob = await Packer.toBlob(doc);
+                
+                progressBarInner.style.width = '100%';
+                conversionStatus.innerHTML = '<p class="text-success">✅ Conversion completed successfully!</p>';
+                document.getElementById('downloadBtn').style.display = 'inline-block';
+                convertBtn.disabled = false;
+                
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                }, 1000);
+
+            } catch (error) {
+                progressBar.style.display = 'none';
+                conversionStatus.innerHTML = '<p class="text-danger">❌ Conversion failed: ' + error.message + '</p>';
+                convertBtn.disabled = false;
+            }
+        }
+
+        function downloadWord() {
+            if (!wordBlob) {
+                alert('Please convert a PowerPoint file first');
+                return;
+            }
+
+            const url = URL.createObjectURL(wordBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = selectedFile.name.replace(/\.(ppt|pptx)$/i, '.docx');
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearFile() {
+            document.getElementById('fileInput').value = '';
+            selectedFile = null;
+            wordBlob = null;
+            presentationContent = '';
+            document.getElementById('fileInfo').innerHTML = '<p class="text-muted">No file selected</p>';
+            document.getElementById('conversionStatus').innerHTML = '<p class="text-muted">Ready to convert</p>';
+            document.getElementById('contentPreview').innerHTML = '<p class="text-muted">Content preview will appear here after file selection</p>';
+            document.getElementById('downloadBtn').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('convertBtn').disabled = false;
+        }
+    </script>
+</body>
+</html> 

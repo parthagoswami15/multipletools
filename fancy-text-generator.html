@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fancy Text Generator | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Fancy Text Generator</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="inputText" class="form-label">Enter your text</label>
+                                <textarea class="form-control" id="inputText" rows="4" placeholder="Type your text here to convert it to fancy styles..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" onclick="generateAll()">Generate All Styles</button>
+                                <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+                            </div>
+                            <div id="fancyResults">
+                                <!-- Fancy text results will be generated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="case-converter.html">Case Converter</a></li>
+                            <li><a href="character-counter.html">Character Counter</a></li>
+                            <li><a href="random-text-generator.html">Random Text Generator</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        const fancyStyles = [
+            {
+                name: "Bold",
+                transform: (text) => text.split('').map(char => char + '\u0332').join('')
+            },
+            {
+                name: "Italic",
+                transform: (text) => text.split('').map(char => char + '\u0333').join('')
+            },
+            {
+                name: "Bold Italic",
+                transform: (text) => text.split('').map(char => char + '\u0332\u0333').join('')
+            },
+            {
+                name: "Double Struck",
+                transform: (text) => text.split('').map(char => {
+                    const code = char.charCodeAt(0);
+                    if (code >= 65 && code <= 90) return String.fromCharCode(code + 120205);
+                    if (code >= 97 && code <= 122) return String.fromCharCode(code + 120211);
+                    if (code >= 48 && code <= 57) return String.fromCharCode(code + 120734);
+                    return char;
+                }).join('')
+            },
+            {
+                name: "Script",
+                transform: (text) => text.split('').map(char => {
+                    const code = char.charCodeAt(0);
+                    if (code >= 65 && code <= 90) return String.fromCharCode(code + 120276);
+                    if (code >= 97 && code <= 122) return String.fromCharCode(code + 120302);
+                    return char;
+                }).join('')
+            },
+            {
+                name: "Bold Script",
+                transform: (text) => text.split('').map(char => {
+                    const code = char.charCodeAt(0);
+                    if (code >= 65 && code <= 90) return String.fromCharCode(code + 120276);
+                    if (code >= 97 && code <= 122) return String.fromCharCode(code + 120302);
+                    return char;
+                }).join('').split('').map(char => char + '\u0332').join('')
+            },
+            {
+                name: "Sans Serif",
+                transform: (text) => text.split('').map(char => {
+                    const code = char.charCodeAt(0);
+                    if (code >= 65 && code <= 90) return String.fromCharCode(code + 120211);
+                    if (code >= 97 && code <= 122) return String.fromCharCode(code + 120205);
+                    if (code >= 48 && code <= 57) return String.fromCharCode(code + 120816);
+                    return char;
+                }).join('')
+            },
+            {
+                name: "Bold Sans Serif",
+                transform: (text) => text.split('').map(char => {
+                    const code = char.charCodeAt(0);
+                    if (code >= 65 && code <= 90) return String.fromCharCode(code + 120211);
+                    if (code >= 97 && code <= 122) return String.fromCharCode(code + 120205);
+                    if (code >= 48 && code <= 57) return String.fromCharCode(code + 120816);
+                    return char;
+                }).join('').split('').map(char => char + '\u0332').join('')
+            },
+            {
+                name: "Monospace",
+                transform: (text) => text.split('').map(char => {
+                    const code = char.charCodeAt(0);
+                    if (code >= 65 && code <= 90) return String.fromCharCode(code + 120367);
+                    if (code >= 97 && code <= 122) return String.fromCharCode(code + 120393);
+                    if (code >= 48 && code <= 57) return String.fromCharCode(code + 120822);
+                    return char;
+                }).join('')
+            },
+            {
+                name: "Circled",
+                transform: (text) => text.split('').map(char => {
+                    const code = char.charCodeAt(0);
+                    if (code >= 65 && code <= 90) return String.fromCharCode(code + 9333);
+                    if (code >= 97 && code <= 122) return String.fromCharCode(code + 9327);
+                    if (code >= 48 && code <= 57) return String.fromCharCode(code + 9312);
+                    return char;
+                }).join('')
+            },
+            {
+                name: "Squared",
+                transform: (text) => text.split('').map(char => {
+                    const code = char.charCodeAt(0);
+                    if (code >= 65 && code <= 90) return String.fromCharCode(code + 127462);
+                    if (code >= 97 && code <= 122) return String.fromCharCode(code + 127462);
+                    return char;
+                }).join('')
+            },
+            {
+                name: "Reversed",
+                transform: (text) => text.split('').reverse().join('')
+            },
+            {
+                name: "Upside Down",
+                transform: (text) => text.split('').map(char => {
+                    const upsideDownMap = {
+                        'a': 'ɐ', 'b': 'q', 'c': 'ɔ', 'd': 'p', 'e': 'ǝ', 'f': 'ɟ', 'g': 'ƃ', 'h': 'ɥ',
+                        'i': 'ᴉ', 'j': 'ɾ', 'k': 'ʞ', 'l': 'l', 'm': 'ɯ', 'n': 'u', 'o': 'o', 'p': 'd',
+                        'q': 'b', 'r': 'ɹ', 's': 's', 't': 'ʇ', 'u': 'n', 'v': 'ʌ', 'w': 'ʍ', 'x': 'x',
+                        'y': 'ʎ', 'z': 'z', 'A': '∀', 'B': 'B', 'C': 'Ɔ', 'D': 'D', 'E': 'Ǝ', 'F': 'Ⅎ',
+                        'G': 'פ', 'H': 'H', 'I': 'I', 'J': 'ſ', 'K': 'K', 'L': '˥', 'M': 'W', 'N': 'N',
+                        'O': 'O', 'P': 'Ԁ', 'Q': 'Q', 'R': 'R', 'S': 'S', 'T': '┴', 'U': '∩', 'V': 'Λ',
+                        'W': 'M', 'X': 'X', 'Y': '⅄', 'Z': 'Z', '0': '0', '1': 'Ɩ', '2': 'ᄅ', '3': 'Ɛ',
+                        '4': 'ㄣ', '5': 'ϛ', '6': '9', '7': 'ㄥ', '8': '8', '9': '6', ',': '\'', '.': '˙',
+                        '?': '¿', '!': '¡', '(': ')', ')': '(', '[': ']', ']': '[', '{': '}', '}': '{',
+                        '<': '>', '>': '<', '&': '⅋', '_': '‾', '∴': '∵', '⁅': '⁆', '∦': '∣'
+                    };
+                    return upsideDownMap[char] || char;
+                }).join('')
+            }
+        ];
+
+        function generateAll() {
+            const input = document.getElementById('inputText').value.trim();
+            if (!input) {
+                alert('Please enter some text to convert');
+                return;
+            }
+
+            const resultsContainer = document.getElementById('fancyResults');
+            resultsContainer.innerHTML = '';
+
+            fancyStyles.forEach(style => {
+                const result = style.transform(input);
+                const card = document.createElement('div');
+                card.className = 'card mb-3';
+                card.innerHTML = `
+                    <div class="card-body">
+                        <h6 class="card-title">${style.name}</h6>
+                        <div class="input-group">
+                            <input type="text" class="form-control" value="${result}" readonly>
+                            <button class="btn btn-outline-secondary" onclick="copyText(this)">Copy</button>
+                        </div>
+                    </div>
+                `;
+                resultsContainer.appendChild(card);
+            });
+        }
+
+        function copyText(button) {
+            const input = button.previousElementSibling;
+            input.select();
+            document.execCommand('copy');
+            
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => {
+                button.textContent = originalText;
+            }, 2000);
+        }
+
+        function clearAll() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('fancyResults').innerHTML = '';
+        }
+    </script>
+</body>
+</html> 

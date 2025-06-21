@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan EMI Calculator | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Loan EMI Calculator</h1>
+                        <div id="tool-ui">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="loanAmount" class="form-label">Loan Amount</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="loanAmount" placeholder="Enter loan amount" min="0" step="0.01">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="interestRate" class="form-label">Annual Interest Rate (%)</label>
+                                    <input type="number" class="form-control" id="interestRate" placeholder="Enter interest rate" min="0" max="100" step="0.01">
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="loanTenure" class="form-label">Loan Tenure</label>
+                                    <input type="number" class="form-control" id="loanTenure" placeholder="Enter tenure" min="1" max="50">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="tenureType" class="form-label">Tenure Type</label>
+                                    <select class="form-select" id="tenureType">
+                                        <option value="years">Years</option>
+                                        <option value="months">Months</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="loanType" class="form-label">Loan Type</label>
+                                    <select class="form-select" id="loanType">
+                                        <option value="fixed">Fixed Rate</option>
+                                        <option value="floating">Floating Rate</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="paymentFrequency" class="form-label">Payment Frequency</label>
+                                    <select class="form-select" id="paymentFrequency">
+                                        <option value="monthly">Monthly</option>
+                                        <option value="quarterly">Quarterly</option>
+                                        <option value="semi-annually">Semi-Annually</option>
+                                        <option value="annually">Annually</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <button class="btn btn-primary" onclick="calculateEMI()">Calculate EMI</button>
+                                <button class="btn btn-secondary" onclick="clearCalculator()">Clear</button>
+                            </div>
+                            
+                            <div id="emiResults" style="display:none;">
+                                <div class="row mt-4">
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-primary" id="monthlyEMI">$0</h4>
+                                                <small class="text-muted">Monthly EMI</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-success" id="totalAmount">$0</h4>
+                                                <small class="text-muted">Total Amount</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-info" id="totalInterest">$0</h4>
+                                                <small class="text-muted">Total Interest</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-warning" id="effectiveRate">0%</h4>
+                                                <small class="text-muted">Effective Rate</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Amortization Schedule</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm" id="amortizationTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Payment #</th>
+                                                        <th>Payment</th>
+                                                        <th>Principal</th>
+                                                        <th>Interest</th>
+                                                        <th>Balance</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="amortizationBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="text-center mt-2">
+                                            <button class="btn btn-outline-primary btn-sm" onclick="showMorePayments()">Show More</button>
+                                            <button class="btn btn-outline-secondary btn-sm" onclick="exportToCSV()">Export to CSV</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Payment Breakdown</h5>
+                                                <canvas id="paymentChart" width="300" height="200"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Loan Summary</h5>
+                                                <div id="loanSummary"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="percentage-calculator.html">Percentage Calculator</a></li>
+                            <li><a href="scientific-calculator.html">Scientific Calculator</a></li>
+                            <li><a href="discount-calculator.html">Discount Calculator</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let currentPayments = 12;
+        let allPayments = [];
+        let paymentChart;
+
+        function calculateEMI() {
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+            const loanTenure = parseFloat(document.getElementById('loanTenure').value);
+            const tenureType = document.getElementById('tenureType').value;
+            const paymentFrequency = document.getElementById('paymentFrequency').value;
+            
+            if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTenure) || loanAmount <= 0 || interestRate <= 0 || loanTenure <= 0) {
+                alert('Please enter valid values for all fields');
+                return;
+            }
+            
+            // Convert tenure to months
+            let totalMonths = loanTenure;
+            if (tenureType === 'years') {
+                totalMonths = loanTenure * 12;
+            }
+            
+            // Convert annual rate to monthly rate
+            const monthlyRate = interestRate / 100 / 12;
+            
+            // Calculate EMI
+            const emi = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+            
+            // Generate amortization schedule
+            allPayments = generateAmortizationSchedule(loanAmount, monthlyRate, totalMonths, emi);
+            
+            displayResults(emi, loanAmount, interestRate, totalMonths);
+        }
+
+        function generateAmortizationSchedule(principal, monthlyRate, totalMonths, emi) {
+            const payments = [];
+            let balance = principal;
+            
+            for (let month = 1; month <= totalMonths; month++) {
+                const interest = balance * monthlyRate;
+                const principalPaid = emi - interest;
+                balance = balance - principalPaid;
+                
+                payments.push({
+                    paymentNumber: month,
+                    payment: emi,
+                    principal: principalPaid,
+                    interest: interest,
+                    balance: Math.max(0, balance)
+                });
+            }
+            
+            return payments;
+        }
+
+        function displayResults(emi, loanAmount, interestRate, totalMonths) {
+            const totalAmount = emi * totalMonths;
+            const totalInterest = totalAmount - loanAmount;
+            const effectiveRate = ((Math.pow(totalAmount / loanAmount, 1 / totalMonths) - 1) * 12 * 100);
+            
+            document.getElementById('monthlyEMI').textContent = '$' + emi.toFixed(2);
+            document.getElementById('totalAmount').textContent = '$' + totalAmount.toFixed(2);
+            document.getElementById('totalInterest').textContent = '$' + totalInterest.toFixed(2);
+            document.getElementById('effectiveRate').textContent = effectiveRate.toFixed(2) + '%';
+            
+            displayAmortizationTable();
+            displayPaymentChart(loanAmount, totalInterest);
+            displayLoanSummary(emi, loanAmount, totalAmount, totalInterest, totalMonths);
+            
+            document.getElementById('emiResults').style.display = 'block';
+        }
+
+        function displayAmortizationTable() {
+            const tbody = document.getElementById('amortizationBody');
+            tbody.innerHTML = '';
+            
+            const paymentsToShow = allPayments.slice(0, currentPayments);
+            
+            paymentsToShow.forEach(payment => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${payment.paymentNumber}</td>
+                    <td>$${payment.payment.toFixed(2)}</td>
+                    <td>$${payment.principal.toFixed(2)}</td>
+                    <td>$${payment.interest.toFixed(2)}</td>
+                    <td>$${payment.balance.toFixed(2)}</td>
+                `;
+            });
+        }
+
+        function displayPaymentChart(principal, totalInterest) {
+            const ctx = document.getElementById('paymentChart').getContext('2d');
+            
+            if (paymentChart) {
+                paymentChart.destroy();
+            }
+            
+            paymentChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Principal', 'Interest'],
+                    datasets: [{
+                        data: [principal, totalInterest],
+                        backgroundColor: ['#007bff', '#28a745'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function displayLoanSummary(emi, principal, totalAmount, totalInterest, totalMonths) {
+            const summary = document.getElementById('loanSummary');
+            summary.innerHTML = `
+                <p><strong>Loan Amount:</strong> $${principal.toLocaleString()}</p>
+                <p><strong>Monthly EMI:</strong> $${emi.toFixed(2)}</p>
+                <p><strong>Total Interest:</strong> $${totalInterest.toFixed(2)}</p>
+                <p><strong>Total Amount:</strong> $${totalAmount.toFixed(2)}</p>
+                <p><strong>Loan Term:</strong> ${totalMonths} months (${(totalMonths/12).toFixed(1)} years)</p>
+                <p><strong>Interest to Principal Ratio:</strong> ${((totalInterest/principal)*100).toFixed(1)}%</p>
+            `;
+        }
+
+        function showMorePayments() {
+            currentPayments = Math.min(currentPayments + 12, allPayments.length);
+            displayAmortizationTable();
+        }
+
+        function exportToCSV() {
+            let csv = 'Payment #,Payment,Principal,Interest,Balance\n';
+            
+            allPayments.forEach(payment => {
+                csv += `${payment.paymentNumber},$${payment.payment.toFixed(2)},$${payment.principal.toFixed(2)},$${payment.interest.toFixed(2)},$${payment.balance.toFixed(2)}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'loan_amortization_schedule.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function clearCalculator() {
+            document.getElementById('loanAmount').value = '';
+            document.getElementById('interestRate').value = '';
+            document.getElementById('loanTenure').value = '';
+            document.getElementById('emiResults').style.display = 'none';
+            currentPayments = 12;
+            allPayments = [];
+            if (paymentChart) {
+                paymentChart.destroy();
+            }
+        }
+    </script>
+</body>
+</html> 

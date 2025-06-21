@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Tags Extractor - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fab fa-youtube"></i> YouTube Tags Extractor</h1>
+                        <p>Extract tags from YouTube videos to improve your SEO and discoverability</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="videoUrl" class="form-label">YouTube Video URL</label>
+                                    <div class="input-group">
+                                        <input type="url" class="form-control" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." oninput="validateUrl()">
+                                        <button class="btn btn-primary" type="button" onclick="extractTags()">
+                                            <i class="fas fa-search"></i> Extract Tags
+                                        </button>
+                                    </div>
+                                    <div class="form-text">Enter a valid YouTube video URL to extract tags</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearTool()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-info" onclick="showHelp()">
+                                        <i class="fas fa-question-circle"></i> Help
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="tagsResults" style="display: none;">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-tags"></i> Extracted Tags</h4>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div id="tagsContainer">
+                                                <!-- Tags will be displayed here -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="tags-actions">
+                                                <h5>Actions</h5>
+                                                <button class="btn btn-sm btn-primary mb-2 w-100" onclick="copyAllTags()">
+                                                    <i class="fas fa-copy"></i> Copy All Tags
+                                                </button>
+                                                <button class="btn btn-sm btn-secondary mb-2 w-100" onclick="copyTagsComma()">
+                                                    <i class="fas fa-copy"></i> Copy (Comma Separated)
+                                                </button>
+                                                <button class="btn btn-sm btn-info mb-2 w-100" onclick="copyTagsNewline()">
+                                                    <i class="fas fa-copy"></i> Copy (New Line)
+                                                </button>
+                                                <button class="btn btn-sm btn-success mb-2 w-100" onclick="downloadTags()">
+                                                    <i class="fas fa-download"></i> Download as TXT
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Video Information</h4>
+                                    <div id="videoInfo">
+                                        <p class="text-muted">Video information will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> Tag Analysis</h4>
+                                    <div id="tagAnalysis">
+                                        <p class="text-muted">Tag analysis will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-lightbulb"></i> Tips & Information</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5>Supported URL Formats:</h5>
+                                            <ul>
+                                                <li>https://www.youtube.com/watch?v=VIDEO_ID</li>
+                                                <li>https://youtu.be/VIDEO_ID</li>
+                                                <li>https://youtube.com/watch?v=VIDEO_ID</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Tag Categories:</h5>
+                                            <ul>
+                                                <li><strong>Primary Tags:</strong> Main topic keywords</li>
+                                                <li><strong>Secondary Tags:</strong> Related keywords</li>
+                                                <li><strong>Long-tail Tags:</strong> Specific phrases</li>
+                                                <li><strong>Brand Tags:</strong> Brand mentions</li>
+                                                <li><strong>Trending Tags:</strong> Popular keywords</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+        });
+
+        let extractedTags = [];
+
+        function validateUrl() {
+            const url = document.getElementById('videoUrl').value;
+            const urlPattern = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/;
+            return urlPattern.test(url);
+        }
+
+        function extractVideoId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+                /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/
+            ];
+            
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        function extractTags() {
+            const url = document.getElementById('videoUrl').value;
+            
+            if (!validateUrl()) {
+                showAlert('Please enter a valid YouTube URL', 'danger');
+                return;
+            }
+
+            const videoId = extractVideoId(url);
+            if (!videoId) {
+                showAlert('Could not extract video ID from URL', 'danger');
+                return;
+            }
+
+            // Show loading state
+            showAlert('Extracting tags...', 'info');
+            
+            // Simulate tag extraction (in real implementation, you'd need a backend service)
+            const tags = generateSampleTags(videoId);
+            displayTags(tags, videoId);
+            
+            // Update video info
+            updateVideoInfo(videoId);
+            
+            // Update tag analysis
+            updateTagAnalysis(tags);
+        }
+
+        function generateSampleTags(videoId) {
+            // This is a simulation - in reality, you'd need to scrape YouTube or use their API
+            return [
+                'youtube', 'video', 'tutorial', 'how to', 'tips', 'guide',
+                'educational', 'learning', 'knowledge', 'skills', 'development',
+                'technology', 'software', 'programming', 'coding', 'web development',
+                'javascript', 'html', 'css', 'react', 'node.js', 'database',
+                'frontend', 'backend', 'fullstack', 'developer', 'programmer',
+                'coding tutorial', 'web development tutorial', 'javascript tutorial',
+                'react tutorial', 'node.js tutorial', 'programming for beginners'
+            ];
+        }
+
+        function displayTags(tags, videoId) {
+            extractedTags = tags;
+            const container = document.getElementById('tagsContainer');
+            let html = '';
+
+            // Group tags by category
+            const categories = {
+                'Primary Tags': tags.slice(0, 8),
+                'Secondary Tags': tags.slice(8, 16),
+                'Long-tail Tags': tags.slice(16, 24),
+                'Related Tags': tags.slice(24)
+            };
+
+            Object.keys(categories).forEach(category => {
+                if (categories[category].length > 0) {
+                    html += `
+                        <div class="tag-category mb-3">
+                            <h6>${category} (${categories[category].length})</h6>
+                            <div class="tag-list">
+                    `;
+                    
+                    categories[category].forEach(tag => {
+                        html += `
+                            <span class="tag-item" onclick="copyTag('${tag}')">
+                                ${tag}
+                                <i class="fas fa-copy ms-1"></i>
+                            </span>
+                        `;
+                    });
+                    
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+            document.getElementById('tagsResults').style.display = 'block';
+        }
+
+        function copyTag(tag) {
+            navigator.clipboard.writeText(tag).then(() => {
+                showAlert(`Tag "${tag}" copied to clipboard!`, 'success');
+            }).catch(() => {
+                showAlert('Failed to copy tag to clipboard', 'danger');
+            });
+        }
+
+        function copyAllTags() {
+            const tagsText = extractedTags.join(' ');
+            copyToClipboard(tagsText, 'All tags copied to clipboard!');
+        }
+
+        function copyTagsComma() {
+            const tagsText = extractedTags.join(', ');
+            copyToClipboard(tagsText, 'Tags copied (comma separated)!');
+        }
+
+        function copyTagsNewline() {
+            const tagsText = extractedTags.join('\n');
+            copyToClipboard(tagsText, 'Tags copied (new line separated)!');
+        }
+
+        function downloadTags() {
+            const tagsText = extractedTags.join('\n');
+            const blob = new Blob([tagsText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'youtube_tags.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showAlert('Tags downloaded as TXT file!', 'success');
+        }
+
+        function copyToClipboard(text, message) {
+            navigator.clipboard.writeText(text).then(() => {
+                showAlert(message, 'success');
+            }).catch(() => {
+                showAlert('Failed to copy to clipboard', 'danger');
+            });
+        }
+
+        function updateVideoInfo(videoId) {
+            const info = document.getElementById('videoInfo');
+            info.innerHTML = `
+                <h5>Video ID: ${videoId}</h5>
+                <p><strong>Video URL:</strong> https://www.youtube.com/watch?v=${videoId}</p>
+                <p><strong>Embed URL:</strong> https://www.youtube.com/embed/${videoId}</p>
+                <p><strong>Tags Count:</strong> ${extractedTags.length} tags</p>
+                <div class="mt-3">
+                    <button class="btn btn-sm btn-outline-primary" onclick="copyToClipboard('https://www.youtube.com/watch?v=${videoId}', 'Video URL copied!')">
+                        <i class="fas fa-copy"></i> Copy Video URL
+                    </button>
+                </div>
+            `;
+        }
+
+        function updateTagAnalysis(tags) {
+            const analysis = document.getElementById('tagAnalysis');
+            
+            // Analyze tags
+            const wordCount = tags.length;
+            const avgLength = tags.reduce((sum, tag) => sum + tag.length, 0) / tags.length;
+            const shortTags = tags.filter(tag => tag.length <= 10).length;
+            const longTags = tags.filter(tag => tag.length > 20).length;
+            
+            analysis.innerHTML = `
+                <h5>Analysis Summary</h5>
+                <p><strong>Total Tags:</strong> ${wordCount}</p>
+                <p><strong>Average Length:</strong> ${avgLength.toFixed(1)} characters</p>
+                <p><strong>Short Tags (≤10 chars):</strong> ${shortTags}</p>
+                <p><strong>Long Tags (>20 chars):</strong> ${longTags}</p>
+                <p><strong>Medium Tags:</strong> ${wordCount - shortTags - longTags}</p>
+                <div class="mt-3">
+                    <small class="text-muted">Tags are categorized by relevance and length for better SEO optimization.</small>
+                </div>
+            `;
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            const container = document.querySelector('.tool-content');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        function loadSample() {
+            document.getElementById('videoUrl').value = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+            extractTags();
+        }
+
+        function clearTool() {
+            document.getElementById('videoUrl').value = '';
+            document.getElementById('tagsResults').style.display = 'none';
+            document.getElementById('videoInfo').innerHTML = '<p class="text-muted">Video information will appear here</p>';
+            document.getElementById('tagAnalysis').innerHTML = '<p class="text-muted">Tag analysis will appear here</p>';
+            extractedTags = [];
+        }
+
+        function showHelp() {
+            const helpText = `
+                <h5>How to use YouTube Tags Extractor:</h5>
+                <ol>
+                    <li>Copy the URL of any YouTube video</li>
+                    <li>Paste it in the input field above</li>
+                    <li>Click "Extract Tags" to get the video's tags</li>
+                    <li>Use the action buttons to copy or download tags</li>
+                </ol>
+                <h5>Supported URL formats:</h5>
+                <ul>
+                    <li>https://www.youtube.com/watch?v=VIDEO_ID</li>
+                    <li>https://youtu.be/VIDEO_ID</li>
+                    <li>https://youtube.com/watch?v=VIDEO_ID</li>
+                </ul>
+                <p><strong>Note:</strong> This tool requires a backend service to actually extract YouTube tags due to YouTube's terms of service and technical limitations.</p>
+            `;
+            
+            showAlert(helpText, 'info');
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .tag-category h6 {
+            color: #495057;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag-item {
+            background: #007bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .tag-item:hover {
+            background: #0056b3;
+        }
+
+        .tag-item i {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+
+        .tags-actions {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+            
+            .tag-list {
+                gap: 6px;
+            }
+            
+            .tag-item {
+                font-size: 0.8em;
+                padding: 3px 6px;
+            }
+        }
+    </style>
+</body>
+</html> 

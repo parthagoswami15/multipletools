@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discount Calculator | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Discount Calculator</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="calculationType" class="form-label">Calculation Type</label>
+                                <select class="form-select" id="calculationType" onchange="updateCalculator()">
+                                    <option value="discount-percentage">Discount Percentage</option>
+                                    <option value="final-price">Final Price</option>
+                                    <option value="original-price">Original Price</option>
+                                    <option value="discount-amount">Discount Amount</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Discount Percentage -->
+                            <div id="discount-percentage" class="calculator-section">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="originalPrice1" class="form-label">Original Price</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="originalPrice1" placeholder="Enter original price" min="0" step="0.01">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="finalPrice1" class="form-label">Final Price</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="finalPrice1" placeholder="Enter final price" min="0" step="0.01">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="calculateDiscountPercentage()">Calculate</button>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="alert alert-info" id="result1" style="display:none;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Final Price -->
+                            <div id="final-price" class="calculator-section" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="originalPrice2" class="form-label">Original Price</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="originalPrice2" placeholder="Enter original price" min="0" step="0.01">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="discountPercent1" class="form-label">Discount Percentage (%)</label>
+                                        <input type="number" class="form-control" id="discountPercent1" placeholder="Enter discount %" min="0" max="100" step="0.01">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="calculateFinalPrice()">Calculate</button>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="alert alert-info" id="result2" style="display:none;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Original Price -->
+                            <div id="original-price" class="calculator-section" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="finalPrice2" class="form-label">Final Price</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="finalPrice2" placeholder="Enter final price" min="0" step="0.01">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="discountPercent2" class="form-label">Discount Percentage (%)</label>
+                                        <input type="number" class="form-control" id="discountPercent2" placeholder="Enter discount %" min="0" max="100" step="0.01">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="calculateOriginalPrice()">Calculate</button>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="alert alert-info" id="result3" style="display:none;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Discount Amount -->
+                            <div id="discount-amount" class="calculator-section" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="originalPrice3" class="form-label">Original Price</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">$</span>
+                                            <input type="number" class="form-control" id="originalPrice3" placeholder="Enter original price" min="0" step="0.01">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="discountPercent3" class="form-label">Discount Percentage (%)</label>
+                                        <input type="number" class="form-control" id="discountPercent3" placeholder="Enter discount %" min="0" max="100" step="0.01">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="calculateDiscountAmount()">Calculate</button>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="alert alert-info" id="result4" style="display:none;"></div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Discount Examples</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Example 1: 20% Off</h6>
+                                        <p class="card-text">
+                                            Original Price: $100<br>
+                                            Discount: 20%<br>
+                                            Final Price: $80<br>
+                                            Savings: $20
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Example 2: 50% Off</h6>
+                                        <p class="card-text">
+                                            Original Price: $200<br>
+                                            Discount: 50%<br>
+                                            Final Price: $100<br>
+                                            Savings: $100
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="percentage-calculator.html">Percentage Calculator</a></li>
+                            <li><a href="scientific-calculator.html">Scientific Calculator</a></li>
+                            <li><a href="tip-calculator.html">Tip Calculator</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        function updateCalculator() {
+            const type = document.getElementById('calculationType').value;
+            const sections = document.querySelectorAll('.calculator-section');
+            
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            document.getElementById(type).style.display = 'block';
+        }
+
+        function calculateDiscountPercentage() {
+            const originalPrice = parseFloat(document.getElementById('originalPrice1').value);
+            const finalPrice = parseFloat(document.getElementById('finalPrice1').value);
+            
+            if (isNaN(originalPrice) || isNaN(finalPrice)) {
+                alert('Please enter valid prices');
+                return;
+            }
+            
+            if (finalPrice > originalPrice) {
+                alert('Final price cannot be greater than original price');
+                return;
+            }
+            
+            const discountAmount = originalPrice - finalPrice;
+            const discountPercentage = (discountAmount / originalPrice) * 100;
+            
+            document.getElementById('result1').innerHTML = `
+                <strong>Results:</strong><br>
+                Discount Amount: $${discountAmount.toFixed(2)}<br>
+                Discount Percentage: ${discountPercentage.toFixed(2)}%<br>
+                Savings: $${discountAmount.toFixed(2)}
+            `;
+            document.getElementById('result1').style.display = 'block';
+        }
+
+        function calculateFinalPrice() {
+            const originalPrice = parseFloat(document.getElementById('originalPrice2').value);
+            const discountPercent = parseFloat(document.getElementById('discountPercent1').value);
+            
+            if (isNaN(originalPrice) || isNaN(discountPercent)) {
+                alert('Please enter valid values');
+                return;
+            }
+            
+            if (discountPercent < 0 || discountPercent > 100) {
+                alert('Discount percentage must be between 0 and 100');
+                return;
+            }
+            
+            const discountAmount = (originalPrice * discountPercent) / 100;
+            const finalPrice = originalPrice - discountAmount;
+            
+            document.getElementById('result2').innerHTML = `
+                <strong>Results:</strong><br>
+                Discount Amount: $${discountAmount.toFixed(2)}<br>
+                Final Price: $${finalPrice.toFixed(2)}<br>
+                Savings: $${discountAmount.toFixed(2)}
+            `;
+            document.getElementById('result2').style.display = 'block';
+        }
+
+        function calculateOriginalPrice() {
+            const finalPrice = parseFloat(document.getElementById('finalPrice2').value);
+            const discountPercent = parseFloat(document.getElementById('discountPercent2').value);
+            
+            if (isNaN(finalPrice) || isNaN(discountPercent)) {
+                alert('Please enter valid values');
+                return;
+            }
+            
+            if (discountPercent < 0 || discountPercent > 100) {
+                alert('Discount percentage must be between 0 and 100');
+                return;
+            }
+            
+            const originalPrice = finalPrice / (1 - discountPercent / 100);
+            const discountAmount = originalPrice - finalPrice;
+            
+            document.getElementById('result3').innerHTML = `
+                <strong>Results:</strong><br>
+                Original Price: $${originalPrice.toFixed(2)}<br>
+                Discount Amount: $${discountAmount.toFixed(2)}<br>
+                Savings: $${discountAmount.toFixed(2)}
+            `;
+            document.getElementById('result3').style.display = 'block';
+        }
+
+        function calculateDiscountAmount() {
+            const originalPrice = parseFloat(document.getElementById('originalPrice3').value);
+            const discountPercent = parseFloat(document.getElementById('discountPercent3').value);
+            
+            if (isNaN(originalPrice) || isNaN(discountPercent)) {
+                alert('Please enter valid values');
+                return;
+            }
+            
+            if (discountPercent < 0 || discountPercent > 100) {
+                alert('Discount percentage must be between 0 and 100');
+                return;
+            }
+            
+            const discountAmount = (originalPrice * discountPercent) / 100;
+            const finalPrice = originalPrice - discountAmount;
+            
+            document.getElementById('result4').innerHTML = `
+                <strong>Results:</strong><br>
+                Discount Amount: $${discountAmount.toFixed(2)}<br>
+                Final Price: $${finalPrice.toFixed(2)}<br>
+                Savings: $${discountAmount.toFixed(2)}
+            `;
+            document.getElementById('result4').style.display = 'block';
+        }
+
+        function clearAll() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => input.value = '');
+            
+            const results = document.querySelectorAll('.alert');
+            results.forEach(result => result.style.display = 'none');
+        }
+    </script>
+</body>
+</html> 

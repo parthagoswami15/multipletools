@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hashtag Generator - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-hashtag"></i> Hashtag Generator</h1>
+                        <p>Generate relevant hashtags for your social media posts to increase engagement</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label for="inputText" class="form-label">Content or Keywords</label>
+                                    <textarea class="form-control" id="inputText" rows="4" placeholder="Enter your post content or keywords to generate relevant hashtags..." oninput="generateHashtags()"></textarea>
+                                    <div class="form-text">Describe your content or enter keywords to get relevant hashtags</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="platform" class="form-label">Platform</label>
+                                    <select class="form-select" id="platform" onchange="generateHashtags()">
+                                        <option value="instagram">Instagram</option>
+                                        <option value="twitter">Twitter</option>
+                                        <option value="tiktok">TikTok</option>
+                                        <option value="facebook">Facebook</option>
+                                        <option value="linkedin">LinkedIn</option>
+                                        <option value="youtube">YouTube</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="hashtagCount" class="form-label">Number of Hashtags</label>
+                                    <select class="form-select" id="hashtagCount" onchange="generateHashtags()">
+                                        <option value="5">5 hashtags</option>
+                                        <option value="10" selected>10 hashtags</option>
+                                        <option value="15">15 hashtags</option>
+                                        <option value="20">20 hashtags</option>
+                                        <option value="30">30 hashtags</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearTool()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-info" onclick="showHelp()">
+                                        <i class="fas fa-question-circle"></i> Help
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="hashtagResults" style="display: none;">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-hashtag"></i> Generated Hashtags</h4>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div id="hashtagsContainer">
+                                                <!-- Hashtags will be displayed here -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="hashtag-actions">
+                                                <h5>Actions</h5>
+                                                <button class="btn btn-sm btn-primary mb-2 w-100" onclick="copyAllHashtags()">
+                                                    <i class="fas fa-copy"></i> Copy All Hashtags
+                                                </button>
+                                                <button class="btn btn-sm btn-secondary mb-2 w-100" onclick="copyHashtagsSpace()">
+                                                    <i class="fas fa-copy"></i> Copy (Space Separated)
+                                                </button>
+                                                <button class="btn btn-sm btn-info mb-2 w-100" onclick="copyHashtagsNewline()">
+                                                    <i class="fas fa-copy"></i> Copy (New Line)
+                                                </button>
+                                                <button class="btn btn-sm btn-success mb-2 w-100" onclick="downloadHashtags()">
+                                                    <i class="fas fa-download"></i> Download as TXT
+                                                </button>
+                                                <button class="btn btn-sm btn-warning mb-2 w-100" onclick="regenerateHashtags()">
+                                                    <i class="fas fa-sync-alt"></i> Regenerate
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> Hashtag Analysis</h4>
+                                    <div id="hashtagAnalysis">
+                                        <p class="text-muted">Hashtag analysis will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-lightbulb"></i> Popular Hashtags</h4>
+                                    <div id="popularHashtags">
+                                        <p class="text-muted">Popular hashtags will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Platform Guidelines</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5>Optimal Hashtag Count:</h5>
+                                            <ul>
+                                                <li><strong>Instagram:</strong> 5-30 hashtags</li>
+                                                <li><strong>Twitter:</strong> 1-3 hashtags</li>
+                                                <li><strong>TikTok:</strong> 3-5 hashtags</li>
+                                                <li><strong>Facebook:</strong> 1-5 hashtags</li>
+                                                <li><strong>LinkedIn:</strong> 3-5 hashtags</li>
+                                                <li><strong>YouTube:</strong> 5-15 hashtags</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Best Practices:</h5>
+                                            <ul>
+                                                <li>Mix popular and niche hashtags</li>
+                                                <li>Use relevant and specific hashtags</li>
+                                                <li>Avoid overused or spammy hashtags</li>
+                                                <li>Research trending hashtags</li>
+                                                <li>Create branded hashtags</li>
+                                                <li>Test different hashtag combinations</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+        });
+
+        let generatedHashtags = [];
+
+        // Hashtag database by category
+        const hashtagDatabase = {
+            'technology': ['#tech', '#technology', '#innovation', '#digital', '#ai', '#artificialintelligence', '#machinelearning', '#coding', '#programming', '#software', '#app', '#mobile', '#web', '#startup', '#entrepreneur', '#business', '#future', '#trending', '#viral', '#fyp'],
+            'fitness': ['#fitness', '#workout', '#gym', '#exercise', '#health', '#healthy', '#lifestyle', '#motivation', '#fitnessmotivation', '#training', '#strength', '#cardio', '#yoga', '#meditation', '#wellness', '#nutrition', '#diet', '#weightloss', '#muscle', '#sports'],
+            'food': ['#food', '#foodie', '#delicious', '#yummy', '#cooking', '#recipe', '#homemade', '#healthyfood', '#instafood', '#foodphotography', '#chef', '#baking', '#dessert', '#breakfast', '#lunch', '#dinner', '#snack', '#drinks', '#coffee', '#tea'],
+            'travel': ['#travel', '#traveling', '#adventure', '#explore', '#wanderlust', '#vacation', '#holiday', '#trip', '#journey', '#destination', '#travelphotography', '#nature', '#landscape', '#mountains', '#beach', '#city', '#culture', '#photography', '#instatravel', '#travelblogger'],
+            'fashion': ['#fashion', '#style', '#outfit', '#clothing', '#shoes', '#accessories', '#beauty', '#makeup', '#skincare', '#hair', '#model', '#streetstyle', '#ootd', '#fashionblogger', '#trend', '#designer', '#luxury', '#streetwear', '#vintage', '#sustainablefashion'],
+            'education': ['#education', '#learning', '#study', '#student', '#teacher', '#school', '#university', '#college', '#knowledge', '#wisdom', '#inspiration', '#motivation', '#success', '#goals', '#achievement', '#career', '#professional', '#skills', '#development', '#growth'],
+            'entertainment': ['#entertainment', '#fun', '#comedy', '#humor', '#laugh', '#smile', '#happy', '#joy', '#music', '#dance', '#art', '#creative', '#design', '#photography', '#video', '#content', '#creator', '#influencer', '#socialmedia', '#viral']
+        };
+
+        function generateHashtags() {
+            const inputText = document.getElementById('inputText').value.toLowerCase();
+            const platform = document.getElementById('platform').value;
+            const count = parseInt(document.getElementById('hashtagCount').value);
+
+            if (!inputText.trim()) {
+                document.getElementById('hashtagResults').style.display = 'none';
+                return;
+            }
+
+            // Generate hashtags based on input
+            const hashtags = generateRelevantHashtags(inputText, platform, count);
+            displayHashtags(hashtags, platform);
+            updateHashtagAnalysis(hashtags, platform);
+            updatePopularHashtags(platform);
+        }
+
+        function generateRelevantHashtags(inputText, platform, count) {
+            let relevantHashtags = [];
+            
+            // Extract keywords from input
+            const keywords = inputText.split(/\s+/).filter(word => word.length > 2);
+            
+            // Find relevant categories
+            Object.keys(hashtagDatabase).forEach(category => {
+                if (keywords.some(keyword => category.includes(keyword) || keyword.includes(category))) {
+                    relevantHashtags = relevantHashtags.concat(hashtagDatabase[category]);
+                }
+            });
+
+            // Add platform-specific hashtags
+            const platformHashtags = {
+                'instagram': ['#instagram', '#instagood', '#instalike', '#instafollow', '#instadaily', '#instamood', '#instapic', '#instaphoto', '#instalove', '#instacool'],
+                'twitter': ['#twitter', '#tweet', '#followme', '#followback', '#retweet', '#like', '#trending', '#viral', '#news', '#update'],
+                'tiktok': ['#tiktok', '#fyp', '#foryou', '#foryoupage', '#viral', '#trending', '#dance', '#comedy', '#funny', '#entertainment'],
+                'facebook': ['#facebook', '#fb', '#social', '#friends', '#family', '#life', '#love', '#happy', '#blessed', '#grateful'],
+                'linkedin': ['#linkedin', '#professional', '#business', '#career', '#networking', '#industry', '#leadership', '#success', '#motivation', '#growth'],
+                'youtube': ['#youtube', '#youtuber', '#video', '#content', '#creator', '#subscribe', '#like', '#comment', '#share', '#trending']
+            };
+
+            relevantHashtags = relevantHashtags.concat(platformHashtags[platform] || []);
+
+            // Add generic popular hashtags
+            const genericHashtags = ['#love', '#like', '#follow', '#followme', '#instagood', '#photooftheday', '#beautiful', '#happy', '#cute', '#fashion', '#me', '#selfie', '#picoftheday', '#fun', '#summer', '#instadaily', '#friends', '#fitness', '#food', '#instalike', '#smile', '#family', '#travel', '#style', '#instafollow', '#life', '#beauty', '#amazing', '#cool', '#nice', '#good', '#great', '#awesome', '#best', '#perfect', '#wonderful', '#fantastic', '#excellent', '#outstanding', '#superb', '#brilliant', '#magnificent', '#splendid', '#gorgeous', '#stunning', '#breathtaking', '#mesmerizing', '#captivating', '#enchanting', '#charming', '#delightful', '#pleasing', '#satisfying', '#fulfilling', '#rewarding', '#gratifying', '#enjoyable', '#pleasant', '#agreeable', '#welcome', '#appreciated', '#valued', '#cherished', '#treasured', '#precious', '#beloved', '#adored', '#loved', '#cherished', '#treasured', '#precious', '#beloved', '#adored', '#loved'];
+
+            relevantHashtags = relevantHashtags.concat(genericHashtags);
+
+            // Shuffle and limit to requested count
+            relevantHashtags = shuffleArray(relevantHashtags).slice(0, count);
+
+            return relevantHashtags;
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function displayHashtags(hashtags, platform) {
+            generatedHashtags = hashtags;
+            const container = document.getElementById('hashtagsContainer');
+            let html = '';
+
+            // Group hashtags by popularity
+            const popular = hashtags.slice(0, Math.ceil(hashtags.length * 0.3));
+            const medium = hashtags.slice(Math.ceil(hashtags.length * 0.3), Math.ceil(hashtags.length * 0.7));
+            const niche = hashtags.slice(Math.ceil(hashtags.length * 0.7));
+
+            if (popular.length > 0) {
+                html += `
+                    <div class="hashtag-category mb-3">
+                        <h6><i class="fas fa-fire text-danger"></i> Popular Hashtags (${popular.length})</h6>
+                        <div class="hashtag-list">
+                `;
+                popular.forEach(hashtag => {
+                    html += `<span class="hashtag-item popular" onclick="copyHashtag('${hashtag}')">${hashtag}</span>`;
+                });
+                html += `</div></div>`;
+            }
+
+            if (medium.length > 0) {
+                html += `
+                    <div class="hashtag-category mb-3">
+                        <h6><i class="fas fa-star text-warning"></i> Medium Hashtags (${medium.length})</h6>
+                        <div class="hashtag-list">
+                `;
+                medium.forEach(hashtag => {
+                    html += `<span class="hashtag-item medium" onclick="copyHashtag('${hashtag}')">${hashtag}</span>`;
+                });
+                html += `</div></div>`;
+            }
+
+            if (niche.length > 0) {
+                html += `
+                    <div class="hashtag-category mb-3">
+                        <h6><i class="fas fa-gem text-info"></i> Niche Hashtags (${niche.length})</h6>
+                        <div class="hashtag-list">
+                `;
+                niche.forEach(hashtag => {
+                    html += `<span class="hashtag-item niche" onclick="copyHashtag('${hashtag}')">${hashtag}</span>`;
+                });
+                html += `</div></div>`;
+            }
+
+            container.innerHTML = html;
+            document.getElementById('hashtagResults').style.display = 'block';
+        }
+
+        function copyHashtag(hashtag) {
+            navigator.clipboard.writeText(hashtag).then(() => {
+                showAlert(`Hashtag "${hashtag}" copied to clipboard!`, 'success');
+            }).catch(() => {
+                showAlert('Failed to copy hashtag to clipboard', 'danger');
+            });
+        }
+
+        function copyAllHashtags() {
+            const hashtagsText = generatedHashtags.join(' ');
+            copyToClipboard(hashtagsText, 'All hashtags copied to clipboard!');
+        }
+
+        function copyHashtagsSpace() {
+            const hashtagsText = generatedHashtags.join(' ');
+            copyToClipboard(hashtagsText, 'Hashtags copied (space separated)!');
+        }
+
+        function copyHashtagsNewline() {
+            const hashtagsText = generatedHashtags.join('\n');
+            copyToClipboard(hashtagsText, 'Hashtags copied (new line separated)!');
+        }
+
+        function downloadHashtags() {
+            const hashtagsText = generatedHashtags.join('\n');
+            const blob = new Blob([hashtagsText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'hashtags.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showAlert('Hashtags downloaded as TXT file!', 'success');
+        }
+
+        function regenerateHashtags() {
+            generateHashtags();
+            showAlert('Hashtags regenerated!', 'info');
+        }
+
+        function copyToClipboard(text, message) {
+            navigator.clipboard.writeText(text).then(() => {
+                showAlert(message, 'success');
+            }).catch(() => {
+                showAlert('Failed to copy to clipboard', 'danger');
+            });
+        }
+
+        function updateHashtagAnalysis(hashtags, platform) {
+            const analysis = document.getElementById('hashtagAnalysis');
+            
+            const totalHashtags = hashtags.length;
+            const avgLength = hashtags.reduce((sum, hashtag) => sum + hashtag.length, 0) / hashtags.length;
+            const shortHashtags = hashtags.filter(hashtag => hashtag.length <= 15).length;
+            const longHashtags = hashtags.filter(hashtag => hashtag.length > 20).length;
+            
+            analysis.innerHTML = `
+                <h5>Analysis Summary</h5>
+                <p><strong>Total Hashtags:</strong> ${totalHashtags}</p>
+                <p><strong>Average Length:</strong> ${avgLength.toFixed(1)} characters</p>
+                <p><strong>Short Hashtags (≤15 chars):</strong> ${shortHashtags}</p>
+                <p><strong>Long Hashtags (>20 chars):</strong> ${longHashtags}</p>
+                <p><strong>Medium Hashtags:</strong> ${totalHashtags - shortHashtags - longHashtags}</p>
+                <p><strong>Platform:</strong> ${platform.charAt(0).toUpperCase() + platform.slice(1)}</p>
+            `;
+        }
+
+        function updatePopularHashtags(platform) {
+            const popular = document.getElementById('popularHashtags');
+            
+            const platformTrending = {
+                'instagram': ['#love', '#instagood', '#photooftheday', '#fashion', '#beautiful', '#happy', '#cute', '#followme', '#picoftheday', '#me'],
+                'twitter': ['#trending', '#viral', '#news', '#update', '#breaking', '#followme', '#retweet', '#like', '#tweet', '#twitter'],
+                'tiktok': ['#fyp', '#foryou', '#viral', '#trending', '#dance', '#comedy', '#funny', '#entertainment', '#tiktok', '#foryoupage'],
+                'facebook': ['#facebook', '#friends', '#family', '#life', '#love', '#happy', '#blessed', '#grateful', '#social', '#fb'],
+                'linkedin': ['#linkedin', '#professional', '#business', '#career', '#networking', '#industry', '#leadership', '#success', '#motivation', '#growth'],
+                'youtube': ['#youtube', '#youtuber', '#video', '#content', '#creator', '#subscribe', '#like', '#comment', '#share', '#trending']
+            };
+
+            const trending = platformTrending[platform] || [];
+            
+            popular.innerHTML = `
+                <h5>Trending on ${platform.charAt(0).toUpperCase() + platform.slice(1)}</h5>
+                <div class="trending-hashtags">
+                    ${trending.map(hashtag => `<span class="trending-tag">${hashtag}</span>`).join('')}
+                </div>
+            `;
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            const container = document.querySelector('.tool-content');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        function loadSample() {
+            document.getElementById('inputText').value = 'I love cooking healthy food and sharing recipes on social media';
+            document.getElementById('platform').value = 'instagram';
+            document.getElementById('hashtagCount').value = '15';
+            generateHashtags();
+        }
+
+        function clearTool() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('hashtagResults').style.display = 'none';
+            document.getElementById('hashtagAnalysis').innerHTML = '<p class="text-muted">Hashtag analysis will appear here</p>';
+            document.getElementById('popularHashtags').innerHTML = '<p class="text-muted">Popular hashtags will appear here</p>';
+            generatedHashtags = [];
+        }
+
+        function showHelp() {
+            const helpText = `
+                <h5>How to use Hashtag Generator:</h5>
+                <ol>
+                    <li>Enter your content or keywords in the text area</li>
+                    <li>Select your target platform</li>
+                    <li>Choose the number of hashtags you want</li>
+                    <li>Click to copy individual hashtags or use action buttons</li>
+                </ol>
+                <h5>Tips for better hashtag usage:</h5>
+                <ul>
+                    <li>Mix popular and niche hashtags</li>
+                    <li>Use relevant and specific hashtags</li>
+                    <li>Research trending hashtags regularly</li>
+                    <li>Create branded hashtags for your business</li>
+                    <li>Test different hashtag combinations</li>
+                </ul>
+            `;
+            
+            showAlert(helpText, 'info');
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .hashtag-category h6 {
+            color: #495057;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .hashtag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .hashtag-item {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .hashtag-item.popular {
+            background: #dc3545;
+            color: white;
+        }
+
+        .hashtag-item.medium {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .hashtag-item.niche {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .hashtag-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .hashtag-actions {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .trending-hashtags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .trending-tag {
+            background: #6c757d;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+            
+            .hashtag-list {
+                gap: 6px;
+            }
+            
+            .hashtag-item {
+                font-size: 0.8em;
+                padding: 4px 8px;
+            }
+        }
+    </style>
+</body>
+</html> 

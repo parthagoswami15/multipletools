@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volume Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-cube"></i> Volume Converter</h1>
+                        <p>Convert between different volume units quickly and accurately</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit" class="form-label">From Unit</label>
+                                    <select class="form-select" id="fromUnit" onchange="convert()">
+                                        <option value="liter">Liter (L)</option>
+                                        <option value="milliliter">Milliliter (mL)</option>
+                                        <option value="cubic-meter">Cubic Meter (m³)</option>
+                                        <option value="cubic-centimeter">Cubic Centimeter (cm³)</option>
+                                        <option value="gallon">US Gallon (gal)</option>
+                                        <option value="quart">US Quart (qt)</option>
+                                        <option value="pint">US Pint (pt)</option>
+                                        <option value="cup">US Cup (cup)</option>
+                                        <option value="fluid-ounce">US Fluid Ounce (fl oz)</option>
+                                        <option value="tablespoon">US Tablespoon (tbsp)</option>
+                                        <option value="teaspoon">US Teaspoon (tsp)</option>
+                                        <option value="cubic-inch">Cubic Inch (in³)</option>
+                                        <option value="cubic-foot">Cubic Foot (ft³)</option>
+                                        <option value="cubic-yard">Cubic Yard (yd³)</option>
+                                        <option value="imperial-gallon">Imperial Gallon (imp gal)</option>
+                                        <option value="barrel">Barrel (bbl)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit" class="form-label">To Unit</label>
+                                    <select class="form-select" id="toUnit" onchange="convert()">
+                                        <option value="liter">Liter (L)</option>
+                                        <option value="milliliter" selected>Milliliter (mL)</option>
+                                        <option value="cubic-meter">Cubic Meter (m³)</option>
+                                        <option value="cubic-centimeter">Cubic Centimeter (cm³)</option>
+                                        <option value="gallon">US Gallon (gal)</option>
+                                        <option value="quart">US Quart (qt)</option>
+                                        <option value="pint">US Pint (pt)</option>
+                                        <option value="cup">US Cup (cup)</option>
+                                        <option value="fluid-ounce">US Fluid Ounce (fl oz)</option>
+                                        <option value="tablespoon">US Tablespoon (tbsp)</option>
+                                        <option value="teaspoon">US Teaspoon (tsp)</option>
+                                        <option value="cubic-inch">Cubic Inch (in³)</option>
+                                        <option value="cubic-foot">Cubic Foot (ft³)</option>
+                                        <option value="cubic-yard">Cubic Yard (yd³)</option>
+                                        <option value="imperial-gallon">Imperial Gallon (imp gal)</option>
+                                        <option value="barrel">Barrel (bbl)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromValue" class="form-label">From Value</label>
+                                    <input type="number" class="form-control" id="fromValue" value="1" oninput="convert()" step="any">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toValue" class="form-label">To Value</label>
+                                    <input type="number" class="form-control" id="toValue" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="swapUnits()">
+                                        <i class="fas fa-exchange-alt"></i> Swap Units
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearConverter()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> All Units Conversion</h4>
+                                    <div class="row" id="allConversions">
+                                        <!-- All conversions will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Unit Information</h4>
+                                    <div id="unitInfo">
+                                        <p class="text-muted">Select a unit to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Conversion History</h4>
+                                    <div id="conversionHistory">
+                                        <p class="text-muted">Recent conversions will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            convert();
+        });
+
+        // Conversion factors to liters
+        const volumeUnits = {
+            'liter': 1,
+            'milliliter': 0.001,
+            'cubic-meter': 1000,
+            'cubic-centimeter': 0.001,
+            'gallon': 3.78541,
+            'quart': 0.946353,
+            'pint': 0.473176,
+            'cup': 0.236588,
+            'fluid-ounce': 0.0295735,
+            'tablespoon': 0.0147868,
+            'teaspoon': 0.00492892,
+            'cubic-inch': 0.0163871,
+            'cubic-foot': 28.3168,
+            'cubic-yard': 764.555,
+            'imperial-gallon': 4.54609,
+            'barrel': 158.987
+        };
+
+        const unitNames = {
+            'liter': 'Liter',
+            'milliliter': 'Milliliter',
+            'cubic-meter': 'Cubic Meter',
+            'cubic-centimeter': 'Cubic Centimeter',
+            'gallon': 'US Gallon',
+            'quart': 'US Quart',
+            'pint': 'US Pint',
+            'cup': 'US Cup',
+            'fluid-ounce': 'US Fluid Ounce',
+            'tablespoon': 'US Tablespoon',
+            'teaspoon': 'US Teaspoon',
+            'cubic-inch': 'Cubic Inch',
+            'cubic-foot': 'Cubic Foot',
+            'cubic-yard': 'Cubic Yard',
+            'imperial-gallon': 'Imperial Gallon',
+            'barrel': 'Barrel'
+        };
+
+        const unitSymbols = {
+            'liter': 'L',
+            'milliliter': 'mL',
+            'cubic-meter': 'm³',
+            'cubic-centimeter': 'cm³',
+            'gallon': 'gal',
+            'quart': 'qt',
+            'pint': 'pt',
+            'cup': 'cup',
+            'fluid-ounce': 'fl oz',
+            'tablespoon': 'tbsp',
+            'teaspoon': 'tsp',
+            'cubic-inch': 'in³',
+            'cubic-foot': 'ft³',
+            'cubic-yard': 'yd³',
+            'imperial-gallon': 'imp gal',
+            'barrel': 'bbl'
+        };
+
+        const unitInfo = {
+            'liter': 'The base unit of volume in the metric system. Equal to 1,000 milliliters.',
+            'milliliter': 'Equal to 0.001 liters. Commonly used for small liquid measurements.',
+            'cubic-meter': 'Equal to 1,000 liters. Used for large volume measurements.',
+            'cubic-centimeter': 'Equal to 0.001 liters. Used for small volume measurements.',
+            'gallon': 'A US unit of volume equal to 3.78541 liters.',
+            'quart': 'Equal to 0.946353 liters. Used in US liquid measurements.',
+            'pint': 'Equal to 0.473176 liters. Used in US liquid measurements.',
+            'cup': 'Equal to 0.236588 liters. Used in cooking measurements.',
+            'fluid-ounce': 'Equal to 0.0295735 liters. Used in US liquid measurements.',
+            'tablespoon': 'Equal to 0.0147868 liters. Used in cooking measurements.',
+            'teaspoon': 'Equal to 0.00492892 liters. Used in cooking measurements.',
+            'cubic-inch': 'Equal to 0.0163871 liters. Used in engineering.',
+            'cubic-foot': 'Equal to 28.3168 liters. Used for larger volumes.',
+            'cubic-yard': 'Equal to 764.555 liters. Used for very large volumes.',
+            'imperial-gallon': 'A British unit equal to 4.54609 liters.',
+            'barrel': 'Equal to 158.987 liters. Used in oil industry.'
+        };
+
+        let conversionHistory = [];
+
+        function convert() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
+
+            // Convert to liters first, then to target unit
+            const liters = fromValue * volumeUnits[fromUnit];
+            const result = liters / volumeUnits[toUnit];
+
+            document.getElementById('toValue').value = result.toFixed(6);
+
+            // Update all conversions
+            updateAllConversions(fromValue, fromUnit);
+            
+            // Update unit info
+            updateUnitInfo(fromUnit);
+            
+            // Add to history
+            addToHistory(fromValue, fromUnit, result, toUnit);
+        }
+
+        function updateAllConversions(value, fromUnit) {
+            const container = document.getElementById('allConversions');
+            let html = '';
+
+            Object.keys(volumeUnits).forEach(unit => {
+                if (unit !== fromUnit) {
+                    const liters = value * volumeUnits[fromUnit];
+                    const converted = liters / volumeUnits[unit];
+                    const symbol = unitSymbols[unit];
+                    const name = unitNames[unit];
+                    
+                    html += `
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="conversion-item">
+                                <strong>${name}</strong><br>
+                                <span class="conversion-value">${converted.toFixed(6)} ${symbol}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateUnitInfo(unit) {
+            const info = document.getElementById('unitInfo');
+            info.innerHTML = `
+                <h5>${unitNames[unit]} (${unitSymbols[unit]})</h5>
+                <p>${unitInfo[unit]}</p>
+                <p><strong>In liters:</strong> ${volumeUnits[unit]} L</p>
+            `;
+        }
+
+        function addToHistory(fromValue, fromUnit, toValue, toUnit) {
+            const conversion = {
+                from: `${fromValue} ${unitSymbols[fromUnit]}`,
+                to: `${toValue.toFixed(6)} ${unitSymbols[toUnit]}`,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            conversionHistory.unshift(conversion);
+            if (conversionHistory.length > 5) {
+                conversionHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('conversionHistory');
+            if (conversionHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No conversions yet</p>';
+                return;
+            }
+
+            let html = '';
+            conversionHistory.forEach(conv => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${conv.timestamp}</small><br>
+                        ${conv.from} → ${conv.to}
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = document.getElementById('fromValue').value;
+            const toValue = document.getElementById('toValue').value;
+
+            document.getElementById('fromUnit').value = toUnit;
+            document.getElementById('toUnit').value = fromUnit;
+            document.getElementById('fromValue').value = toValue;
+            document.getElementById('toValue').value = fromValue;
+
+            convert();
+        }
+
+        function clearConverter() {
+            document.getElementById('fromValue').value = '';
+            document.getElementById('toValue').value = '';
+            document.getElementById('allConversions').innerHTML = '';
+            document.getElementById('unitInfo').innerHTML = '<p class="text-muted">Select a unit to see information</p>';
+        }
+
+        function loadSample() {
+            document.getElementById('fromUnit').value = 'liter';
+            document.getElementById('toUnit').value = 'gallon';
+            document.getElementById('fromValue').value = '5';
+            convert();
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversion-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .conversion-value {
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

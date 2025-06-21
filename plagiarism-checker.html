@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plagiarism Checker | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Plagiarism Checker</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="textInput" class="form-label">Enter your text to check for plagiarism</label>
+                                <textarea class="form-control" id="textInput" rows="8" placeholder="Paste your text here to check for potential plagiarism..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" onclick="checkPlagiarism()">Check for Plagiarism</button>
+                                <button class="btn btn-secondary" onclick="clearText()">Clear Text</button>
+                            </div>
+                            <div id="results" style="display:none;">
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h3 class="text-success" id="originalityScore">0%</h3>
+                                                <small class="text-muted">Originality Score</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h3 class="text-warning" id="similarityScore">0%</h3>
+                                                <small class="text-muted">Similarity Score</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h3 class="text-info" id="wordCount">0</h3>
+                                                <small class="text-muted">Words Analyzed</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Analysis Results</h5>
+                                        <div id="analysisResults"></div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Recommendations</h5>
+                                        <div id="recommendations"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="grammar-checker.html">Grammar Checker</a></li>
+                            <li><a href="word-counter.html">Word Counter</a></li>
+                            <li><a href="case-converter.html">Case Converter</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        function checkPlagiarism() {
+            const text = document.getElementById('textInput').value.trim();
+            
+            if (!text) {
+                alert('Please enter some text to check');
+                return;
+            }
+            
+            // Simulate plagiarism checking (in a real app, this would use an API)
+            const words = text.split(/\s+/).length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+            
+            // Calculate basic metrics
+            const avgWordsPerSentence = words / sentences;
+            const uniqueWords = new Set(text.toLowerCase().match(/\b\w+\b/g)).size;
+            const vocabularyDiversity = (uniqueWords / words) * 100;
+            
+            // Simulate originality score based on vocabulary diversity and text complexity
+            const originalityScore = Math.min(100, Math.max(0, 
+                vocabularyDiversity * 0.6 + 
+                (avgWordsPerSentence > 10 ? 20 : avgWordsPerSentence * 2) +
+                (text.length > 500 ? 10 : text.length / 50)
+            ));
+            
+            const similarityScore = 100 - originalityScore;
+            
+            // Update UI
+            document.getElementById('originalityScore').textContent = Math.round(originalityScore) + '%';
+            document.getElementById('similarityScore').textContent = Math.round(similarityScore) + '%';
+            document.getElementById('wordCount').textContent = words;
+            
+            // Generate analysis results
+            let analysisHtml = `
+                <p><strong>Text Statistics:</strong></p>
+                <ul>
+                    <li>Total words: ${words}</li>
+                    <li>Sentences: ${sentences}</li>
+                    <li>Average words per sentence: ${avgWordsPerSentence.toFixed(1)}</li>
+                    <li>Unique words: ${uniqueWords}</li>
+                    <li>Vocabulary diversity: ${vocabularyDiversity.toFixed(1)}%</li>
+                </ul>
+            `;
+            
+            if (originalityScore > 80) {
+                analysisHtml += '<p class="text-success"><strong>✅ High originality detected</strong></p>';
+            } else if (originalityScore > 60) {
+                analysisHtml += '<p class="text-warning"><strong>⚠️ Moderate originality detected</strong></p>';
+            } else {
+                analysisHtml += '<p class="text-danger"><strong>❌ Low originality detected</strong></p>';
+            }
+            
+            document.getElementById('analysisResults').innerHTML = analysisHtml;
+            
+            // Generate recommendations
+            let recommendationsHtml = '<ul>';
+            if (originalityScore < 70) {
+                recommendationsHtml += '<li>Consider rewriting sections with similar phrases</li>';
+                recommendationsHtml += '<li>Add more unique vocabulary and expressions</li>';
+                recommendationsHtml += '<li>Vary sentence structure and length</li>';
+            } else {
+                recommendationsHtml += '<li>Your text shows good originality</li>';
+                recommendationsHtml += '<li>Continue using diverse vocabulary</li>';
+                recommendationsHtml += '<li>Maintain your unique writing style</li>';
+            }
+            recommendationsHtml += '</ul>';
+            
+            document.getElementById('recommendations').innerHTML = recommendationsHtml;
+            
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function clearText() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('results').style.display = 'none';
+        }
+    </script>
+</body>
+</html> 

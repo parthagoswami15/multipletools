@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .calculator {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .calc-display {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: right;
+            font-family: monospace;
+            font-size: 1.2em;
+            min-height: 60px;
+        }
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+        }
+        .calc-btn {
+            padding: 15px 10px;
+            border: 1px solid #dee2e6;
+            background: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        .calc-btn:hover {
+            background: #e9ecef;
+        }
+        .calc-btn.operator {
+            background: #007bff;
+            color: white;
+        }
+        .calc-btn.operator:hover {
+            background: #0056b3;
+        }
+        .calc-btn.function {
+            background: #28a745;
+            color: white;
+        }
+        .calc-btn.function:hover {
+            background: #1e7e34;
+        }
+        .calc-btn.clear {
+            background: #dc3545;
+            color: white;
+        }
+        .calc-btn.clear:hover {
+            background: #c82333;
+        }
+        .calc-btn.equals {
+            background: #ffc107;
+            color: #212529;
+        }
+        .calc-btn.equals:hover {
+            background: #e0a800;
+        }
+        .history-item {
+            cursor: pointer;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .history-item:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Scientific Calculator</h1>
+                        <div id="tool-ui">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="calculator">
+                                        <div class="calc-display" id="display">
+                                            <div id="expression">0</div>
+                                            <div id="result" style="font-size: 0.8em; color: #6c757d;"></div>
+                                        </div>
+                                        
+                                        <div class="calc-buttons">
+                                            <!-- Row 1 -->
+                                            <button class="calc-btn function" onclick="addFunction('sin')">sin</button>
+                                            <button class="calc-btn function" onclick="addFunction('cos')">cos</button>
+                                            <button class="calc-btn function" onclick="addFunction('tan')">tan</button>
+                                            <button class="calc-btn function" onclick="addFunction('log')">log</button>
+                                            <button class="calc-btn clear" onclick="clearAll()">C</button>
+                                            
+                                            <!-- Row 2 -->
+                                            <button class="calc-btn function" onclick="addFunction('asin')">asin</button>
+                                            <button class="calc-btn function" onclick="addFunction('acos')">acos</button>
+                                            <button class="calc-btn function" onclick="addFunction('atan')">atan</button>
+                                            <button class="calc-btn function" onclick="addFunction('ln')">ln</button>
+                                            <button class="calc-btn clear" onclick="clearEntry()">CE</button>
+                                            
+                                            <!-- Row 3 -->
+                                            <button class="calc-btn function" onclick="addFunction('sqrt')">√</button>
+                                            <button class="calc-btn function" onclick="addFunction('pow')">x^y</button>
+                                            <button class="calc-btn function" onclick="addFunction('fact')">x!</button>
+                                            <button class="calc-btn function" onclick="addFunction('abs')">|x|</button>
+                                            <button class="calc-btn" onclick="addToExpression('(')">(</button>
+                                            
+                                            <!-- Row 4 -->
+                                            <button class="calc-btn" onclick="addToExpression('7')">7</button>
+                                            <button class="calc-btn" onclick="addToExpression('8')">8</button>
+                                            <button class="calc-btn" onclick="addToExpression('9')">9</button>
+                                            <button class="calc-btn operator" onclick="addToExpression('/')">/</button>
+                                            <button class="calc-btn" onclick="addToExpression(')')">)</button>
+                                            
+                                            <!-- Row 5 -->
+                                            <button class="calc-btn" onclick="addToExpression('4')">4</button>
+                                            <button class="calc-btn" onclick="addToExpression('5')">5</button>
+                                            <button class="calc-btn" onclick="addToExpression('6')">6</button>
+                                            <button class="calc-btn operator" onclick="addToExpression('*')">×</button>
+                                            <button class="calc-btn function" onclick="addFunction('pi')">π</button>
+                                            
+                                            <!-- Row 6 -->
+                                            <button class="calc-btn" onclick="addToExpression('1')">1</button>
+                                            <button class="calc-btn" onclick="addToExpression('2')">2</button>
+                                            <button class="calc-btn" onclick="addToExpression('3')">3</button>
+                                            <button class="calc-btn operator" onclick="addToExpression('-')">-</button>
+                                            <button class="calc-btn function" onclick="addFunction('e')">e</button>
+                                            
+                                            <!-- Row 7 -->
+                                            <button class="calc-btn" onclick="addToExpression('0')">0</button>
+                                            <button class="calc-btn" onclick="addToExpression('.')">.</button>
+                                            <button class="calc-btn function" onclick="addFunction('exp')">exp</button>
+                                            <button class="calc-btn operator" onclick="addToExpression('+')">+</button>
+                                            <button class="calc-btn equals" onclick="calculate()">=</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">History</h5>
+                                            <div id="history" style="max-height: 300px; overflow-y: auto;">
+                                                <div class="text-muted">No calculations yet</div>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-secondary mt-2" onclick="clearHistory()">Clear History</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Quick Functions</h5>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <button class="btn btn-outline-primary btn-sm me-2 mb-2" onclick="quickFunction('square')">x²</button>
+                                                    <button class="btn btn-outline-primary btn-sm me-2 mb-2" onclick="quickFunction('cube')">x³</button>
+                                                    <button class="btn btn-outline-primary btn-sm me-2 mb-2" onclick="quickFunction('reciprocal')">1/x</button>
+                                                    <button class="btn btn-outline-primary btn-sm me-2 mb-2" onclick="quickFunction('percent')">%</button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button class="btn btn-outline-success btn-sm me-2 mb-2" onclick="quickFunction('degrees')">Degrees</button>
+                                                    <button class="btn btn-outline-success btn-sm me-2 mb-2" onclick="quickFunction('radians')">Radians</button>
+                                                    <button class="btn btn-outline-info btn-sm me-2 mb-2" onclick="quickFunction('random')">Random</button>
+                                                    <button class="btn btn-outline-warning btn-sm me-2 mb-2" onclick="quickFunction('round')">Round</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="percentage-calculator.html">Percentage Calculator</a></li>
+                            <li><a href="bmi-calculator.html">BMI Calculator</a></li>
+                            <li><a href="loan-emi-calculator.html">Loan EMI Calculator</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let currentExpression = '0';
+        let calculationHistory = [];
+        let angleMode = 'degrees'; // degrees or radians
+
+        function updateDisplay() {
+            document.getElementById('expression').textContent = currentExpression;
+        }
+
+        function addToExpression(value) {
+            if (currentExpression === '0' && value !== '.') {
+                currentExpression = value;
+            } else {
+                currentExpression += value;
+            }
+            updateDisplay();
+        }
+
+        function addFunction(func) {
+            switch(func) {
+                case 'sin':
+                case 'cos':
+                case 'tan':
+                case 'asin':
+                case 'acos':
+                case 'atan':
+                    currentExpression += func + '(';
+                    break;
+                case 'log':
+                    currentExpression += 'log(';
+                    break;
+                case 'ln':
+                    currentExpression += 'ln(';
+                    break;
+                case 'sqrt':
+                    currentExpression += 'sqrt(';
+                    break;
+                case 'pow':
+                    currentExpression += '^';
+                    break;
+                case 'fact':
+                    currentExpression += '!';
+                    break;
+                case 'abs':
+                    currentExpression += 'abs(';
+                    break;
+                case 'pi':
+                    currentExpression = currentExpression === '0' ? '3.14159265359' : currentExpression + '3.14159265359';
+                    break;
+                case 'e':
+                    currentExpression = currentExpression === '0' ? '2.71828182846' : currentExpression + '2.71828182846';
+                    break;
+                case 'exp':
+                    currentExpression += 'exp(';
+                    break;
+            }
+            updateDisplay();
+        }
+
+        function calculate() {
+            try {
+                let expression = currentExpression;
+                
+                // Replace mathematical functions
+                expression = expression.replace(/sin\(/g, 'Math.sin(');
+                expression = expression.replace(/cos\(/g, 'Math.cos(');
+                expression = expression.replace(/tan\(/g, 'Math.tan(');
+                expression = expression.replace(/asin\(/g, 'Math.asin(');
+                expression = expression.replace(/acos\(/g, 'Math.acos(');
+                expression = expression.replace(/atan\(/g, 'Math.atan(');
+                expression = expression.replace(/log\(/g, 'Math.log10(');
+                expression = expression.replace(/ln\(/g, 'Math.log(');
+                expression = expression.replace(/sqrt\(/g, 'Math.sqrt(');
+                expression = expression.replace(/abs\(/g, 'Math.abs(');
+                expression = expression.replace(/exp\(/g, 'Math.exp(');
+                
+                // Handle factorial
+                expression = expression.replace(/(\d+)!/g, function(match, num) {
+                    return factorial(parseInt(num));
+                });
+                
+                // Handle power
+                expression = expression.replace(/\^/g, '**');
+                
+                // Convert angles if needed
+                if (angleMode === 'degrees') {
+                    expression = expression.replace(/Math\.sin\(/g, 'Math.sin(Math.PI/180*');
+                    expression = expression.replace(/Math\.cos\(/g, 'Math.cos(Math.PI/180*');
+                    expression = expression.replace(/Math\.tan\(/g, 'Math.tan(Math.PI/180*');
+                }
+                
+                const result = eval(expression);
+                
+                // Add to history
+                const historyItem = {
+                    expression: currentExpression,
+                    result: result
+                };
+                calculationHistory.unshift(historyItem);
+                updateHistory();
+                
+                // Update display
+                document.getElementById('result').textContent = '= ' + result;
+                currentExpression = result.toString();
+                updateDisplay();
+                
+            } catch (error) {
+                document.getElementById('result').textContent = 'Error: ' + error.message;
+            }
+        }
+
+        function factorial(n) {
+            if (n < 0) return NaN;
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        function clearAll() {
+            currentExpression = '0';
+            document.getElementById('result').textContent = '';
+            updateDisplay();
+        }
+
+        function clearEntry() {
+            currentExpression = '0';
+            document.getElementById('result').textContent = '';
+            updateDisplay();
+        }
+
+        function updateHistory() {
+            const historyDiv = document.getElementById('history');
+            if (calculationHistory.length === 0) {
+                historyDiv.innerHTML = '<div class="text-muted">No calculations yet</div>';
+                return;
+            }
+            
+            historyDiv.innerHTML = calculationHistory.slice(0, 10).map((item, index) => 
+                `<div class="history-item" onclick="loadFromHistory(${index})">
+                    <div><strong>${item.expression}</strong></div>
+                    <div class="text-muted">= ${item.result}</div>
+                </div>`
+            ).join('');
+        }
+
+        function loadFromHistory(index) {
+            currentExpression = calculationHistory[index].expression;
+            document.getElementById('result').textContent = '= ' + calculationHistory[index].result;
+            updateDisplay();
+        }
+
+        function clearHistory() {
+            calculationHistory = [];
+            updateHistory();
+        }
+
+        function quickFunction(func) {
+            const currentValue = parseFloat(currentExpression);
+            if (isNaN(currentValue)) return;
+            
+            let result;
+            switch(func) {
+                case 'square':
+                    result = currentValue * currentValue;
+                    break;
+                case 'cube':
+                    result = currentValue * currentValue * currentValue;
+                    break;
+                case 'reciprocal':
+                    result = 1 / currentValue;
+                    break;
+                case 'percent':
+                    result = currentValue / 100;
+                    break;
+                case 'degrees':
+                    angleMode = 'degrees';
+                    alert('Angle mode set to degrees');
+                    return;
+                case 'radians':
+                    angleMode = 'radians';
+                    alert('Angle mode set to radians');
+                    return;
+                case 'random':
+                    result = Math.random();
+                    break;
+                case 'round':
+                    result = Math.round(currentValue);
+                    break;
+            }
+            
+            currentExpression = result.toString();
+            document.getElementById('result').textContent = '= ' + result;
+            updateDisplay();
+        }
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html> 

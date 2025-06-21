@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-tachometer-alt"></i> Speed Converter</h1>
+                        <p>Convert between different speed units quickly and accurately</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit" class="form-label">From Unit</label>
+                                    <select class="form-select" id="fromUnit" onchange="convert()">
+                                        <option value="mps">Meters per Second (m/s)</option>
+                                        <option value="kph">Kilometers per Hour (km/h)</option>
+                                        <option value="mph">Miles per Hour (mph)</option>
+                                        <option value="knot">Knot (kn)</option>
+                                        <option value="fps">Feet per Second (ft/s)</option>
+                                        <option value="ips">Inches per Second (in/s)</option>
+                                        <option value="mach">Mach (M)</option>
+                                        <option value="lightspeed">Speed of Light (c)</option>
+                                        <option value="sound">Speed of Sound (m/s)</option>
+                                        <option value="yardps">Yards per Second (yd/s)</option>
+                                        <option value="fpm">Feet per Minute (ft/min)</option>
+                                        <option value="ipm">Inches per Minute (in/min)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit" class="form-label">To Unit</label>
+                                    <select class="form-select" id="toUnit" onchange="convert()">
+                                        <option value="mps">Meters per Second (m/s)</option>
+                                        <option value="kph" selected>Kilometers per Hour (km/h)</option>
+                                        <option value="mph">Miles per Hour (mph)</option>
+                                        <option value="knot">Knot (kn)</option>
+                                        <option value="fps">Feet per Second (ft/s)</option>
+                                        <option value="ips">Inches per Second (in/s)</option>
+                                        <option value="mach">Mach (M)</option>
+                                        <option value="lightspeed">Speed of Light (c)</option>
+                                        <option value="sound">Speed of Sound (m/s)</option>
+                                        <option value="yardps">Yards per Second (yd/s)</option>
+                                        <option value="fpm">Feet per Minute (ft/min)</option>
+                                        <option value="ipm">Inches per Minute (in/min)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromValue" class="form-label">From Value</label>
+                                    <input type="number" class="form-control" id="fromValue" value="1" oninput="convert()" step="any">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toValue" class="form-label">To Value</label>
+                                    <input type="number" class="form-control" id="toValue" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="swapUnits()">
+                                        <i class="fas fa-exchange-alt"></i> Swap Units
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearConverter()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> All Units Conversion</h4>
+                                    <div class="row" id="allConversions">
+                                        <!-- All conversions will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Unit Information</h4>
+                                    <div id="unitInfo">
+                                        <p class="text-muted">Select a unit to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Conversion History</h4>
+                                    <div id="conversionHistory">
+                                        <p class="text-muted">Recent conversions will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            convert();
+        });
+
+        // Conversion factors to meters per second
+        const speedUnits = {
+            'mps': 1,
+            'kph': 0.277778,
+            'mph': 0.44704,
+            'knot': 0.514444,
+            'fps': 0.3048,
+            'ips': 0.0254,
+            'mach': 340.29,
+            'lightspeed': 299792458,
+            'sound': 343,
+            'yardps': 0.9144,
+            'fpm': 0.00508,
+            'ipm': 0.000423333
+        };
+
+        const unitNames = {
+            'mps': 'Meters per Second',
+            'kph': 'Kilometers per Hour',
+            'mph': 'Miles per Hour',
+            'knot': 'Knot',
+            'fps': 'Feet per Second',
+            'ips': 'Inches per Second',
+            'mach': 'Mach',
+            'lightspeed': 'Speed of Light',
+            'sound': 'Speed of Sound',
+            'yardps': 'Yards per Second',
+            'fpm': 'Feet per Minute',
+            'ipm': 'Inches per Minute'
+        };
+
+        const unitSymbols = {
+            'mps': 'm/s',
+            'kph': 'km/h',
+            'mph': 'mph',
+            'knot': 'kn',
+            'fps': 'ft/s',
+            'ips': 'in/s',
+            'mach': 'M',
+            'lightspeed': 'c',
+            'sound': 'm/s',
+            'yardps': 'yd/s',
+            'fpm': 'ft/min',
+            'ipm': 'in/min'
+        };
+
+        const unitInfo = {
+            'mps': 'The base unit of speed in the International System of Units (SI).',
+            'kph': 'Commonly used for vehicle speeds. Equal to 0.277778 m/s.',
+            'mph': 'Used in the United States for vehicle speeds. Equal to 0.44704 m/s.',
+            'knot': 'Used in maritime and aviation. Equal to 0.514444 m/s.',
+            'fps': 'Equal to 0.3048 m/s. Used in some engineering applications.',
+            'ips': 'Equal to 0.0254 m/s. Used for very slow speeds.',
+            'mach': 'Speed relative to the speed of sound. Mach 1 = 340.29 m/s at sea level.',
+            'lightspeed': 'The speed of light in vacuum. Equal to 299,792,458 m/s.',
+            'sound': 'Speed of sound in air at sea level. Equal to 343 m/s.',
+            'yardps': 'Equal to 0.9144 m/s. Used in some sports.',
+            'fpm': 'Equal to 0.00508 m/s. Used for slow speeds.',
+            'ipm': 'Equal to 0.000423333 m/s. Used for very slow speeds.'
+        };
+
+        let conversionHistory = [];
+
+        function convert() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
+
+            // Convert to meters per second first, then to target unit
+            const mps = fromValue * speedUnits[fromUnit];
+            const result = mps / speedUnits[toUnit];
+
+            document.getElementById('toValue').value = result.toFixed(6);
+
+            // Update all conversions
+            updateAllConversions(fromValue, fromUnit);
+            
+            // Update unit info
+            updateUnitInfo(fromUnit);
+            
+            // Add to history
+            addToHistory(fromValue, fromUnit, result, toUnit);
+        }
+
+        function updateAllConversions(value, fromUnit) {
+            const container = document.getElementById('allConversions');
+            let html = '';
+
+            Object.keys(speedUnits).forEach(unit => {
+                if (unit !== fromUnit) {
+                    const mps = value * speedUnits[fromUnit];
+                    const converted = mps / speedUnits[unit];
+                    const symbol = unitSymbols[unit];
+                    const name = unitNames[unit];
+                    
+                    html += `
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="conversion-item">
+                                <strong>${name}</strong><br>
+                                <span class="conversion-value">${converted.toFixed(6)} ${symbol}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateUnitInfo(unit) {
+            const info = document.getElementById('unitInfo');
+            info.innerHTML = `
+                <h5>${unitNames[unit]} (${unitSymbols[unit]})</h5>
+                <p>${unitInfo[unit]}</p>
+                <p><strong>In m/s:</strong> ${speedUnits[unit]} m/s</p>
+            `;
+        }
+
+        function addToHistory(fromValue, fromUnit, toValue, toUnit) {
+            const conversion = {
+                from: `${fromValue} ${unitSymbols[fromUnit]}`,
+                to: `${toValue.toFixed(6)} ${unitSymbols[toUnit]}`,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            conversionHistory.unshift(conversion);
+            if (conversionHistory.length > 5) {
+                conversionHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('conversionHistory');
+            if (conversionHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No conversions yet</p>';
+                return;
+            }
+
+            let html = '';
+            conversionHistory.forEach(conv => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${conv.timestamp}</small><br>
+                        ${conv.from} → ${conv.to}
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = document.getElementById('fromValue').value;
+            const toValue = document.getElementById('toValue').value;
+
+            document.getElementById('fromUnit').value = toUnit;
+            document.getElementById('toUnit').value = fromUnit;
+            document.getElementById('fromValue').value = toValue;
+            document.getElementById('toValue').value = fromValue;
+
+            convert();
+        }
+
+        function clearConverter() {
+            document.getElementById('fromValue').value = '';
+            document.getElementById('toValue').value = '';
+            document.getElementById('allConversions').innerHTML = '';
+            document.getElementById('unitInfo').innerHTML = '<p class="text-muted">Select a unit to see information</p>';
+        }
+
+        function loadSample() {
+            document.getElementById('fromUnit').value = 'kph';
+            document.getElementById('toUnit').value = 'mph';
+            document.getElementById('fromValue').value = '100';
+            convert();
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversion-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .conversion-value {
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

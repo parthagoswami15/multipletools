@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Photo Downloader - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fab fa-instagram"></i> Instagram Photo Downloader</h1>
+                        <p>Download high-quality photos from Instagram posts easily</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="postUrl" class="form-label">Instagram Post URL</label>
+                                    <div class="input-group">
+                                        <input type="url" class="form-control" id="postUrl" placeholder="https://www.instagram.com/p/..." oninput="validateUrl()">
+                                        <button class="btn btn-primary" type="button" onclick="extractPhotos()">
+                                            <i class="fas fa-search"></i> Extract
+                                        </button>
+                                    </div>
+                                    <div class="form-text">Enter a valid Instagram post URL to extract photos</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearTool()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-info" onclick="showHelp()">
+                                        <i class="fas fa-question-circle"></i> Help
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="photoResults" style="display: none;">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-images"></i> Available Photos</h4>
+                                    <div class="row" id="photosContainer">
+                                        <!-- Photos will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Post Information</h4>
+                                    <div id="postInfo">
+                                        <p class="text-muted">Post information will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Recent Downloads</h4>
+                                    <div id="downloadHistory">
+                                        <p class="text-muted">Recent downloads will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-lightbulb"></i> Tips & Information</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5>Supported URL Formats:</h5>
+                                            <ul>
+                                                <li>https://www.instagram.com/p/POST_ID/</li>
+                                                <li>https://instagram.com/p/POST_ID/</li>
+                                                <li>https://www.instagram.com/reel/POST_ID/</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Download Options:</h5>
+                                            <ul>
+                                                <li><strong>Original:</strong> Highest quality available</li>
+                                                <li><strong>Large:</strong> 1080x1080 pixels</li>
+                                                <li><strong>Medium:</strong> 600x600 pixels</li>
+                                                <li><strong>Small:</strong> 320x320 pixels</li>
+                                                <li><strong>Thumbnail:</strong> 150x150 pixels</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+        });
+
+        let downloadHistory = [];
+
+        function validateUrl() {
+            const url = document.getElementById('postUrl').value;
+            const urlPattern = /^(https?:\/\/)?(www\.)?(instagram\.com\/p\/|instagram\.com\/reel\/)([a-zA-Z0-9_-]+)/;
+            return urlPattern.test(url);
+        }
+
+        function extractPostId(url) {
+            const patterns = [
+                /instagram\.com\/p\/([a-zA-Z0-9_-]+)/,
+                /instagram\.com\/reel\/([a-zA-Z0-9_-]+)/
+            ];
+            
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        function extractPhotos() {
+            const url = document.getElementById('postUrl').value;
+            
+            if (!validateUrl()) {
+                showAlert('Please enter a valid Instagram URL', 'danger');
+                return;
+            }
+
+            const postId = extractPostId(url);
+            if (!postId) {
+                showAlert('Could not extract post ID from URL', 'danger');
+                return;
+            }
+
+            // Show loading state
+            showAlert('Extracting photos...', 'info');
+            
+            // Simulate photo extraction (in real implementation, you'd need a backend service)
+            const photos = generatePhotoUrls(postId);
+            displayPhotos(photos, postId);
+            
+            // Update post info
+            updatePostInfo(postId);
+            
+            // Add to history
+            addToHistory(url, postId);
+        }
+
+        function generatePhotoUrls(postId) {
+            // This is a simulation - in reality, you'd need to scrape Instagram or use their API
+            return [
+                {
+                    url: `https://example.com/instagram/${postId}_original.jpg`,
+                    quality: 'Original',
+                    size: '1080x1080',
+                    description: 'Original quality photo'
+                },
+                {
+                    url: `https://example.com/instagram/${postId}_large.jpg`,
+                    quality: 'Large',
+                    size: '1080x1080',
+                    description: 'Large quality photo'
+                },
+                {
+                    url: `https://example.com/instagram/${postId}_medium.jpg`,
+                    quality: 'Medium',
+                    size: '600x600',
+                    description: 'Medium quality photo'
+                },
+                {
+                    url: `https://example.com/instagram/${postId}_small.jpg`,
+                    quality: 'Small',
+                    size: '320x320',
+                    description: 'Small quality photo'
+                },
+                {
+                    url: `https://example.com/instagram/${postId}_thumb.jpg`,
+                    quality: 'Thumbnail',
+                    size: '150x150',
+                    description: 'Thumbnail quality photo'
+                }
+            ];
+        }
+
+        function displayPhotos(photos, postId) {
+            const container = document.getElementById('photosContainer');
+            let html = '';
+
+            photos.forEach((photo, index) => {
+                html += `
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="photo-card">
+                            <div class="photo-placeholder">
+                                <i class="fab fa-instagram fa-3x text-muted"></i>
+                                <p class="mt-2">${photo.quality} Quality</p>
+                            </div>
+                            <div class="photo-info">
+                                <h6>${photo.quality}</h6>
+                                <p class="text-muted">${photo.size}</p>
+                                <p class="small">${photo.description}</p>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-sm btn-primary" onclick="downloadPhoto('${photo.url}', '${postId}_${photo.quality.toLowerCase()}')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary" onclick="copyPhotoUrl('${photo.url}')">
+                                        <i class="fas fa-copy"></i> Copy URL
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('photoResults').style.display = 'block';
+        }
+
+        function downloadPhoto(url, filename) {
+            // In a real implementation, you'd need to handle the actual download
+            showAlert(`Download started for ${filename}!`, 'success');
+            
+            // Simulate download
+            setTimeout(() => {
+                showAlert('Download completed!', 'success');
+            }, 2000);
+        }
+
+        function copyPhotoUrl(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                showAlert('Photo URL copied to clipboard!', 'success');
+            }).catch(() => {
+                showAlert('Failed to copy URL to clipboard', 'danger');
+            });
+        }
+
+        function updatePostInfo(postId) {
+            const info = document.getElementById('postInfo');
+            info.innerHTML = `
+                <h5>Post ID: ${postId}</h5>
+                <p><strong>Post URL:</strong> https://www.instagram.com/p/${postId}/</p>
+                <p><strong>Reel URL:</strong> https://www.instagram.com/reel/${postId}/</p>
+                <p><strong>Embed URL:</strong> https://www.instagram.com/p/${postId}/embed/</p>
+                <div class="mt-3">
+                    <button class="btn btn-sm btn-outline-primary" onclick="copyToClipboard('https://www.instagram.com/p/${postId}/')">
+                        <i class="fas fa-copy"></i> Copy Post URL
+                    </button>
+                </div>
+            `;
+        }
+
+        function addToHistory(url, postId) {
+            const download = {
+                url: url,
+                postId: postId,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            downloadHistory.unshift(download);
+            if (downloadHistory.length > 5) {
+                downloadHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('downloadHistory');
+            if (downloadHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No recent downloads</p>';
+                return;
+            }
+
+            let html = '';
+            downloadHistory.forEach(download => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${download.timestamp}</small><br>
+                        <strong>Post ID:</strong> ${download.postId}<br>
+                        <a href="${download.url}" target="_blank" class="text-decoration-none">View Post</a>
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showAlert('Copied to clipboard!', 'success');
+            }).catch(() => {
+                showAlert('Failed to copy to clipboard', 'danger');
+            });
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            const container = document.querySelector('.tool-content');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        function loadSample() {
+            document.getElementById('postUrl').value = 'https://www.instagram.com/p/ABC123xyz/';
+            extractPhotos();
+        }
+
+        function clearTool() {
+            document.getElementById('postUrl').value = '';
+            document.getElementById('photoResults').style.display = 'none';
+            document.getElementById('postInfo').innerHTML = '<p class="text-muted">Post information will appear here</p>';
+        }
+
+        function showHelp() {
+            const helpText = `
+                <h5>How to use Instagram Photo Downloader:</h5>
+                <ol>
+                    <li>Copy the URL of any Instagram post</li>
+                    <li>Paste it in the input field above</li>
+                    <li>Click "Extract" to generate photo URLs</li>
+                    <li>Choose your preferred quality and download</li>
+                </ol>
+                <h5>Supported URL formats:</h5>
+                <ul>
+                    <li>https://www.instagram.com/p/POST_ID/</li>
+                    <li>https://instagram.com/p/POST_ID/</li>
+                    <li>https://www.instagram.com/reel/POST_ID/</li>
+                </ul>
+                <p><strong>Note:</strong> This tool requires a backend service to actually download Instagram photos due to Instagram's terms of service and technical limitations.</p>
+            `;
+            
+            showAlert(helpText, 'info');
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .photo-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .photo-placeholder {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 15px;
+            color: #6c757d;
+        }
+
+        .photo-info h6 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

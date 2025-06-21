@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Speed Checker | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Page Speed Checker</h1>
+                        <div id="tool-ui">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="checkUrl" class="form-label">URL to Check</label>
+                                    <input type="url" class="form-control" id="checkUrl" placeholder="https://example.com">
+                                    <div class="form-text">Enter the URL you want to check for page speed</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="deviceType" class="form-label">Device Type</label>
+                                    <select class="form-select" id="deviceType">
+                                        <option value="desktop">Desktop</option>
+                                        <option value="mobile">Mobile</option>
+                                        <option value="both">Both</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="connectionType" class="form-label">Connection Type</label>
+                                    <select class="form-select" id="connectionType">
+                                        <option value="4g">4G</option>
+                                        <option value="3g">3G</option>
+                                        <option value="2g">2G</option>
+                                        <option value="cable">Cable</option>
+                                        <option value="dsl">DSL</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="location" class="form-label">Test Location</label>
+                                    <select class="form-select" id="location">
+                                        <option value="us">United States</option>
+                                        <option value="eu">Europe</option>
+                                        <option value="asia">Asia</option>
+                                        <option value="au">Australia</option>
+                                        <option value="sa">South America</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <button class="btn btn-primary" onclick="checkPageSpeed()">Check Page Speed</button>
+                                <button class="btn btn-secondary" onclick="clearChecker()">Clear</button>
+                                <button class="btn btn-outline-secondary" onclick="loadSampleUrl()">Load Sample</button>
+                                <button class="btn btn-outline-info" onclick="compareSpeed()">Compare</button>
+                            </div>
+                            
+                            <div id="speedResults" style="display:none;">
+                                <div class="row mt-4">
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-primary" id="pageSpeedScore">0</h4>
+                                                <small class="text-muted">Speed Score</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-success" id="loadTime">0s</h4>
+                                                <small class="text-muted">Load Time</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-info" id="pageSize">0 KB</h4>
+                                                <small class="text-muted">Page Size</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-warning" id="requests">0</h4>
+                                                <small class="text-muted">Requests</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Performance Metrics</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Core Web Vitals</h6>
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Largest Contentful Paint (LCP)</td>
+                                                                <td><span id="lcpValue">0s</span> <span id="lcpStatus" class="badge">Good</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>First Input Delay (FID)</td>
+                                                                <td><span id="fidValue">0ms</span> <span id="fidStatus" class="badge">Good</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Cumulative Layout Shift (CLS)</td>
+                                                                <td><span id="clsValue">0</span> <span id="clsStatus" class="badge">Good</span></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>Additional Metrics</h6>
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>First Contentful Paint (FCP)</td>
+                                                                <td><span id="fcpValue">0s</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Speed Index</td>
+                                                                <td><span id="speedIndexValue">0s</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Time to Interactive (TTI)</td>
+                                                                <td><span id="ttiValue">0s</span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Total Blocking Time (TBT)</td>
+                                                                <td><span id="tbtValue">0ms</span></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Performance Analysis</h5>
+                                                <div id="performanceAnalysis"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Optimization Recommendations</h5>
+                                                <div id="optimizationRecommendations"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Resource Breakdown</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm" id="resourceTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Resource Type</th>
+                                                        <th>Count</th>
+                                                        <th>Size</th>
+                                                        <th>Load Time</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="resourceTableBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Performance Timeline</h5>
+                                        <div class="progress mb-3" style="height: 30px;">
+                                            <div class="progress-bar bg-success" id="fcpBar" style="width: 0%">FCP</div>
+                                            <div class="progress-bar bg-info" id="lcpBar" style="width: 0%">LCP</div>
+                                            <div class="progress-bar bg-warning" id="ttiBar" style="width: 0%">TTI</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <small class="text-muted">FCP: <span id="fcpTimeline">0s</span></small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small class="text-muted">LCP: <span id="lcpTimeline">0s</span></small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small class="text-muted">TTI: <span id="ttiTimeline">0s</span></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Page Speed Guidelines</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Speed Score Ranges</h6>
+                                <ul>
+                                    <li><strong>90-100:</strong> Excellent (Green)</li>
+                                    <li><strong>50-89:</strong> Good (Orange)</li>
+                                    <li><strong>0-49:</strong> Poor (Red)</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Core Web Vitals Targets</h6>
+                                <ul>
+                                    <li><strong>LCP:</strong> &lt; 2.5s (Good)</li>
+                                    <li><strong>FID:</strong> &lt; 100ms (Good)</li>
+                                    <li><strong>CLS:</strong> &lt; 0.1 (Good)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="domain-authority-checker.html">Domain Authority Checker</a></li>
+                            <li><a href="backlink-checker.html">Backlink Checker</a></li>
+                            <li><a href="mobile-friendly-test.html">Mobile-Friendly Test</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        function checkPageSpeed() {
+            const checkUrl = document.getElementById('checkUrl').value;
+            const deviceType = document.getElementById('deviceType').value;
+            const connectionType = document.getElementById('connectionType').value;
+            const location = document.getElementById('location').value;
+            
+            if (!checkUrl) {
+                alert('Please enter a URL to check');
+                return;
+            }
+            
+            // Simulate checking process
+            showLoading();
+            
+            setTimeout(() => {
+                const results = generateSpeedResults(deviceType, connectionType);
+                displayResults(results);
+            }, 4000);
+        }
+
+        function generateSpeedResults(deviceType, connectionType) {
+            // Generate realistic speed metrics based on device and connection
+            const baseSpeed = deviceType === 'mobile' ? 0.8 : 1.0;
+            const connectionMultiplier = {
+                '4g': 1.0,
+                '3g': 1.5,
+                '2g': 3.0,
+                'cable': 0.8,
+                'dsl': 1.2
+            }[connectionType] || 1.0;
+            
+            const speedMultiplier = baseSpeed * connectionMultiplier;
+            
+            return {
+                speedScore: Math.floor(Math.random() * 40) + 60, // 60-100
+                loadTime: (Math.random() * 3 + 1) * speedMultiplier,
+                pageSize: Math.floor(Math.random() * 2000) + 500,
+                requests: Math.floor(Math.random() * 50) + 20,
+                lcp: (Math.random() * 2 + 1) * speedMultiplier,
+                fid: Math.floor(Math.random() * 100) + 20,
+                cls: Math.random() * 0.2,
+                fcp: (Math.random() * 1.5 + 0.5) * speedMultiplier,
+                speedIndex: (Math.random() * 3 + 1) * speedMultiplier,
+                tti: (Math.random() * 4 + 2) * speedMultiplier,
+                tbt: Math.floor(Math.random() * 300) + 50
+            };
+        }
+
+        function displayResults(results) {
+            // Update summary stats
+            document.getElementById('pageSpeedScore').textContent = results.speedScore;
+            document.getElementById('loadTime').textContent = results.loadTime.toFixed(1) + 's';
+            document.getElementById('pageSize').textContent = (results.pageSize / 1024).toFixed(1) + ' KB';
+            document.getElementById('requests').textContent = results.requests;
+            
+            // Update Core Web Vitals
+            document.getElementById('lcpValue').textContent = results.lcp.toFixed(1) + 's';
+            document.getElementById('fidValue').textContent = results.fid + 'ms';
+            document.getElementById('clsValue').textContent = results.cls.toFixed(3);
+            
+            // Update status badges
+            updateStatusBadge('lcpStatus', results.lcp, 2.5, 'LCP');
+            updateStatusBadge('fidStatus', results.fid, 100, 'FID');
+            updateStatusBadge('clsStatus', results.cls, 0.1, 'CLS');
+            
+            // Update additional metrics
+            document.getElementById('fcpValue').textContent = results.fcp.toFixed(1) + 's';
+            document.getElementById('speedIndexValue').textContent = results.speedIndex.toFixed(1) + 's';
+            document.getElementById('ttiValue').textContent = results.tti.toFixed(1) + 's';
+            document.getElementById('tbtValue').textContent = results.tbt + 'ms';
+            
+            // Generate analysis and recommendations
+            generatePerformanceAnalysis(results);
+            generateOptimizationRecommendations(results);
+            generateResourceBreakdown(results);
+            generatePerformanceTimeline(results);
+            
+            document.getElementById('speedResults').style.display = 'block';
+        }
+
+        function updateStatusBadge(elementId, value, threshold, metric) {
+            const element = document.getElementById(elementId);
+            const isGood = metric === 'CLS' ? value < threshold : value < threshold;
+            
+            element.textContent = isGood ? 'Good' : 'Poor';
+            element.className = isGood ? 'badge bg-success' : 'badge bg-danger';
+        }
+
+        function generatePerformanceAnalysis(results) {
+            const analysis = document.getElementById('performanceAnalysis');
+            const score = results.speedScore;
+            
+            let performanceLevel = 'Poor';
+            let performanceClass = 'text-danger';
+            
+            if (score >= 90) {
+                performanceLevel = 'Excellent';
+                performanceClass = 'text-success';
+            } else if (score >= 50) {
+                performanceLevel = 'Good';
+                performanceClass = 'text-warning';
+            }
+            
+            analysis.innerHTML = `
+                <p><strong>Overall Performance:</strong> <span class="${performanceClass}">${performanceLevel}</span></p>
+                <p><strong>Speed Score:</strong> ${score}/100</p>
+                <p><strong>Load Time:</strong> ${results.loadTime.toFixed(1)}s</p>
+                <p><strong>Page Size:</strong> ${(results.pageSize / 1024).toFixed(1)} KB</p>
+                <p><strong>HTTP Requests:</strong> ${results.requests}</p>
+                <p><strong>Core Web Vitals:</strong> ${getCoreWebVitalsStatus(results)}</p>
+            `;
+        }
+
+        function getCoreWebVitalsStatus(results) {
+            const lcpGood = results.lcp < 2.5;
+            const fidGood = results.fid < 100;
+            const clsGood = results.cls < 0.1;
+            
+            const goodCount = [lcpGood, fidGood, clsGood].filter(Boolean).length;
+            
+            if (goodCount === 3) return 'All Good';
+            if (goodCount === 2) return '2/3 Good';
+            if (goodCount === 1) return '1/3 Good';
+            return 'All Poor';
+        }
+
+        function generateOptimizationRecommendations(results) {
+            const recommendations = [];
+            
+            if (results.speedScore < 90) {
+                recommendations.push('Optimize images and use WebP format');
+                recommendations.push('Minify CSS, JavaScript, and HTML');
+                recommendations.push('Enable compression (Gzip/Brotli)');
+            }
+            
+            if (results.lcp > 2.5) {
+                recommendations.push('Optimize Largest Contentful Paint');
+                recommendations.push('Use image optimization and lazy loading');
+            }
+            
+            if (results.fid > 100) {
+                recommendations.push('Reduce JavaScript execution time');
+                recommendations.push('Split long tasks');
+            }
+            
+            if (results.cls > 0.1) {
+                recommendations.push('Avoid layout shifts');
+                recommendations.push('Set explicit dimensions for images');
+            }
+            
+            if (results.pageSize > 1500) {
+                recommendations.push('Reduce page size');
+                recommendations.push('Remove unused CSS and JavaScript');
+            }
+            
+            if (results.requests > 40) {
+                recommendations.push('Reduce HTTP requests');
+                recommendations.push('Combine CSS and JavaScript files');
+            }
+            
+            recommendations.push('Use a CDN for static assets');
+            recommendations.push('Implement browser caching');
+            
+            const container = document.getElementById('optimizationRecommendations');
+            container.innerHTML = recommendations.map(rec => `<p>• ${rec}</p>`).join('');
+        }
+
+        function generateResourceBreakdown(results) {
+            const resourceTypes = [
+                { type: 'HTML', count: 1, size: results.pageSize * 0.1, loadTime: results.fcp * 0.3 },
+                { type: 'CSS', count: Math.floor(results.requests * 0.2), size: results.pageSize * 0.15, loadTime: results.fcp * 0.4 },
+                { type: 'JavaScript', count: Math.floor(results.requests * 0.3), size: results.pageSize * 0.25, loadTime: results.tti * 0.5 },
+                { type: 'Images', count: Math.floor(results.requests * 0.4), size: results.pageSize * 0.4, loadTime: results.lcp * 0.8 },
+                { type: 'Fonts', count: Math.floor(results.requests * 0.05), size: results.pageSize * 0.05, loadTime: results.fcp * 0.2 },
+                { type: 'Other', count: Math.floor(results.requests * 0.05), size: results.pageSize * 0.05, loadTime: results.loadTime * 0.1 }
+            ];
+            
+            const tbody = document.getElementById('resourceTableBody');
+            tbody.innerHTML = '';
+            
+            resourceTypes.forEach(resource => {
+                const row = tbody.insertRow();
+                const status = resource.loadTime < results.loadTime * 0.3 ? 'Fast' : 'Slow';
+                const statusClass = status === 'Fast' ? 'bg-success' : 'bg-warning';
+                
+                row.innerHTML = `
+                    <td>${resource.type}</td>
+                    <td>${resource.count}</td>
+                    <td>${(resource.size / 1024).toFixed(1)} KB</td>
+                    <td>${resource.loadTime.toFixed(1)}s</td>
+                    <td><span class="badge ${statusClass}">${status}</span></td>
+                `;
+            });
+        }
+
+        function generatePerformanceTimeline(results) {
+            const totalTime = results.tti;
+            const fcpPercent = (results.fcp / totalTime) * 100;
+            const lcpPercent = ((results.lcp - results.fcp) / totalTime) * 100;
+            const ttiPercent = ((results.tti - results.lcp) / totalTime) * 100;
+            
+            document.getElementById('fcpBar').style.width = fcpPercent + '%';
+            document.getElementById('lcpBar').style.width = lcpPercent + '%';
+            document.getElementById('ttiBar').style.width = ttiPercent + '%';
+            
+            document.getElementById('fcpTimeline').textContent = results.fcp.toFixed(1) + 's';
+            document.getElementById('lcpTimeline').textContent = results.lcp.toFixed(1) + 's';
+            document.getElementById('ttiTimeline').textContent = results.tti.toFixed(1) + 's';
+        }
+
+        function compareSpeed() {
+            const checkUrl = document.getElementById('checkUrl').value;
+            if (!checkUrl) {
+                alert('Please enter a URL first');
+                return;
+            }
+            
+            alert('Compare feature would show speed comparison with competitors or previous tests. This is a simulation.');
+        }
+
+        function showLoading() {
+            document.getElementById('speedResults').style.display = 'none';
+            // You could add a loading spinner here
+        }
+
+        function clearChecker() {
+            document.getElementById('checkUrl').value = '';
+            document.getElementById('deviceType').value = 'desktop';
+            document.getElementById('connectionType').value = '4g';
+            document.getElementById('location').value = 'us';
+            document.getElementById('speedResults').style.display = 'none';
+        }
+
+        function loadSampleUrl() {
+            document.getElementById('checkUrl').value = 'https://example.com';
+        }
+    </script>
+</body>
+</html> 

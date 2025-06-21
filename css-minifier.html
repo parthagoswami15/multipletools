@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Minifier - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-compress"></i> CSS Minifier</h1>
+                        <p>Compress and optimize your CSS code for faster loading and smaller file sizes</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cssInput" class="form-label">Original CSS</label>
+                                    <textarea class="form-control" id="cssInput" rows="15" placeholder="/* Enter your CSS code here */"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cssOutput" class="form-label">Minified CSS</label>
+                                    <textarea class="form-control" id="cssOutput" rows="15" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="minifyCSS()">
+                                        <i class="fas fa-compress"></i> Minify CSS
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="beautifyCSS()">
+                                        <i class="fas fa-expand"></i> Beautify
+                                    </button>
+                                    <button type="button" class="btn btn-info" onclick="validateCSS()">
+                                        <i class="fas fa-check-circle"></i> Validate
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearCSS()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-cog"></i> Minification Options</h4>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="removeComments" checked>
+                                        <label class="form-check-label" for="removeComments">
+                                            Remove Comments
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="removeWhitespace" checked>
+                                        <label class="form-check-label" for="removeWhitespace">
+                                            Remove Whitespace
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="removeEmptyRules" checked>
+                                        <label class="form-check-label" for="removeEmptyRules">
+                                            Remove Empty Rules
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="optimizeColors" checked>
+                                        <label class="form-check-label" for="optimizeColors">
+                                            Optimize Colors
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="optimizeUnits" checked>
+                                        <label class="form-check-label" for="optimizeUnits">
+                                            Optimize Units
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> Compression Stats</h4>
+                                    <div id="compressionStats">
+                                        <p class="text-muted">Minify CSS to see statistics</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-exclamation-triangle"></i> Validation Results</h4>
+                                    <div id="validationResults">
+                                        <p class="text-muted">Click validate to check CSS</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-outline-primary" onclick="copyMinified()">
+                                <i class="fas fa-copy"></i> Copy Minified CSS
+                            </button>
+                            <button class="btn btn-outline-success" onclick="downloadCSS()">
+                                <i class="fas fa-download"></i> Download CSS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+        });
+
+        function minifyCSS() {
+            const cssInput = document.getElementById('cssInput').value.trim();
+            
+            if (!cssInput) {
+                alert('Please enter some CSS to minify');
+                return;
+            }
+
+            try {
+                let minified = cssInput;
+                
+                // Apply minification options
+                if (document.getElementById('removeComments').checked) {
+                    minified = removeComments(minified);
+                }
+                
+                if (document.getElementById('removeWhitespace').checked) {
+                    minified = removeWhitespace(minified);
+                }
+                
+                if (document.getElementById('removeEmptyRules').checked) {
+                    minified = removeEmptyRules(minified);
+                }
+                
+                if (document.getElementById('optimizeColors').checked) {
+                    minified = optimizeColors(minified);
+                }
+                
+                if (document.getElementById('optimizeUnits').checked) {
+                    minified = optimizeUnits(minified);
+                }
+
+                document.getElementById('cssOutput').value = minified;
+                updateCompressionStats(cssInput, minified);
+                showValidationResult(true, 'CSS minified successfully!');
+                
+            } catch (error) {
+                alert('Error minifying CSS: ' + error.message);
+            }
+        }
+
+        function removeComments(css) {
+            // Remove CSS comments
+            return css.replace(/\/\*[\s\S]*?\*\//g, '');
+        }
+
+        function removeWhitespace(css) {
+            // Remove unnecessary whitespace
+            return css
+                .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+                .replace(/\s*{\s*/g, '{') // Remove spaces around opening braces
+                .replace(/\s*}\s*/g, '}') // Remove spaces around closing braces
+                .replace(/\s*:\s*/g, ':') // Remove spaces around colons
+                .replace(/\s*;\s*/g, ';') // Remove spaces around semicolons
+                .replace(/\s*,\s*/g, ',') // Remove spaces around commas
+                .replace(/;\s*}/g, '}') // Remove semicolons before closing braces
+                .trim();
+        }
+
+        function removeEmptyRules(css) {
+            // Remove empty CSS rules
+            return css.replace(/[^{}]+\{\s*\}/g, '');
+        }
+
+        function optimizeColors(css) {
+            // Optimize color values
+            return css
+                .replace(/#([0-9a-fA-F])\1([0-9a-fA-F])\2([0-9a-fA-F])\3/g, '#$1$2$3') // #ffffff -> #fff
+                .replace(/rgb\(\s*0\s*,\s*0\s*,\s*0\s*\)/g, '#000') // rgb(0,0,0) -> #000
+                .replace(/rgb\(\s*255\s*,\s*255\s*,\s*255\s*\)/g, '#fff'); // rgb(255,255,255) -> #fff
+        }
+
+        function optimizeUnits(css) {
+            // Optimize units
+            return css
+                .replace(/0px/g, '0') // 0px -> 0
+                .replace(/0em/g, '0') // 0em -> 0
+                .replace(/0rem/g, '0') // 0rem -> 0
+                .replace(/0%/g, '0'); // 0% -> 0
+        }
+
+        function beautifyCSS() {
+            const cssInput = document.getElementById('cssInput').value.trim();
+            
+            if (!cssInput) {
+                alert('Please enter some CSS to beautify');
+                return;
+            }
+
+            try {
+                const beautified = beautifyCSSCode(cssInput);
+                document.getElementById('cssOutput').value = beautified;
+                updateCompressionStats(cssInput, beautified);
+                showValidationResult(true, 'CSS beautified successfully!');
+                
+            } catch (error) {
+                alert('Error beautifying CSS: ' + error.message);
+            }
+        }
+
+        function beautifyCSSCode(css) {
+            let beautified = '';
+            let indent = 0;
+            let inRule = false;
+            
+            // Remove comments first
+            css = removeComments(css);
+            
+            for (let i = 0; i < css.length; i++) {
+                const char = css[i];
+                
+                if (char === '{') {
+                    beautified += ' {\n';
+                    indent += 2;
+                    inRule = true;
+                } else if (char === '}') {
+                    indent -= 2;
+                    beautified += '\n' + ' '.repeat(indent) + '}';
+                    inRule = false;
+                } else if (char === ';') {
+                    beautified += ';\n' + ' '.repeat(indent);
+                } else if (char === ':') {
+                    beautified += ': ';
+                } else if (char === ',') {
+                    beautified += ', ';
+                } else if (char.trim() !== '') {
+                    if (!inRule && char !== ' ') {
+                        beautified += ' '.repeat(indent);
+                    }
+                    beautified += char;
+                }
+            }
+            
+            return beautified.trim();
+        }
+
+        function validateCSS() {
+            const cssInput = document.getElementById('cssInput').value.trim();
+            
+            if (!cssInput) {
+                showValidationResult(false, 'No CSS provided');
+                return;
+            }
+
+            try {
+                // Basic CSS validation
+                const errors = [];
+                
+                // Check for unmatched braces
+                const openBraces = (cssInput.match(/\{/g) || []).length;
+                const closeBraces = (cssInput.match(/\}/g) || []).length;
+                
+                if (openBraces !== closeBraces) {
+                    errors.push('Unmatched braces');
+                }
+                
+                // Check for missing semicolons
+                const rules = cssInput.match(/[^;{}]+;/g) || [];
+                const properties = cssInput.match(/[a-zA-Z-]+\s*:\s*[^;{}]+/g) || [];
+                
+                if (properties.length > rules.length) {
+                    errors.push('Missing semicolons');
+                }
+                
+                if (errors.length === 0) {
+                    showValidationResult(true, 'CSS appears to be valid!');
+                } else {
+                    showValidationResult(false, 'CSS validation errors: ' + errors.join(', '));
+                }
+                
+            } catch (error) {
+                showValidationResult(false, 'Error validating CSS: ' + error.message);
+            }
+        }
+
+        function clearCSS() {
+            document.getElementById('cssInput').value = '';
+            document.getElementById('cssOutput').value = '';
+            document.getElementById('compressionStats').innerHTML = '<p class="text-muted">Minify CSS to see statistics</p>';
+            document.getElementById('validationResults').innerHTML = '<p class="text-muted">Click validate to check CSS</p>';
+        }
+
+        function loadSample() {
+            const sampleCSS = `/* Sample CSS for testing */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.header {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    .header {
+        padding: 0.5rem;
+    }
+}`;
+            
+            document.getElementById('cssInput').value = sampleCSS;
+            minifyCSS();
+        }
+
+        function updateCompressionStats(original, minified) {
+            const stats = document.getElementById('compressionStats');
+            const originalSize = original.length;
+            const minifiedSize = minified.length;
+            const compressionRatio = ((originalSize - minifiedSize) / originalSize * 100).toFixed(1);
+            
+            stats.innerHTML = `
+                <p><strong>Original Size:</strong> ${originalSize} characters</p>
+                <p><strong>Minified Size:</strong> ${minifiedSize} characters</p>
+                <p><strong>Compression:</strong> ${compressionRatio}% smaller</p>
+                <p><strong>Bytes Saved:</strong> ${originalSize - minifiedSize} characters</p>
+            `;
+        }
+
+        function showValidationResult(isValid, message) {
+            const results = document.getElementById('validationResults');
+            const icon = isValid ? 'check-circle text-success' : 'times-circle text-danger';
+            
+            results.innerHTML = `
+                <p><i class="fas fa-${icon}"></i> ${message}</p>
+            `;
+        }
+
+        function copyMinified() {
+            const minified = document.getElementById('cssOutput').value;
+            if (!minified) {
+                alert('No minified CSS to copy');
+                return;
+            }
+            
+            navigator.clipboard.writeText(minified).then(() => {
+                alert('Minified CSS copied to clipboard!');
+            }).catch(() => {
+                alert('Failed to copy to clipboard');
+            });
+        }
+
+        function downloadCSS() {
+            const minified = document.getElementById('cssOutput').value;
+            if (!minified) {
+                alert('No minified CSS to download');
+                return;
+            }
+            
+            const blob = new Blob([minified], { type: 'text/css' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'minified.css';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-check {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

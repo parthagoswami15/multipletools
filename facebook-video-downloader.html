@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Video Downloader - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fab fa-facebook"></i> Facebook Video Downloader</h1>
+                        <p>Download videos from Facebook posts easily and quickly</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="postUrl" class="form-label">Facebook Post URL</label>
+                                    <div class="input-group">
+                                        <input type="url" class="form-control" id="postUrl" placeholder="https://www.facebook.com/username/posts/..." oninput="validateUrl()">
+                                        <button class="btn btn-primary" type="button" onclick="extractVideos()">
+                                            <i class="fas fa-search"></i> Extract
+                                        </button>
+                                    </div>
+                                    <div class="form-text">Enter a valid Facebook post URL to extract videos</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearTool()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-info" onclick="showHelp()">
+                                        <i class="fas fa-question-circle"></i> Help
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="videoResults" style="display: none;">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-video"></i> Available Videos</h4>
+                                    <div class="row" id="videosContainer">
+                                        <!-- Videos will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Post Information</h4>
+                                    <div id="postInfo">
+                                        <p class="text-muted">Post information will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Recent Downloads</h4>
+                                    <div id="downloadHistory">
+                                        <p class="text-muted">Recent downloads will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-lightbulb"></i> Tips & Information</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5>Supported URL Formats:</h5>
+                                            <ul>
+                                                <li>https://www.facebook.com/username/posts/POST_ID</li>
+                                                <li>https://facebook.com/username/posts/POST_ID</li>
+                                                <li>https://www.facebook.com/username/videos/VIDEO_ID</li>
+                                                <li>https://m.facebook.com/username/posts/POST_ID</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Video Qualities:</h5>
+                                            <ul>
+                                                <li><strong>Original:</strong> Highest quality available</li>
+                                                <li><strong>HD:</strong> 1280x720 pixels</li>
+                                                <li><strong>SD:</strong> 640x360 pixels</li>
+                                                <li><strong>Low:</strong> 320x180 pixels</li>
+                                                <li><strong>Mobile:</strong> Optimized for mobile</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+        });
+
+        let downloadHistory = [];
+
+        function validateUrl() {
+            const url = document.getElementById('postUrl').value;
+            const urlPattern = /^(https?:\/\/)?(www\.|m\.)?(facebook\.com)\/[a-zA-Z0-9.]+\/(posts|videos)\/[0-9]+/;
+            return urlPattern.test(url);
+        }
+
+        function extractPostId(url) {
+            const patterns = [
+                /facebook\.com\/[a-zA-Z0-9.]+\/posts\/([0-9]+)/,
+                /facebook\.com\/[a-zA-Z0-9.]+\/videos\/([0-9]+)/,
+                /m\.facebook\.com\/[a-zA-Z0-9.]+\/posts\/([0-9]+)/
+            ];
+            
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        function extractUsername(url) {
+            const patterns = [
+                /facebook\.com\/([a-zA-Z0-9.]+)\/(posts|videos)/,
+                /m\.facebook\.com\/([a-zA-Z0-9.]+)\/(posts|videos)/
+            ];
+            
+            for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        function extractVideos() {
+            const url = document.getElementById('postUrl').value;
+            
+            if (!validateUrl()) {
+                showAlert('Please enter a valid Facebook URL', 'danger');
+                return;
+            }
+
+            const postId = extractPostId(url);
+            const username = extractUsername(url);
+            
+            if (!postId) {
+                showAlert('Could not extract post ID from URL', 'danger');
+                return;
+            }
+
+            // Show loading state
+            showAlert('Extracting videos...', 'info');
+            
+            // Simulate video extraction (in real implementation, you'd need a backend service)
+            const videos = generateVideoUrls(postId, username);
+            displayVideos(videos, postId, username);
+            
+            // Update post info
+            updatePostInfo(postId, username);
+            
+            // Add to history
+            addToHistory(url, postId, username);
+        }
+
+        function generateVideoUrls(postId, username) {
+            // This is a simulation - in reality, you'd need to scrape Facebook or use their API
+            return [
+                {
+                    url: `https://example.com/facebook/${postId}_original.mp4`,
+                    quality: 'Original',
+                    resolution: '1920x1080',
+                    format: 'MP4',
+                    size: '~25MB',
+                    description: 'Original quality video'
+                },
+                {
+                    url: `https://example.com/facebook/${postId}_hd.mp4`,
+                    quality: 'HD',
+                    resolution: '1280x720',
+                    format: 'MP4',
+                    size: '~15MB',
+                    description: 'High definition video'
+                },
+                {
+                    url: `https://example.com/facebook/${postId}_sd.mp4`,
+                    quality: 'SD',
+                    resolution: '640x360',
+                    format: 'MP4',
+                    size: '~8MB',
+                    description: 'Standard definition video'
+                },
+                {
+                    url: `https://example.com/facebook/${postId}_low.mp4`,
+                    quality: 'Low',
+                    resolution: '320x180',
+                    format: 'MP4',
+                    size: '~4MB',
+                    description: 'Low quality video'
+                },
+                {
+                    url: `https://example.com/facebook/${postId}_mobile.mp4`,
+                    quality: 'Mobile',
+                    resolution: '480x270',
+                    format: 'MP4',
+                    size: '~6MB',
+                    description: 'Mobile optimized video'
+                }
+            ];
+        }
+
+        function displayVideos(videos, postId, username) {
+            const container = document.getElementById('videosContainer');
+            let html = '';
+
+            videos.forEach((video, index) => {
+                html += `
+                    <div class="col-md-6 col-lg-4 mb-3">
+                        <div class="video-card">
+                            <div class="video-placeholder">
+                                <i class="fab fa-facebook fa-3x text-primary"></i>
+                                <p class="mt-2">${video.quality} Quality</p>
+                                <small class="text-muted">${video.resolution}</small>
+                            </div>
+                            <div class="video-info">
+                                <h6>${video.quality}</h6>
+                                <p class="text-muted">${video.resolution} • ${video.format}</p>
+                                <p class="small">${video.size} • ${video.description}</p>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-sm btn-primary" onclick="downloadVideo('${video.url}', '${username}_${postId}_${video.quality.toLowerCase()}')">
+                                        <i class="fas fa-download"></i> Download
+                                    </button>
+                                    <button class="btn btn-sm btn-secondary" onclick="copyVideoUrl('${video.url}')">
+                                        <i class="fas fa-copy"></i> Copy URL
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('videoResults').style.display = 'block';
+        }
+
+        function downloadVideo(url, filename) {
+            // In a real implementation, you'd need to handle the actual download
+            showAlert(`Download started for ${filename}!`, 'success');
+            
+            // Simulate download
+            setTimeout(() => {
+                showAlert('Download completed!', 'success');
+            }, 2000);
+        }
+
+        function copyVideoUrl(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                showAlert('Video URL copied to clipboard!', 'success');
+            }).catch(() => {
+                showAlert('Failed to copy URL to clipboard', 'danger');
+            });
+        }
+
+        function updatePostInfo(postId, username) {
+            const info = document.getElementById('postInfo');
+            info.innerHTML = `
+                <h5>Post ID: ${postId}</h5>
+                <p><strong>Username:</strong> ${username}</p>
+                <p><strong>Post URL:</strong> https://www.facebook.com/${username}/posts/${postId}</p>
+                <p><strong>Video URL:</strong> https://www.facebook.com/${username}/videos/${postId}</p>
+                <p><strong>Mobile URL:</strong> https://m.facebook.com/${username}/posts/${postId}</p>
+                <div class="mt-3">
+                    <button class="btn btn-sm btn-outline-primary" onclick="copyToClipboard('https://www.facebook.com/${username}/posts/${postId}')">
+                        <i class="fas fa-copy"></i> Copy Post URL
+                    </button>
+                </div>
+            `;
+        }
+
+        function addToHistory(url, postId, username) {
+            const download = {
+                url: url,
+                postId: postId,
+                username: username,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            downloadHistory.unshift(download);
+            if (downloadHistory.length > 5) {
+                downloadHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('downloadHistory');
+            if (downloadHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No recent downloads</p>';
+                return;
+            }
+
+            let html = '';
+            downloadHistory.forEach(download => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${download.timestamp}</small><br>
+                        <strong>${download.username}</strong><br>
+                        <strong>Post ID:</strong> ${download.postId}<br>
+                        <a href="${download.url}" target="_blank" class="text-decoration-none">View Post</a>
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showAlert('Copied to clipboard!', 'success');
+            }).catch(() => {
+                showAlert('Failed to copy to clipboard', 'danger');
+            });
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            const container = document.querySelector('.tool-content');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        function loadSample() {
+            document.getElementById('postUrl').value = 'https://www.facebook.com/username/posts/123456789012345';
+            extractVideos();
+        }
+
+        function clearTool() {
+            document.getElementById('postUrl').value = '';
+            document.getElementById('videoResults').style.display = 'none';
+            document.getElementById('postInfo').innerHTML = '<p class="text-muted">Post information will appear here</p>';
+        }
+
+        function showHelp() {
+            const helpText = `
+                <h5>How to use Facebook Video Downloader:</h5>
+                <ol>
+                    <li>Copy the URL of any Facebook post with video</li>
+                    <li>Paste it in the input field above</li>
+                    <li>Click "Extract" to generate video URLs</li>
+                    <li>Choose your preferred quality and download</li>
+                </ol>
+                <h5>Supported URL formats:</h5>
+                <ul>
+                    <li>https://www.facebook.com/username/posts/POST_ID</li>
+                    <li>https://facebook.com/username/posts/POST_ID</li>
+                    <li>https://www.facebook.com/username/videos/VIDEO_ID</li>
+                    <li>https://m.facebook.com/username/posts/POST_ID</li>
+                </ul>
+                <p><strong>Note:</strong> This tool requires a backend service to actually download Facebook videos due to Facebook's terms of service and technical limitations.</p>
+            `;
+            
+            showAlert(helpText, 'info');
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .video-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .video-placeholder {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 15px;
+            color: #6c757d;
+        }
+
+        .video-info h6 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

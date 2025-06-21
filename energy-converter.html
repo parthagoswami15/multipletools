@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-bolt"></i> Energy Converter</h1>
+                        <p>Convert between different energy units quickly and accurately</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit" class="form-label">From Unit</label>
+                                    <select class="form-select" id="fromUnit" onchange="convert()">
+                                        <option value="joule">Joule (J)</option>
+                                        <option value="kilojoule">Kilojoule (kJ)</option>
+                                        <option value="calorie">Calorie (cal)</option>
+                                        <option value="kilocalorie">Kilocalorie (kcal)</option>
+                                        <option value="watt-hour">Watt Hour (Wh)</option>
+                                        <option value="kilowatt-hour">Kilowatt Hour (kWh)</option>
+                                        <option value="btu">British Thermal Unit (BTU)</option>
+                                        <option value="electron-volt">Electron Volt (eV)</option>
+                                        <option value="erg">Erg (erg)</option>
+                                        <option value="foot-pound">Foot Pound (ft⋅lb)</option>
+                                        <option value="newton-meter">Newton Meter (N⋅m)</option>
+                                        <option value="therm">Therm (thm)</option>
+                                        <option value="horsepower-hour">Horsepower Hour (hp⋅h)</option>
+                                        <option value="ton-tnt">Ton of TNT (tTNT)</option>
+                                        <option value="barrel-oil">Barrel of Oil (bbl)</option>
+                                        <option value="gallon-gasoline">Gallon of Gasoline (gal)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit" class="form-label">To Unit</label>
+                                    <select class="form-select" id="toUnit" onchange="convert()">
+                                        <option value="joule">Joule (J)</option>
+                                        <option value="kilojoule" selected>Kilojoule (kJ)</option>
+                                        <option value="calorie">Calorie (cal)</option>
+                                        <option value="kilocalorie">Kilocalorie (kcal)</option>
+                                        <option value="watt-hour">Watt Hour (Wh)</option>
+                                        <option value="kilowatt-hour">Kilowatt Hour (kWh)</option>
+                                        <option value="btu">British Thermal Unit (BTU)</option>
+                                        <option value="electron-volt">Electron Volt (eV)</option>
+                                        <option value="erg">Erg (erg)</option>
+                                        <option value="foot-pound">Foot Pound (ft⋅lb)</option>
+                                        <option value="newton-meter">Newton Meter (N⋅m)</option>
+                                        <option value="therm">Therm (thm)</option>
+                                        <option value="horsepower-hour">Horsepower Hour (hp⋅h)</option>
+                                        <option value="ton-tnt">Ton of TNT (tTNT)</option>
+                                        <option value="barrel-oil">Barrel of Oil (bbl)</option>
+                                        <option value="gallon-gasoline">Gallon of Gasoline (gal)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromValue" class="form-label">From Value</label>
+                                    <input type="number" class="form-control" id="fromValue" value="1" oninput="convert()" step="any">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toValue" class="form-label">To Value</label>
+                                    <input type="number" class="form-control" id="toValue" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="swapUnits()">
+                                        <i class="fas fa-exchange-alt"></i> Swap Units
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearConverter()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> All Units Conversion</h4>
+                                    <div class="row" id="allConversions">
+                                        <!-- All conversions will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Unit Information</h4>
+                                    <div id="unitInfo">
+                                        <p class="text-muted">Select a unit to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Conversion History</h4>
+                                    <div id="conversionHistory">
+                                        <p class="text-muted">Recent conversions will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            convert();
+        });
+
+        // Conversion factors to joules
+        const energyUnits = {
+            'joule': 1,
+            'kilojoule': 1000,
+            'calorie': 4.184,
+            'kilocalorie': 4184,
+            'watt-hour': 3600,
+            'kilowatt-hour': 3600000,
+            'btu': 1055.06,
+            'electron-volt': 1.60218e-19,
+            'erg': 1e-7,
+            'foot-pound': 1.35582,
+            'newton-meter': 1,
+            'therm': 105505585.262,
+            'horsepower-hour': 2684519.54,
+            'ton-tnt': 4184000000,
+            'barrel-oil': 6117863200,
+            'gallon-gasoline': 131881987.5
+        };
+
+        const unitNames = {
+            'joule': 'Joule',
+            'kilojoule': 'Kilojoule',
+            'calorie': 'Calorie',
+            'kilocalorie': 'Kilocalorie',
+            'watt-hour': 'Watt Hour',
+            'kilowatt-hour': 'Kilowatt Hour',
+            'btu': 'British Thermal Unit',
+            'electron-volt': 'Electron Volt',
+            'erg': 'Erg',
+            'foot-pound': 'Foot Pound',
+            'newton-meter': 'Newton Meter',
+            'therm': 'Therm',
+            'horsepower-hour': 'Horsepower Hour',
+            'ton-tnt': 'Ton of TNT',
+            'barrel-oil': 'Barrel of Oil',
+            'gallon-gasoline': 'Gallon of Gasoline'
+        };
+
+        const unitSymbols = {
+            'joule': 'J',
+            'kilojoule': 'kJ',
+            'calorie': 'cal',
+            'kilocalorie': 'kcal',
+            'watt-hour': 'Wh',
+            'kilowatt-hour': 'kWh',
+            'btu': 'BTU',
+            'electron-volt': 'eV',
+            'erg': 'erg',
+            'foot-pound': 'ft⋅lb',
+            'newton-meter': 'N⋅m',
+            'therm': 'thm',
+            'horsepower-hour': 'hp⋅h',
+            'ton-tnt': 'tTNT',
+            'barrel-oil': 'bbl',
+            'gallon-gasoline': 'gal'
+        };
+
+        const unitInfo = {
+            'joule': 'The SI unit of energy. Equal to the work done by a force of one newton.',
+            'kilojoule': 'Equal to 1,000 joules. Commonly used in nutrition and chemistry.',
+            'calorie': 'The energy needed to raise the temperature of 1 gram of water by 1°C.',
+            'kilocalorie': 'Equal to 1,000 calories. Used in nutrition (often called "calorie").',
+            'watt-hour': 'Equal to 3,600 joules. Used for electrical energy consumption.',
+            'kilowatt-hour': 'Equal to 3,600,000 joules. Standard unit for electricity billing.',
+            'btu': 'British Thermal Unit. The energy needed to raise 1 pound of water by 1°F.',
+            'electron-volt': 'The energy gained by an electron moving through 1 volt potential.',
+            'erg': 'A CGS unit of energy. Equal to 10^-7 joules.',
+            'foot-pound': 'The energy transferred by applying a force of 1 pound over 1 foot.',
+            'newton-meter': 'Equal to 1 joule. Used in torque and energy calculations.',
+            'therm': 'Equal to 100,000 BTU. Used in natural gas billing.',
+            'horsepower-hour': 'The energy equivalent to 1 horsepower for 1 hour.',
+            'ton-tnt': 'The energy released by detonating 1 ton of TNT.',
+            'barrel-oil': 'The energy content of 1 barrel (42 gallons) of crude oil.',
+            'gallon-gasoline': 'The energy content of 1 gallon of gasoline.'
+        };
+
+        let conversionHistory = [];
+
+        function convert() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
+
+            // Convert to joules first, then to target unit
+            const joules = fromValue * energyUnits[fromUnit];
+            const result = joules / energyUnits[toUnit];
+
+            document.getElementById('toValue').value = result.toFixed(6);
+
+            // Update all conversions
+            updateAllConversions(fromValue, fromUnit);
+            
+            // Update unit info
+            updateUnitInfo(fromUnit);
+            
+            // Add to history
+            addToHistory(fromValue, fromUnit, result, toUnit);
+        }
+
+        function updateAllConversions(value, fromUnit) {
+            const container = document.getElementById('allConversions');
+            let html = '';
+
+            Object.keys(energyUnits).forEach(unit => {
+                if (unit !== fromUnit) {
+                    const joules = value * energyUnits[fromUnit];
+                    const converted = joules / energyUnits[unit];
+                    const symbol = unitSymbols[unit];
+                    const name = unitNames[unit];
+                    
+                    html += `
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="conversion-item">
+                                <strong>${name}</strong><br>
+                                <span class="conversion-value">${converted.toFixed(6)} ${symbol}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateUnitInfo(unit) {
+            const info = document.getElementById('unitInfo');
+            info.innerHTML = `
+                <h5>${unitNames[unit]} (${unitSymbols[unit]})</h5>
+                <p>${unitInfo[unit]}</p>
+                <p><strong>In joules:</strong> ${energyUnits[unit]} J</p>
+            `;
+        }
+
+        function addToHistory(fromValue, fromUnit, toValue, toUnit) {
+            const conversion = {
+                from: `${fromValue} ${unitSymbols[fromUnit]}`,
+                to: `${toValue.toFixed(6)} ${unitSymbols[toUnit]}`,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            conversionHistory.unshift(conversion);
+            if (conversionHistory.length > 5) {
+                conversionHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('conversionHistory');
+            if (conversionHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No conversions yet</p>';
+                return;
+            }
+
+            let html = '';
+            conversionHistory.forEach(conv => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${conv.timestamp}</small><br>
+                        ${conv.from} → ${conv.to}
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = document.getElementById('fromValue').value;
+            const toValue = document.getElementById('toValue').value;
+
+            document.getElementById('fromUnit').value = toUnit;
+            document.getElementById('toUnit').value = fromUnit;
+            document.getElementById('fromValue').value = toValue;
+            document.getElementById('toValue').value = fromValue;
+
+            convert();
+        }
+
+        function clearConverter() {
+            document.getElementById('fromValue').value = '';
+            document.getElementById('toValue').value = '';
+            document.getElementById('allConversions').innerHTML = '';
+            document.getElementById('unitInfo').innerHTML = '<p class="text-muted">Select a unit to see information</p>';
+        }
+
+        function loadSample() {
+            document.getElementById('fromUnit').value = 'kilowatt-hour';
+            document.getElementById('toUnit').value = 'joule';
+            document.getElementById('fromValue').value = '1';
+            convert();
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversion-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .conversion-value {
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

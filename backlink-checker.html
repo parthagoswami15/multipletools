@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backlink Checker | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Backlink Checker</h1>
+                        <div id="tool-ui">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="checkUrl" class="form-label">URL to Check</label>
+                                    <input type="url" class="form-control" id="checkUrl" placeholder="https://example.com">
+                                    <div class="form-text">Enter the URL you want to check for backlinks</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="checkType" class="form-label">Check Type</label>
+                                    <select class="form-select" id="checkType">
+                                        <option value="inbound">Inbound Links</option>
+                                        <option value="outbound">Outbound Links</option>
+                                        <option value="both">Both</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="filterType" class="form-label">Filter by Type</label>
+                                    <select class="form-select" id="filterType">
+                                        <option value="all">All Links</option>
+                                        <option value="dofollow">DoFollow Only</option>
+                                        <option value="nofollow">NoFollow Only</option>
+                                        <option value="sponsored">Sponsored</option>
+                                        <option value="ugc">UGC</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="minDA" class="form-label">Minimum Domain Authority</label>
+                                    <input type="number" class="form-control" id="minDA" min="0" max="100" value="0">
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <button class="btn btn-primary" onclick="checkBacklinks()">Check Backlinks</button>
+                                <button class="btn btn-secondary" onclick="clearChecker()">Clear</button>
+                                <button class="btn btn-outline-secondary" onclick="loadSampleUrl()">Load Sample</button>
+                                <button class="btn btn-outline-info" onclick="exportResults()">Export Results</button>
+                            </div>
+                            
+                            <div id="backlinkResults" style="display:none;">
+                                <div class="row mt-4">
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-primary" id="totalBacklinks">0</h4>
+                                                <small class="text-muted">Total Backlinks</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-success" id="dofollowCount">0</h4>
+                                                <small class="text-muted">DoFollow</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-warning" id="nofollowCount">0</h4>
+                                                <small class="text-muted">NoFollow</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-info" id="avgDA">0</h4>
+                                                <small class="text-muted">Avg DA</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Backlink Analysis</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm" id="backlinkTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Source URL</th>
+                                                        <th>Anchor Text</th>
+                                                        <th>Type</th>
+                                                        <th>DA</th>
+                                                        <th>Spam Score</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="backlinkTableBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <button class="btn btn-sm btn-outline-primary" onclick="loadMoreBacklinks()">Load More</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Link Quality Analysis</h5>
+                                                <div id="linkQualityAnalysis"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">SEO Recommendations</h5>
+                                                <div id="seoRecommendations"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Backlink Distribution</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <canvas id="backlinkChart" width="300" height="200"></canvas>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div id="backlinkBreakdown"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Backlink Quality Guide</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>High-Quality Backlinks</h6>
+                                <ul>
+                                    <li>High Domain Authority (DA 50+)</li>
+                                    <li>Relevant content context</li>
+                                    <li>Natural anchor text</li>
+                                    <li>DoFollow links</li>
+                                    <li>Authoritative domains</li>
+                                    <li>Low spam score</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Low-Quality Backlinks</h6>
+                                <ul>
+                                    <li>Low Domain Authority (DA < 20)</li>
+                                    <li>Irrelevant content</li>
+                                    <li>Exact match anchor text</li>
+                                    <li>NoFollow links only</li>
+                                    <li>Spammy domains</li>
+                                    <li>High spam score</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="domain-authority-checker.html">Domain Authority Checker</a></li>
+                            <li><a href="google-index-checker.html">Google Index Checker</a></li>
+                            <li><a href="page-speed-checker.html">Page Speed Checker</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let backlinkChart;
+        let currentPage = 1;
+        let allBacklinks = [];
+
+        function checkBacklinks() {
+            const checkUrl = document.getElementById('checkUrl').value;
+            const checkType = document.getElementById('checkType').value;
+            const filterType = document.getElementById('filterType').value;
+            const minDA = parseInt(document.getElementById('minDA').value) || 0;
+            
+            if (!checkUrl) {
+                alert('Please enter a URL to check');
+                return;
+            }
+            
+            // Simulate checking process
+            showLoading();
+            
+            setTimeout(() => {
+                // Generate sample backlinks
+                allBacklinks = generateSampleBacklinks(checkUrl);
+                
+                // Filter backlinks
+                let filteredBacklinks = allBacklinks;
+                
+                if (filterType !== 'all') {
+                    filteredBacklinks = allBacklinks.filter(link => link.type === filterType);
+                }
+                
+                filteredBacklinks = filteredBacklinks.filter(link => link.da >= minDA);
+                
+                displayResults(filteredBacklinks);
+            }, 3000);
+        }
+
+        function generateSampleBacklinks(url) {
+            const sampleDomains = [
+                'example.com', 'blog.example.com', 'news.example.com',
+                'techblog.com', 'seo-guide.com', 'marketing-tips.com',
+                'webdesign.com', 'digitalmarketing.com', 'content-strategy.com',
+                'socialmedia.com', 'emailmarketing.com', 'analytics.com'
+            ];
+            
+            const sampleAnchors = [
+                'click here', 'read more', 'learn more', 'visit website',
+                'best practices', 'expert tips', 'comprehensive guide',
+                'detailed analysis', 'step-by-step guide', 'ultimate guide',
+                'complete tutorial', 'in-depth review', 'comprehensive overview'
+            ];
+            
+            const backlinks = [];
+            
+            for (let i = 0; i < 50; i++) {
+                const domain = sampleDomains[Math.floor(Math.random() * sampleDomains.length)];
+                const anchor = sampleAnchors[Math.floor(Math.random() * sampleAnchors.length)];
+                const type = Math.random() > 0.3 ? 'dofollow' : 'nofollow';
+                const da = Math.floor(Math.random() * 100);
+                const spamScore = Math.floor(Math.random() * 18);
+                
+                backlinks.push({
+                    sourceUrl: `https://${domain}/article-${i + 1}`,
+                    anchorText: anchor,
+                    type: type,
+                    da: da,
+                    spamScore: spamScore,
+                    status: getLinkStatus(da, spamScore, type)
+                });
+            }
+            
+            return backlinks;
+        }
+
+        function getLinkStatus(da, spamScore, type) {
+            if (spamScore > 10) return 'Spam';
+            if (da < 10) return 'Low Quality';
+            if (da < 30) return 'Medium Quality';
+            if (da < 50) return 'Good Quality';
+            return 'High Quality';
+        }
+
+        function displayResults(backlinks) {
+            const totalBacklinks = backlinks.length;
+            const dofollowCount = backlinks.filter(link => link.type === 'dofollow').length;
+            const nofollowCount = backlinks.filter(link => link.type === 'nofollow').length;
+            const avgDA = Math.floor(backlinks.reduce((sum, link) => sum + link.da, 0) / backlinks.length);
+            
+            // Update summary stats
+            document.getElementById('totalBacklinks').textContent = totalBacklinks.toLocaleString();
+            document.getElementById('dofollowCount').textContent = dofollowCount.toLocaleString();
+            document.getElementById('nofollowCount').textContent = nofollowCount.toLocaleString();
+            document.getElementById('avgDA').textContent = avgDA;
+            
+            // Display first 10 backlinks
+            displayBacklinksTable(backlinks.slice(0, 10));
+            
+            // Generate analysis and recommendations
+            generateLinkQualityAnalysis(backlinks);
+            generateSEORecommendations(backlinks);
+            generateBacklinkChart(backlinks);
+            generateBacklinkBreakdown(backlinks);
+            
+            document.getElementById('backlinkResults').style.display = 'block';
+        }
+
+        function displayBacklinksTable(backlinks) {
+            const tbody = document.getElementById('backlinkTableBody');
+            tbody.innerHTML = '';
+            
+            backlinks.forEach(backlink => {
+                const row = tbody.insertRow();
+                const statusClass = getStatusClass(backlink.status);
+                const typeClass = backlink.type === 'dofollow' ? 'text-success' : 'text-warning';
+                
+                row.innerHTML = `
+                    <td><a href="${backlink.sourceUrl}" target="_blank">${new URL(backlink.sourceUrl).hostname}</a></td>
+                    <td>${backlink.anchorText}</td>
+                    <td><span class="${typeClass}">${backlink.type}</span></td>
+                    <td><span class="badge bg-secondary">${backlink.da}</span></td>
+                    <td>${backlink.spamScore}</td>
+                    <td><span class="badge ${statusClass}">${backlink.status}</span></td>
+                `;
+            });
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                'High Quality': 'bg-success',
+                'Good Quality': 'bg-primary',
+                'Medium Quality': 'bg-info',
+                'Low Quality': 'bg-warning',
+                'Spam': 'bg-danger'
+            };
+            return classes[status] || 'bg-secondary';
+        }
+
+        function loadMoreBacklinks() {
+            const filterType = document.getElementById('filterType').value;
+            const minDA = parseInt(document.getElementById('minDA').value) || 0;
+            
+            let filteredBacklinks = allBacklinks;
+            
+            if (filterType !== 'all') {
+                filteredBacklinks = allBacklinks.filter(link => link.type === filterType);
+            }
+            
+            filteredBacklinks = filteredBacklinks.filter(link => link.da >= minDA);
+            
+            const startIndex = currentPage * 10;
+            const endIndex = startIndex + 10;
+            const moreBacklinks = filteredBacklinks.slice(startIndex, endIndex);
+            
+            if (moreBacklinks.length > 0) {
+                const tbody = document.getElementById('backlinkTableBody');
+                moreBacklinks.forEach(backlink => {
+                    const row = tbody.insertRow();
+                    const statusClass = getStatusClass(backlink.status);
+                    const typeClass = backlink.type === 'dofollow' ? 'text-success' : 'text-warning';
+                    
+                    row.innerHTML = `
+                        <td><a href="${backlink.sourceUrl}" target="_blank">${new URL(backlink.sourceUrl).hostname}</a></td>
+                        <td>${backlink.anchorText}</td>
+                        <td><span class="${typeClass}">${backlink.type}</span></td>
+                        <td><span class="badge bg-secondary">${backlink.da}</span></td>
+                        <td>${backlink.spamScore}</td>
+                        <td><span class="badge ${statusClass}">${backlink.status}</span></td>
+                    `;
+                });
+                
+                currentPage++;
+            } else {
+                alert('No more backlinks to load');
+            }
+        }
+
+        function generateLinkQualityAnalysis(backlinks) {
+            const highQuality = backlinks.filter(link => link.status === 'High Quality').length;
+            const goodQuality = backlinks.filter(link => link.status === 'Good Quality').length;
+            const mediumQuality = backlinks.filter(link => link.status === 'Medium Quality').length;
+            const lowQuality = backlinks.filter(link => link.status === 'Low Quality').length;
+            const spam = backlinks.filter(link => link.status === 'Spam').length;
+            
+            const analysis = document.getElementById('linkQualityAnalysis');
+            analysis.innerHTML = `
+                <p><strong>High Quality:</strong> ${highQuality} (${(highQuality / backlinks.length * 100).toFixed(1)}%)</p>
+                <p><strong>Good Quality:</strong> ${goodQuality} (${(goodQuality / backlinks.length * 100).toFixed(1)}%)</p>
+                <p><strong>Medium Quality:</strong> ${mediumQuality} (${(mediumQuality / backlinks.length * 100).toFixed(1)}%)</p>
+                <p><strong>Low Quality:</strong> ${lowQuality} (${(lowQuality / backlinks.length * 100).toFixed(1)}%)</p>
+                <p><strong>Spam:</strong> ${spam} (${(spam / backlinks.length * 100).toFixed(1)}%)</p>
+                <p><strong>Average DA:</strong> ${Math.floor(backlinks.reduce((sum, link) => sum + link.da, 0) / backlinks.length)}</p>
+                <p><strong>Average Spam Score:</strong> ${(backlinks.reduce((sum, link) => sum + link.spamScore, 0) / backlinks.length).toFixed(1)}</p>
+            `;
+        }
+
+        function generateSEORecommendations(backlinks) {
+            const recommendations = [];
+            const dofollowCount = backlinks.filter(link => link.type === 'dofollow').length;
+            const highQualityCount = backlinks.filter(link => link.status === 'High Quality').length;
+            const spamCount = backlinks.filter(link => link.status === 'Spam').length;
+            
+            if (dofollowCount < backlinks.length * 0.7) {
+                recommendations.push('Increase DoFollow backlinks');
+            }
+            
+            if (highQualityCount < backlinks.length * 0.3) {
+                recommendations.push('Focus on high-quality backlinks');
+            }
+            
+            if (spamCount > backlinks.length * 0.1) {
+                recommendations.push('Disavow spammy backlinks');
+            }
+            
+            recommendations.push('Monitor backlink profile regularly');
+            recommendations.push('Build relationships with authoritative sites');
+            recommendations.push('Create linkable content');
+            
+            const container = document.getElementById('seoRecommendations');
+            container.innerHTML = recommendations.map(rec => `<p>• ${rec}</p>`).join('');
+        }
+
+        function generateBacklinkChart(backlinks) {
+            const ctx = document.getElementById('backlinkChart').getContext('2d');
+            
+            if (backlinkChart) {
+                backlinkChart.destroy();
+            }
+            
+            const qualityData = {
+                'High Quality': backlinks.filter(link => link.status === 'High Quality').length,
+                'Good Quality': backlinks.filter(link => link.status === 'Good Quality').length,
+                'Medium Quality': backlinks.filter(link => link.status === 'Medium Quality').length,
+                'Low Quality': backlinks.filter(link => link.status === 'Low Quality').length,
+                'Spam': backlinks.filter(link => link.status === 'Spam').length
+            };
+            
+            backlinkChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(qualityData),
+                    datasets: [{
+                        data: Object.values(qualityData),
+                        backgroundColor: ['#28a745', '#007bff', '#17a2b8', '#ffc107', '#dc3545'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateBacklinkBreakdown(backlinks) {
+            const breakdown = {
+                'DoFollow': backlinks.filter(link => link.type === 'dofollow').length,
+                'NoFollow': backlinks.filter(link => link.type === 'nofollow').length,
+                'DA 80+': backlinks.filter(link => link.da >= 80).length,
+                'DA 50-79': backlinks.filter(link => link.da >= 50 && link.da < 80).length,
+                'DA 20-49': backlinks.filter(link => link.da >= 20 && link.da < 50).length,
+                'DA < 20': backlinks.filter(link => link.da < 20).length
+            };
+            
+            const container = document.getElementById('backlinkBreakdown');
+            container.innerHTML = Object.entries(breakdown).map(([category, count]) => 
+                `<div class="d-flex justify-content-between mb-2">
+                    <span>${category}</span>
+                    <span class="badge bg-secondary">${count}</span>
+                </div>`
+            ).join('');
+        }
+
+        function exportResults() {
+            if (allBacklinks.length === 0) {
+                alert('No results to export');
+                return;
+            }
+            
+            let csv = 'Source URL,Anchor Text,Type,DA,Spam Score,Status\n';
+            
+            allBacklinks.forEach(backlink => {
+                csv += `"${backlink.sourceUrl}","${backlink.anchorText}","${backlink.type}",${backlink.da},${backlink.spamScore},"${backlink.status}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'backlink_results.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function showLoading() {
+            document.getElementById('backlinkResults').style.display = 'none';
+            currentPage = 1;
+            allBacklinks = [];
+        }
+
+        function clearChecker() {
+            document.getElementById('checkUrl').value = '';
+            document.getElementById('minDA').value = '0';
+            document.getElementById('backlinkResults').style.display = 'none';
+            currentPage = 1;
+            allBacklinks = [];
+        }
+
+        function loadSampleUrl() {
+            document.getElementById('checkUrl').value = 'https://example.com';
+        }
+    </script>
+</body>
+</html> 

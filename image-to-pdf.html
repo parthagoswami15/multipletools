@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to PDF Converter | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Image to PDF Converter</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="fileInput" class="form-label">Select Images</label>
+                                <input type="file" class="form-control" id="fileInput" accept="image/*" multiple>
+                                <div class="form-text">You can select multiple images. Maximum file size: 5MB per image</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="pageSize" class="form-label">Page Size</label>
+                                        <select class="form-select" id="pageSize">
+                                            <option value="a4">A4</option>
+                                            <option value="letter">Letter</option>
+                                            <option value="legal">Legal</option>
+                                            <option value="a3">A3</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="imageLayout" class="form-label">Image Layout</label>
+                                        <select class="form-select" id="imageLayout">
+                                            <option value="fit">Fit to Page</option>
+                                            <option value="center">Center</option>
+                                            <option value="stretch">Stretch</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="marginSize" class="form-label">Margin (mm)</label>
+                                        <input type="number" class="form-control" id="marginSize" value="10" min="0" max="50">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="imageQuality" class="form-label">Image Quality</label>
+                                        <select class="form-select" id="imageQuality">
+                                            <option value="high">High</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="low">Low</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" onclick="convertToPDF()" id="convertBtn">
+                                    <i class="bi bi-file-earmark-pdf"></i> Convert to PDF
+                                </button>
+                                <button class="btn btn-secondary" onclick="downloadPDF()" id="downloadBtn" style="display:none;">
+                                    <i class="bi bi-download"></i> Download PDF
+                                </button>
+                                <button class="btn btn-secondary" onclick="clearFiles()">Clear Files</button>
+                            </div>
+                            <div class="mb-3">
+                                <div class="progress" id="progressBar" style="display:none;">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <h5>Selected Images</h5>
+                                <div id="imagePreview" class="row">
+                                    <p class="text-muted">No images selected</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">File Information</h5>
+                                            <div id="fileInfo">
+                                                <p class="text-muted">No files selected</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Conversion Status</h5>
+                                            <div id="conversionStatus">
+                                                <p class="text-muted">Ready to convert</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="word-to-pdf.html">Word to PDF</a></li>
+                            <li><a href="pdf-to-word.html">PDF to Word</a></li>
+                            <li><a href="screenshot-to-pdf.html">Screenshot to PDF</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let selectedFiles = [];
+        let pdfBlob = null;
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            selectedFiles = [];
+            
+            files.forEach(file => {
+                if (file.size > 5 * 1024 * 1024) { // 5MB limit per image
+                    alert(`File ${file.name} exceeds 5MB limit`);
+                    return;
+                }
+                selectedFiles.push(file);
+            });
+            
+            updateFileInfo();
+            updateImagePreview();
+            document.getElementById('conversionStatus').innerHTML = '<p class="text-info">Files ready for conversion</p>';
+        });
+
+        function updateFileInfo() {
+            const fileInfo = document.getElementById('fileInfo');
+            if (selectedFiles.length === 0) {
+                fileInfo.innerHTML = '<p class="text-muted">No files selected</p>';
+                return;
+            }
+            
+            const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+            const totalSizeMB = (totalSize / 1024 / 1024).toFixed(2);
+            
+            fileInfo.innerHTML = `
+                <p><strong>Files:</strong> ${selectedFiles.length}</p>
+                <p><strong>Total Size:</strong> ${totalSizeMB} MB</p>
+                <p><strong>Types:</strong> ${[...new Set(selectedFiles.map(f => f.type))].join(', ')}</p>
+            `;
+        }
+
+        function updateImagePreview() {
+            const preview = document.getElementById('imagePreview');
+            if (selectedFiles.length === 0) {
+                preview.innerHTML = '<p class="text-muted">No images selected</p>';
+                return;
+            }
+            
+            preview.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-4 col-sm-6 mb-2';
+                    col.innerHTML = `
+                        <div class="card">
+                            <img src="${e.target.result}" class="card-img-top" style="height: 100px; object-fit: cover;">
+                            <div class="card-body p-2">
+                                <small class="text-muted">${file.name}</small>
+                            </div>
+                        </div>
+                    `;
+                    preview.appendChild(col);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function convertToPDF() {
+            if (selectedFiles.length === 0) {
+                alert('Please select at least one image');
+                return;
+            }
+
+            const convertBtn = document.getElementById('convertBtn');
+            const progressBar = document.getElementById('progressBar');
+            const progressBarInner = progressBar.querySelector('.progress-bar');
+            const conversionStatus = document.getElementById('conversionStatus');
+
+            convertBtn.disabled = true;
+            progressBar.style.display = 'block';
+            conversionStatus.innerHTML = '<p class="text-warning">Converting images to PDF...</p>';
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const pageSize = document.getElementById('pageSize').value;
+                const margin = parseInt(document.getElementById('marginSize').value);
+                const layout = document.getElementById('imageLayout').value;
+                const quality = document.getElementById('imageQuality').value;
+
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: pageSize
+                });
+
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const contentWidth = pageWidth - (margin * 2);
+                const contentHeight = pageHeight - (margin * 2);
+
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    const file = selectedFiles[i];
+                    progressBarInner.style.width = ((i / selectedFiles.length) * 100) + '%';
+                    
+                    const img = new Image();
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    await new Promise((resolve) => {
+                        img.onload = resolve;
+                        img.src = URL.createObjectURL(file);
+                    });
+
+                    // Calculate image dimensions based on layout
+                    let imgWidth, imgHeight;
+                    const imgAspectRatio = img.width / img.height;
+                    const contentAspectRatio = contentWidth / contentHeight;
+
+                    if (layout === 'fit') {
+                        if (imgAspectRatio > contentAspectRatio) {
+                            imgWidth = contentWidth;
+                            imgHeight = contentWidth / imgAspectRatio;
+                        } else {
+                            imgHeight = contentHeight;
+                            imgWidth = contentHeight * imgAspectRatio;
+                        }
+                    } else if (layout === 'stretch') {
+                        imgWidth = contentWidth;
+                        imgHeight = contentHeight;
+                    } else { // center
+                        imgWidth = Math.min(contentWidth, img.width);
+                        imgHeight = Math.min(contentHeight, img.height);
+                    }
+
+                    // Center image on page
+                    const x = margin + (contentWidth - imgWidth) / 2;
+                    const y = margin + (contentHeight - imgHeight) / 2;
+
+                    // Set canvas size and draw image
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+
+                    // Convert to data URL with quality setting
+                    const qualityValue = quality === 'high' ? 1.0 : quality === 'medium' ? 0.7 : 0.4;
+                    const imgData = canvas.toDataURL('image/jpeg', qualityValue);
+
+                    // Add image to PDF
+                    pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+
+                    // Add new page if not the last image
+                    if (i < selectedFiles.length - 1) {
+                        pdf.addPage();
+                    }
+
+                    URL.revokeObjectURL(img.src);
+                }
+
+                pdfBlob = pdf.output('blob');
+                
+                progressBarInner.style.width = '100%';
+                conversionStatus.innerHTML = '<p class="text-success">✅ Conversion completed successfully!</p>';
+                document.getElementById('downloadBtn').style.display = 'inline-block';
+                convertBtn.disabled = false;
+                
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                }, 1000);
+
+            } catch (error) {
+                progressBar.style.display = 'none';
+                conversionStatus.innerHTML = '<p class="text-danger">❌ Conversion failed: ' + error.message + '</p>';
+                convertBtn.disabled = false;
+            }
+        }
+
+        function downloadPDF() {
+            if (!pdfBlob) {
+                alert('Please convert images first');
+                return;
+            }
+
+            const url = URL.createObjectURL(pdfBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'converted-images.pdf';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearFiles() {
+            document.getElementById('fileInput').value = '';
+            selectedFiles = [];
+            pdfBlob = null;
+            updateFileInfo();
+            updateImagePreview();
+            document.getElementById('conversionStatus').innerHTML = '<p class="text-muted">Ready to convert</p>';
+            document.getElementById('downloadBtn').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'none';
+            document.getElementById('convertBtn').disabled = false;
+        }
+    </script>
+</body>
+</html> 

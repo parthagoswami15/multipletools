@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Index Checker | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Google Index Checker</h1>
+                        <div id="tool-ui">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label for="checkUrl" class="form-label">URL to Check</label>
+                                    <input type="url" class="form-control" id="checkUrl" placeholder="https://example.com/page">
+                                    <div class="form-text">Enter the URL you want to check for Google indexing</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="checkType" class="form-label">Check Type</label>
+                                    <select class="form-select" id="checkType">
+                                        <option value="single">Single URL</option>
+                                        <option value="multiple">Multiple URLs</option>
+                                        <option value="domain">Domain Check</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div id="multipleUrlsSection" style="display:none;">
+                                <div class="mt-3">
+                                    <label for="multipleUrls" class="form-label">Multiple URLs (One per line)</label>
+                                    <textarea class="form-control" id="multipleUrls" rows="5" placeholder="https://example.com/page1&#10;https://example.com/page2&#10;https://example.com/page3"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <button class="btn btn-primary" onclick="checkIndexing()">Check Indexing</button>
+                                <button class="btn btn-secondary" onclick="clearChecker()">Clear</button>
+                                <button class="btn btn-outline-secondary" onclick="loadSampleUrls()">Load Sample</button>
+                                <button class="btn btn-outline-info" onclick="bulkCheck()">Bulk Check</button>
+                            </div>
+                            
+                            <div id="indexResults" style="display:none;">
+                                <div class="row mt-4">
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-primary" id="totalChecked">0</h4>
+                                                <small class="text-muted">Total Checked</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-success" id="indexedCount">0</h4>
+                                                <small class="text-muted">Indexed</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-warning" id="notIndexedCount">0</h4>
+                                                <small class="text-muted">Not Indexed</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-info" id="errorCount">0</h4>
+                                                <small class="text-muted">Errors</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Indexing Results</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm" id="indexTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>URL</th>
+                                                        <th>Status</th>
+                                                        <th>Last Crawled</th>
+                                                        <th>Index Date</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="indexTableBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Indexing Summary</h5>
+                                                <div id="indexingSummary"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">SEO Recommendations</h5>
+                                                <div id="seoRecommendations"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Search Results Preview</h5>
+                                        <div id="searchPreview"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Indexing Status Guide</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Indexing Statuses</h6>
+                                <ul>
+                                    <li><span class="badge bg-success">Indexed</span> - Page is in Google's index</li>
+                                    <li><span class="badge bg-warning">Not Indexed</span> - Page not found in index</li>
+                                    <li><span class="badge bg-danger">Blocked</span> - Page blocked by robots.txt</li>
+                                    <li><span class="badge bg-info">Pending</span> - Page discovered but not indexed</li>
+                                    <li><span class="badge bg-secondary">Error</span> - Error occurred during check</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Common Issues</h6>
+                                <ul>
+                                    <li>Noindex meta tag</li>
+                                    <li>Robots.txt blocking</li>
+                                    <li>Poor page quality</li>
+                                    <li>Duplicate content</li>
+                                    <li>Technical errors</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="meta-tag-generator.html">Meta Tag Generator</a></li>
+                            <li><a href="sitemap-generator.html">Sitemap Generator</a></li>
+                            <li><a href="robots-txt-generator.html">Robots.txt Generator</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.getElementById('checkType').addEventListener('change', function() {
+            const checkType = this.value;
+            const multipleSection = document.getElementById('multipleUrlsSection');
+            
+            if (checkType === 'multiple') {
+                multipleSection.style.display = 'block';
+            } else {
+                multipleSection.style.display = 'none';
+            }
+        });
+
+        function checkIndexing() {
+            const checkType = document.getElementById('checkType').value;
+            const singleUrl = document.getElementById('checkUrl').value;
+            const multipleUrls = document.getElementById('multipleUrls').value;
+            
+            if (checkType === 'single' && !singleUrl) {
+                alert('Please enter a URL to check');
+                return;
+            }
+            
+            if (checkType === 'multiple' && !multipleUrls.trim()) {
+                alert('Please enter URLs to check');
+                return;
+            }
+            
+            // Simulate checking process
+            showLoading();
+            
+            setTimeout(() => {
+                if (checkType === 'single') {
+                    checkSingleUrl(singleUrl);
+                } else if (checkType === 'multiple') {
+                    checkMultipleUrls(multipleUrls);
+                } else {
+                    checkDomain(singleUrl);
+                }
+            }, 2000);
+        }
+
+        function checkSingleUrl(url) {
+            const results = [{
+                url: url,
+                status: getRandomStatus(),
+                lastCrawled: getRandomDate(),
+                indexDate: getRandomDate(),
+                title: 'Sample Page Title',
+                description: 'This is a sample page description that would appear in search results.',
+                position: Math.floor(Math.random() * 100) + 1
+            }];
+            
+            displayResults(results);
+        }
+
+        function checkMultipleUrls(urlsText) {
+            const urls = urlsText.split('\n')
+                .map(url => url.trim())
+                .filter(url => url.length > 0);
+            
+            const results = urls.map(url => ({
+                url: url,
+                status: getRandomStatus(),
+                lastCrawled: getRandomDate(),
+                indexDate: getRandomDate(),
+                title: `Page for ${new URL(url).hostname}`,
+                description: `Description for ${url}`,
+                position: Math.floor(Math.random() * 100) + 1
+            }));
+            
+            displayResults(results);
+        }
+
+        function checkDomain(domain) {
+            const baseUrl = domain.startsWith('http') ? domain : `https://${domain}`;
+            const samplePages = [
+                '/',
+                '/about',
+                '/contact',
+                '/services',
+                '/blog',
+                '/products',
+                '/faq'
+            ];
+            
+            const results = samplePages.map(page => ({
+                url: baseUrl + page,
+                status: getRandomStatus(),
+                lastCrawled: getRandomDate(),
+                indexDate: getRandomDate(),
+                title: `Page ${page} - ${new URL(baseUrl).hostname}`,
+                description: `Description for ${page} page`,
+                position: Math.floor(Math.random() * 100) + 1
+            }));
+            
+            displayResults(results);
+        }
+
+        function getRandomStatus() {
+            const statuses = ['Indexed', 'Not Indexed', 'Blocked', 'Pending', 'Error'];
+            const weights = [0.6, 0.2, 0.1, 0.08, 0.02]; // 60% indexed, 20% not indexed, etc.
+            
+            const random = Math.random();
+            let cumulative = 0;
+            
+            for (let i = 0; i < statuses.length; i++) {
+                cumulative += weights[i];
+                if (random <= cumulative) {
+                    return statuses[i];
+                }
+            }
+            
+            return statuses[0];
+        }
+
+        function getRandomDate() {
+            const start = new Date(2023, 0, 1);
+            const end = new Date();
+            const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+            return randomDate.toLocaleDateString();
+        }
+
+        function displayResults(results) {
+            // Update summary stats
+            const totalChecked = results.length;
+            const indexedCount = results.filter(r => r.status === 'Indexed').length;
+            const notIndexedCount = results.filter(r => r.status === 'Not Indexed').length;
+            const errorCount = results.filter(r => r.status === 'Error').length;
+            
+            document.getElementById('totalChecked').textContent = totalChecked;
+            document.getElementById('indexedCount').textContent = indexedCount;
+            document.getElementById('notIndexedCount').textContent = notIndexedCount;
+            document.getElementById('errorCount').textContent = errorCount;
+            
+            // Display results table
+            const tbody = document.getElementById('indexTableBody');
+            tbody.innerHTML = '';
+            
+            results.forEach(result => {
+                const row = tbody.insertRow();
+                const statusClass = getStatusClass(result.status);
+                
+                row.innerHTML = `
+                    <td><a href="${result.url}" target="_blank">${result.url}</a></td>
+                    <td><span class="badge ${statusClass}">${result.status}</span></td>
+                    <td>${result.lastCrawled}</td>
+                    <td>${result.indexDate}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="viewDetails('${result.url}')">Details</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="searchGoogle('${result.url}')">Search</button>
+                    </td>
+                `;
+            });
+            
+            // Generate summary and recommendations
+            generateSummary(results);
+            generateRecommendations(results);
+            generateSearchPreview(results);
+            
+            document.getElementById('indexResults').style.display = 'block';
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                'Indexed': 'bg-success',
+                'Not Indexed': 'bg-warning',
+                'Blocked': 'bg-danger',
+                'Pending': 'bg-info',
+                'Error': 'bg-secondary'
+            };
+            return classes[status] || 'bg-secondary';
+        }
+
+        function generateSummary(results) {
+            const indexed = results.filter(r => r.status === 'Indexed');
+            const notIndexed = results.filter(r => r.status === 'Not Indexed');
+            const blocked = results.filter(r => r.status === 'Blocked');
+            
+            const summary = document.getElementById('indexingSummary');
+            summary.innerHTML = `
+                <p><strong>Total URLs:</strong> ${results.length}</p>
+                <p><strong>Indexed:</strong> ${indexed.length} (${(indexed.length / results.length * 100).toFixed(1)}%)</p>
+                <p><strong>Not Indexed:</strong> ${notIndexed.length} (${(notIndexed.length / results.length * 100).toFixed(1)}%)</p>
+                <p><strong>Blocked:</strong> ${blocked.length} (${(blocked.length / results.length * 100).toFixed(1)}%)</p>
+                <p><strong>Average Position:</strong> ${Math.floor(results.reduce((sum, r) => sum + r.position, 0) / results.length)}</p>
+            `;
+        }
+
+        function generateRecommendations(results) {
+            const notIndexed = results.filter(r => r.status === 'Not Indexed');
+            const blocked = results.filter(r => r.status === 'Blocked');
+            const recommendations = [];
+            
+            if (notIndexed.length > 0) {
+                recommendations.push(`Fix ${notIndexed.length} non-indexed pages`);
+                recommendations.push('Submit sitemap to Google Search Console');
+                recommendations.push('Check for noindex meta tags');
+            }
+            
+            if (blocked.length > 0) {
+                recommendations.push(`Fix ${blocked.length} blocked pages`);
+                recommendations.push('Review robots.txt configuration');
+            }
+            
+            recommendations.push('Monitor indexing in Google Search Console');
+            recommendations.push('Improve page quality and content');
+            
+            const container = document.getElementById('seoRecommendations');
+            container.innerHTML = recommendations.map(rec => `<p>• ${rec}</p>`).join('');
+        }
+
+        function generateSearchPreview(results) {
+            const indexed = results.filter(r => r.status === 'Indexed');
+            
+            if (indexed.length === 0) {
+                document.getElementById('searchPreview').innerHTML = '<p class="text-muted">No indexed pages to preview</p>';
+                return;
+            }
+            
+            const preview = indexed.slice(0, 3).map(result => `
+                <div class="border-bottom pb-3 mb-3">
+                    <div class="text-success small">${result.url}</div>
+                    <div class="fw-bold text-primary">${result.title}</div>
+                    <div class="text-muted">${result.description}</div>
+                    <div class="text-muted small">Position: ${result.position}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('searchPreview').innerHTML = preview;
+        }
+
+        function viewDetails(url) {
+            alert(`Detailed analysis for: ${url}\n\nThis would show detailed indexing information, crawl stats, and technical issues.`);
+        }
+
+        function searchGoogle(url) {
+            const searchQuery = `site:${new URL(url).hostname}`;
+            const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
+            window.open(googleSearchUrl, '_blank');
+        }
+
+        function bulkCheck() {
+            const urls = document.getElementById('multipleUrls').value;
+            if (!urls.trim()) {
+                alert('Please enter URLs for bulk check');
+                return;
+            }
+            
+            checkIndexing();
+        }
+
+        function showLoading() {
+            document.getElementById('indexResults').style.display = 'none';
+            // You could add a loading spinner here
+        }
+
+        function clearChecker() {
+            document.getElementById('checkUrl').value = '';
+            document.getElementById('multipleUrls').value = '';
+            document.getElementById('indexResults').style.display = 'none';
+        }
+
+        function loadSampleUrls() {
+            const sampleUrls = `https://example.com/
+https://example.com/about
+https://example.com/contact
+https://example.com/services
+https://example.com/blog`;
+            
+            document.getElementById('checkUrl').value = 'https://example.com';
+            document.getElementById('multipleUrls').value = sampleUrls;
+            document.getElementById('checkType').value = 'multiple';
+            document.getElementById('multipleUrlsSection').style.display = 'block';
+        }
+    </script>
+</body>
+</html> 

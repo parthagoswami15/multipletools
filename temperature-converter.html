@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-thermometer-half"></i> Temperature Converter</h1>
+                        <p>Convert between different temperature units quickly and accurately</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit" class="form-label">From Unit</label>
+                                    <select class="form-select" id="fromUnit" onchange="convert()">
+                                        <option value="celsius">Celsius (°C)</option>
+                                        <option value="fahrenheit">Fahrenheit (°F)</option>
+                                        <option value="kelvin">Kelvin (K)</option>
+                                        <option value="rankine">Rankine (°R)</option>
+                                        <option value="reaumur">Réaumur (°Ré)</option>
+                                        <option value="triple">Triple Point (K)</option>
+                                        <option value="planck">Planck Temperature (Tp)</option>
+                                        <option value="electron-volt">Electron Volt (eV)</option>
+                                        <option value="joule">Joule (J)</option>
+                                        <option value="btu">British Thermal Unit (BTU)</option>
+                                        <option value="calorie">Calorie (cal)</option>
+                                        <option value="watt-hour">Watt Hour (Wh)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit" class="form-label">To Unit</label>
+                                    <select class="form-select" id="toUnit" onchange="convert()">
+                                        <option value="celsius">Celsius (°C)</option>
+                                        <option value="fahrenheit" selected>Fahrenheit (°F)</option>
+                                        <option value="kelvin">Kelvin (K)</option>
+                                        <option value="rankine">Rankine (°R)</option>
+                                        <option value="reaumur">Réaumur (°Ré)</option>
+                                        <option value="triple">Triple Point (K)</option>
+                                        <option value="planck">Planck Temperature (Tp)</option>
+                                        <option value="electron-volt">Electron Volt (eV)</option>
+                                        <option value="joule">Joule (J)</option>
+                                        <option value="btu">British Thermal Unit (BTU)</option>
+                                        <option value="calorie">Calorie (cal)</option>
+                                        <option value="watt-hour">Watt Hour (Wh)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromValue" class="form-label">From Value</label>
+                                    <input type="number" class="form-control" id="fromValue" value="25" oninput="convert()" step="any">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toValue" class="form-label">To Value</label>
+                                    <input type="number" class="form-control" id="toValue" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="swapUnits()">
+                                        <i class="fas fa-exchange-alt"></i> Swap Units
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearConverter()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> All Units Conversion</h4>
+                                    <div class="row" id="allConversions">
+                                        <!-- All conversions will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Unit Information</h4>
+                                    <div id="unitInfo">
+                                        <p class="text-muted">Select a unit to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Conversion History</h4>
+                                    <div id="conversionHistory">
+                                        <p class="text-muted">Recent conversions will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            convert();
+        });
+
+        const unitNames = {
+            'celsius': 'Celsius',
+            'fahrenheit': 'Fahrenheit',
+            'kelvin': 'Kelvin',
+            'rankine': 'Rankine',
+            'reaumur': 'Réaumur',
+            'triple': 'Triple Point',
+            'planck': 'Planck Temperature',
+            'electron-volt': 'Electron Volt',
+            'joule': 'Joule',
+            'btu': 'British Thermal Unit',
+            'calorie': 'Calorie',
+            'watt-hour': 'Watt Hour'
+        };
+
+        const unitSymbols = {
+            'celsius': '°C',
+            'fahrenheit': '°F',
+            'kelvin': 'K',
+            'rankine': '°R',
+            'reaumur': '°Ré',
+            'triple': 'K',
+            'planck': 'Tp',
+            'electron-volt': 'eV',
+            'joule': 'J',
+            'btu': 'BTU',
+            'calorie': 'cal',
+            'watt-hour': 'Wh'
+        };
+
+        const unitInfo = {
+            'celsius': 'The most commonly used temperature scale worldwide. Water freezes at 0°C and boils at 100°C.',
+            'fahrenheit': 'Used primarily in the United States. Water freezes at 32°F and boils at 212°F.',
+            'kelvin': 'The base unit of temperature in the SI system. Absolute zero is 0K.',
+            'rankine': 'An absolute temperature scale based on Fahrenheit. Absolute zero is 0°R.',
+            'reaumur': 'An older temperature scale where water freezes at 0°Ré and boils at 80°Ré.',
+            'triple': 'The temperature at which a substance can exist in all three phases simultaneously.',
+            'planck': 'The highest possible temperature in the universe. Equal to 1.41679 × 10^32 K.',
+            'electron-volt': 'A unit of energy commonly used in particle physics.',
+            'joule': 'The SI unit of energy.',
+            'btu': 'A unit of energy commonly used in heating and cooling systems.',
+            'calorie': 'A unit of energy, commonly used in nutrition.',
+            'watt-hour': 'A unit of energy equal to one watt of power for one hour.'
+        };
+
+        let conversionHistory = [];
+
+        function convert() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
+
+            // Convert to Celsius first, then to target unit
+            const celsius = toCelsius(fromValue, fromUnit);
+            const result = fromCelsius(celsius, toUnit);
+
+            document.getElementById('toValue').value = result.toFixed(6);
+
+            // Update all conversions
+            updateAllConversions(fromValue, fromUnit);
+            
+            // Update unit info
+            updateUnitInfo(fromUnit);
+            
+            // Add to history
+            addToHistory(fromValue, fromUnit, result, toUnit);
+        }
+
+        function toCelsius(value, unit) {
+            switch(unit) {
+                case 'celsius': return value;
+                case 'fahrenheit': return (value - 32) * 5/9;
+                case 'kelvin': return value - 273.15;
+                case 'rankine': return (value - 491.67) * 5/9;
+                case 'reaumur': return value * 5/4;
+                case 'triple': return value - 273.16;
+                case 'planck': return value - 1.41679e32;
+                case 'electron-volt': return value * 11604.5;
+                case 'joule': return value / 4.184;
+                case 'btu': return (value - 1055.06) / 1.8;
+                case 'calorie': return value / 4.184;
+                case 'watt-hour': return (value * 3600) / 4.184;
+                default: return value;
+            }
+        }
+
+        function fromCelsius(celsius, unit) {
+            switch(unit) {
+                case 'celsius': return celsius;
+                case 'fahrenheit': return celsius * 9/5 + 32;
+                case 'kelvin': return celsius + 273.15;
+                case 'rankine': return (celsius + 273.15) * 9/5;
+                case 'reaumur': return celsius * 4/5;
+                case 'triple': return celsius + 273.16;
+                case 'planck': return celsius + 1.41679e32;
+                case 'electron-volt': return celsius / 11604.5;
+                case 'joule': return celsius * 4.184;
+                case 'btu': return celsius * 1.8 + 1055.06;
+                case 'calorie': return celsius * 4.184;
+                case 'watt-hour': return (celsius * 4.184) / 3600;
+                default: return celsius;
+            }
+        }
+
+        function updateAllConversions(value, fromUnit) {
+            const container = document.getElementById('allConversions');
+            let html = '';
+
+            const units = ['celsius', 'fahrenheit', 'kelvin', 'rankine', 'reaumur'];
+            
+            units.forEach(unit => {
+                if (unit !== fromUnit) {
+                    const celsius = toCelsius(value, fromUnit);
+                    const converted = fromCelsius(celsius, unit);
+                    const symbol = unitSymbols[unit];
+                    const name = unitNames[unit];
+                    
+                    html += `
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="conversion-item">
+                                <strong>${name}</strong><br>
+                                <span class="conversion-value">${converted.toFixed(2)} ${symbol}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateUnitInfo(unit) {
+            const info = document.getElementById('unitInfo');
+            info.innerHTML = `
+                <h5>${unitNames[unit]} (${unitSymbols[unit]})</h5>
+                <p>${unitInfo[unit]}</p>
+            `;
+        }
+
+        function addToHistory(fromValue, fromUnit, toValue, toUnit) {
+            const conversion = {
+                from: `${fromValue} ${unitSymbols[fromUnit]}`,
+                to: `${toValue.toFixed(2)} ${unitSymbols[toUnit]}`,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            conversionHistory.unshift(conversion);
+            if (conversionHistory.length > 5) {
+                conversionHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('conversionHistory');
+            if (conversionHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No conversions yet</p>';
+                return;
+            }
+
+            let html = '';
+            conversionHistory.forEach(conv => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${conv.timestamp}</small><br>
+                        ${conv.from} → ${conv.to}
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = document.getElementById('fromValue').value;
+            const toValue = document.getElementById('toValue').value;
+
+            document.getElementById('fromUnit').value = toUnit;
+            document.getElementById('toUnit').value = fromUnit;
+            document.getElementById('fromValue').value = toValue;
+            document.getElementById('toValue').value = fromValue;
+
+            convert();
+        }
+
+        function clearConverter() {
+            document.getElementById('fromValue').value = '';
+            document.getElementById('toValue').value = '';
+            document.getElementById('allConversions').innerHTML = '';
+            document.getElementById('unitInfo').innerHTML = '<p class="text-muted">Select a unit to see information</p>';
+        }
+
+        function loadSample() {
+            document.getElementById('fromUnit').value = 'celsius';
+            document.getElementById('toUnit').value = 'fahrenheit';
+            document.getElementById('fromValue').value = '25';
+            convert();
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversion-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .conversion-value {
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

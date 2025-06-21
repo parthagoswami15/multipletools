@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Checker | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Grammar Checker</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="textInput" class="form-label">Enter your text to check grammar</label>
+                                <textarea class="form-control" id="textInput" rows="8" placeholder="Type or paste your text here to check for grammar errors..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" onclick="checkGrammar()">Check Grammar</button>
+                                <button class="btn btn-secondary" onclick="clearText()">Clear Text</button>
+                            </div>
+                            <div id="results" style="display:none;">
+                                <div class="row mb-3">
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h3 class="text-success" id="correctCount">0</h3>
+                                                <small class="text-muted">Correct</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h3 class="text-warning" id="warningCount">0</h3>
+                                                <small class="text-muted">Warnings</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h3 class="text-danger" id="errorCount">0</h3>
+                                                <small class="text-muted">Errors</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h3 class="text-info" id="suggestionCount">0</h3>
+                                                <small class="text-muted">Suggestions</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Grammar Issues Found</h5>
+                                        <div id="grammarIssues"></div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Corrected Text</h5>
+                                        <div id="correctedText"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="plagiarism-checker.html">Plagiarism Checker</a></li>
+                            <li><a href="word-counter.html">Word Counter</a></li>
+                            <li><a href="case-converter.html">Case Converter</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        function checkGrammar() {
+            const text = document.getElementById('textInput').value.trim();
+            
+            if (!text) {
+                alert('Please enter some text to check');
+                return;
+            }
+            
+            const issues = [];
+            let correctedText = text;
+            
+            // Check for common grammar issues
+            const checks = [
+                {
+                    pattern: /\b(i)\b/g,
+                    replacement: 'I',
+                    type: 'error',
+                    message: 'Personal pronoun "i" should be capitalized as "I"'
+                },
+                {
+                    pattern: /\b(dont)\b/g,
+                    replacement: "don't",
+                    type: 'error',
+                    message: '"dont" should be "don\'t" (missing apostrophe)'
+                },
+                {
+                    pattern: /\b(cant)\b/g,
+                    replacement: "can't",
+                    type: 'error',
+                    message: '"cant" should be "can\'t" (missing apostrophe)'
+                },
+                {
+                    pattern: /\b(wont)\b/g,
+                    replacement: "won't",
+                    type: 'error',
+                    message: '"wont" should be "won\'t" (missing apostrophe)'
+                },
+                {
+                    pattern: /\b(its)\b(?=\s+[a-z])/g,
+                    replacement: "it's",
+                    type: 'warning',
+                    message: '"its" might be "it\'s" (possessive vs contraction)'
+                },
+                {
+                    pattern: /\b(youre)\b/g,
+                    replacement: "you're",
+                    type: 'error',
+                    message: '"youre" should be "you\'re" (missing apostrophe)'
+                },
+                {
+                    pattern: /\b(theyre)\b/g,
+                    replacement: "they're",
+                    type: 'error',
+                    message: '"theyre" should be "they\'re" (missing apostrophe)'
+                },
+                {
+                    pattern: /\b(weve)\b/g,
+                    replacement: "we've",
+                    type: 'error',
+                    message: '"weve" should be "we\'ve" (missing apostrophe)'
+                },
+                {
+                    pattern: /\b(ive)\b/g,
+                    replacement: "I've",
+                    type: 'error',
+                    message: '"ive" should be "I\'ve" (missing apostrophe and capitalization)'
+                },
+                {
+                    pattern: /\b(im)\b/g,
+                    replacement: "I'm",
+                    type: 'error',
+                    message: '"im" should be "I\'m" (missing apostrophe and capitalization)'
+                }
+            ];
+            
+            checks.forEach(check => {
+                const matches = text.match(check.pattern);
+                if (matches) {
+                    matches.forEach(match => {
+                        issues.push({
+                            type: check.type,
+                            message: check.message,
+                            original: match,
+                            suggestion: check.replacement
+                        });
+                    });
+                    correctedText = correctedText.replace(check.pattern, check.replacement);
+                }
+            });
+            
+            // Check for double spaces
+            const doubleSpaces = text.match(/\s{2,}/g);
+            if (doubleSpaces) {
+                issues.push({
+                    type: 'warning',
+                    message: 'Multiple consecutive spaces detected',
+                    original: '  ',
+                    suggestion: ' '
+                });
+                correctedText = correctedText.replace(/\s{2,}/g, ' ');
+            }
+            
+            // Check for missing periods at end of sentences
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            sentences.forEach(sentence => {
+                if (sentence.trim().length > 0 && !text.endsWith(sentence.trim()) && !text.includes(sentence.trim() + '.')) {
+                    issues.push({
+                        type: 'suggestion',
+                        message: 'Consider adding a period at the end of sentences',
+                        original: sentence.trim(),
+                        suggestion: sentence.trim() + '.'
+                    });
+                }
+            });
+            
+            // Update UI
+            const errorCount = issues.filter(i => i.type === 'error').length;
+            const warningCount = issues.filter(i => i.type === 'warning').length;
+            const suggestionCount = issues.filter(i => i.type === 'suggestion').length;
+            const correctCount = Math.max(0, sentences.length - errorCount - warningCount);
+            
+            document.getElementById('errorCount').textContent = errorCount;
+            document.getElementById('warningCount').textContent = warningCount;
+            document.getElementById('suggestionCount').textContent = suggestionCount;
+            document.getElementById('correctCount').textContent = correctCount;
+            
+            // Display issues
+            let issuesHtml = '';
+            if (issues.length === 0) {
+                issuesHtml = '<p class="text-success">✅ No grammar issues found!</p>';
+            } else {
+                issues.forEach((issue, index) => {
+                    const badgeClass = issue.type === 'error' ? 'danger' : issue.type === 'warning' ? 'warning' : 'info';
+                    issuesHtml += `
+                        <div class="alert alert-${badgeClass} alert-dismissible fade show" role="alert">
+                            <strong>${issue.type.toUpperCase()}:</strong> ${issue.message}
+                            <br><small>Original: "${issue.original}" → Suggestion: "${issue.suggestion}"</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('grammarIssues').innerHTML = issuesHtml;
+            document.getElementById('correctedText').innerHTML = `<p>${correctedText}</p>`;
+            
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function clearText() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('results').style.display = 'none';
+        }
+    </script>
+</body>
+</html> 

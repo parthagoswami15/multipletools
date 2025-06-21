@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pressure Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-compress-alt"></i> Pressure Converter</h1>
+                        <p>Convert between different pressure units quickly and accurately</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit" class="form-label">From Unit</label>
+                                    <select class="form-select" id="fromUnit" onchange="convert()">
+                                        <option value="pascal">Pascal (Pa)</option>
+                                        <option value="kilopascal">Kilopascal (kPa)</option>
+                                        <option value="megapascal">Megapascal (MPa)</option>
+                                        <option value="bar">Bar (bar)</option>
+                                        <option value="millibar">Millibar (mbar)</option>
+                                        <option value="atmosphere">Atmosphere (atm)</option>
+                                        <option value="psi">Pounds per Square Inch (psi)</option>
+                                        <option value="ksi">Kilopounds per Square Inch (ksi)</option>
+                                        <option value="torr">Torr (Torr)</option>
+                                        <option value="millimeter-mercury">Millimeter of Mercury (mmHg)</option>
+                                        <option value="inch-mercury">Inch of Mercury (inHg)</option>
+                                        <option value="inch-water">Inch of Water (inH₂O)</option>
+                                        <option value="foot-water">Foot of Water (ftH₂O)</option>
+                                        <option value="dyne-cm2">Dyne per Square Centimeter (dyn/cm²)</option>
+                                        <option value="newton-m2">Newton per Square Meter (N/m²)</option>
+                                        <option value="pound-force-ft2">Pound-force per Square Foot (lbf/ft²)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit" class="form-label">To Unit</label>
+                                    <select class="form-select" id="toUnit" onchange="convert()">
+                                        <option value="pascal">Pascal (Pa)</option>
+                                        <option value="kilopascal" selected>Kilopascal (kPa)</option>
+                                        <option value="megapascal">Megapascal (MPa)</option>
+                                        <option value="bar">Bar (bar)</option>
+                                        <option value="millibar">Millibar (mbar)</option>
+                                        <option value="atmosphere">Atmosphere (atm)</option>
+                                        <option value="psi">Pounds per Square Inch (psi)</option>
+                                        <option value="ksi">Kilopounds per Square Inch (ksi)</option>
+                                        <option value="torr">Torr (Torr)</option>
+                                        <option value="millimeter-mercury">Millimeter of Mercury (mmHg)</option>
+                                        <option value="inch-mercury">Inch of Mercury (inHg)</option>
+                                        <option value="inch-water">Inch of Water (inH₂O)</option>
+                                        <option value="foot-water">Foot of Water (ftH₂O)</option>
+                                        <option value="dyne-cm2">Dyne per Square Centimeter (dyn/cm²)</option>
+                                        <option value="newton-m2">Newton per Square Meter (N/m²)</option>
+                                        <option value="pound-force-ft2">Pound-force per Square Foot (lbf/ft²)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromValue" class="form-label">From Value</label>
+                                    <input type="number" class="form-control" id="fromValue" value="1" oninput="convert()" step="any">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toValue" class="form-label">To Value</label>
+                                    <input type="number" class="form-control" id="toValue" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="swapUnits()">
+                                        <i class="fas fa-exchange-alt"></i> Swap Units
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearConverter()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> All Units Conversion</h4>
+                                    <div class="row" id="allConversions">
+                                        <!-- All conversions will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Unit Information</h4>
+                                    <div id="unitInfo">
+                                        <p class="text-muted">Select a unit to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Conversion History</h4>
+                                    <div id="conversionHistory">
+                                        <p class="text-muted">Recent conversions will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            convert();
+        });
+
+        // Conversion factors to pascals
+        const pressureUnits = {
+            'pascal': 1,
+            'kilopascal': 1000,
+            'megapascal': 1000000,
+            'bar': 100000,
+            'millibar': 100,
+            'atmosphere': 101325,
+            'psi': 6894.76,
+            'ksi': 6894760,
+            'torr': 133.322,
+            'millimeter-mercury': 133.322,
+            'inch-mercury': 3386.39,
+            'inch-water': 248.84,
+            'foot-water': 2989.07,
+            'dyne-cm2': 0.1,
+            'newton-m2': 1,
+            'pound-force-ft2': 47.8803
+        };
+
+        const unitNames = {
+            'pascal': 'Pascal',
+            'kilopascal': 'Kilopascal',
+            'megapascal': 'Megapascal',
+            'bar': 'Bar',
+            'millibar': 'Millibar',
+            'atmosphere': 'Atmosphere',
+            'psi': 'Pounds per Square Inch',
+            'ksi': 'Kilopounds per Square Inch',
+            'torr': 'Torr',
+            'millimeter-mercury': 'Millimeter of Mercury',
+            'inch-mercury': 'Inch of Mercury',
+            'inch-water': 'Inch of Water',
+            'foot-water': 'Foot of Water',
+            'dyne-cm2': 'Dyne per Square Centimeter',
+            'newton-m2': 'Newton per Square Meter',
+            'pound-force-ft2': 'Pound-force per Square Foot'
+        };
+
+        const unitSymbols = {
+            'pascal': 'Pa',
+            'kilopascal': 'kPa',
+            'megapascal': 'MPa',
+            'bar': 'bar',
+            'millibar': 'mbar',
+            'atmosphere': 'atm',
+            'psi': 'psi',
+            'ksi': 'ksi',
+            'torr': 'Torr',
+            'millimeter-mercury': 'mmHg',
+            'inch-mercury': 'inHg',
+            'inch-water': 'inH₂O',
+            'foot-water': 'ftH₂O',
+            'dyne-cm2': 'dyn/cm²',
+            'newton-m2': 'N/m²',
+            'pound-force-ft2': 'lbf/ft²'
+        };
+
+        const unitInfo = {
+            'pascal': 'The SI unit of pressure. Equal to 1 newton per square meter.',
+            'kilopascal': 'Equal to 1,000 pascals. Commonly used in meteorology.',
+            'megapascal': 'Equal to 1,000,000 pascals. Used in engineering.',
+            'bar': 'Equal to 100,000 pascals. Used in meteorology and scuba diving.',
+            'millibar': 'Equal to 100 pascals. Used in meteorology.',
+            'atmosphere': 'Standard atmospheric pressure at sea level. Equal to 101,325 pascals.',
+            'psi': 'Pounds per square inch. Commonly used in the United States.',
+            'ksi': 'Kilopounds per square inch. Used in engineering for high pressures.',
+            'torr': 'Equal to 1/760 of an atmosphere. Used in vacuum measurements.',
+            'millimeter-mercury': 'Pressure exerted by a column of mercury 1 mm high.',
+            'inch-mercury': 'Pressure exerted by a column of mercury 1 inch high.',
+            'inch-water': 'Pressure exerted by a column of water 1 inch high.',
+            'foot-water': 'Pressure exerted by a column of water 1 foot high.',
+            'dyne-cm2': 'CGS unit of pressure. Equal to 0.1 pascals.',
+            'newton-m2': 'Equal to 1 pascal. Used in some engineering contexts.',
+            'pound-force-ft2': 'Pressure exerted by 1 pound-force over 1 square foot.'
+        };
+
+        let conversionHistory = [];
+
+        function convert() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
+
+            // Convert to pascals first, then to target unit
+            const pascals = fromValue * pressureUnits[fromUnit];
+            const result = pascals / pressureUnits[toUnit];
+
+            document.getElementById('toValue').value = result.toFixed(6);
+
+            // Update all conversions
+            updateAllConversions(fromValue, fromUnit);
+            
+            // Update unit info
+            updateUnitInfo(fromUnit);
+            
+            // Add to history
+            addToHistory(fromValue, fromUnit, result, toUnit);
+        }
+
+        function updateAllConversions(value, fromUnit) {
+            const container = document.getElementById('allConversions');
+            let html = '';
+
+            Object.keys(pressureUnits).forEach(unit => {
+                if (unit !== fromUnit) {
+                    const pascals = value * pressureUnits[fromUnit];
+                    const converted = pascals / pressureUnits[unit];
+                    const symbol = unitSymbols[unit];
+                    const name = unitNames[unit];
+                    
+                    html += `
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="conversion-item">
+                                <strong>${name}</strong><br>
+                                <span class="conversion-value">${converted.toFixed(6)} ${symbol}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateUnitInfo(unit) {
+            const info = document.getElementById('unitInfo');
+            info.innerHTML = `
+                <h5>${unitNames[unit]} (${unitSymbols[unit]})</h5>
+                <p>${unitInfo[unit]}</p>
+                <p><strong>In pascals:</strong> ${pressureUnits[unit]} Pa</p>
+            `;
+        }
+
+        function addToHistory(fromValue, fromUnit, toValue, toUnit) {
+            const conversion = {
+                from: `${fromValue} ${unitSymbols[fromUnit]}`,
+                to: `${toValue.toFixed(6)} ${unitSymbols[toUnit]}`,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            conversionHistory.unshift(conversion);
+            if (conversionHistory.length > 5) {
+                conversionHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('conversionHistory');
+            if (conversionHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No conversions yet</p>';
+                return;
+            }
+
+            let html = '';
+            conversionHistory.forEach(conv => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${conv.timestamp}</small><br>
+                        ${conv.from} → ${conv.to}
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = document.getElementById('fromValue').value;
+            const toValue = document.getElementById('toValue').value;
+
+            document.getElementById('fromUnit').value = toUnit;
+            document.getElementById('toUnit').value = fromUnit;
+            document.getElementById('fromValue').value = toValue;
+            document.getElementById('toValue').value = fromValue;
+
+            convert();
+        }
+
+        function clearConverter() {
+            document.getElementById('fromValue').value = '';
+            document.getElementById('toValue').value = '';
+            document.getElementById('allConversions').innerHTML = '';
+            document.getElementById('unitInfo').innerHTML = '<p class="text-muted">Select a unit to see information</p>';
+        }
+
+        function loadSample() {
+            document.getElementById('fromUnit').value = 'atmosphere';
+            document.getElementById('toUnit').value = 'psi';
+            document.getElementById('fromValue').value = '1';
+            convert();
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversion-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .conversion-value {
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

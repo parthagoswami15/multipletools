@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">QR Code Generator</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="qrText" class="form-label">Enter Text or URL</label>
+                                <textarea class="form-control" id="qrText" rows="3" placeholder="Enter text, URL, or any data to generate QR code..."></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="qrSize" class="form-label">Size: <span id="sizeValue">200</span>px</label>
+                                    <input type="range" class="form-range" id="qrSize" min="100" max="400" value="200" step="50">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="qrColor" class="form-label">Color</label>
+                                    <input type="color" class="form-control" id="qrColor" value="#000000">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" onclick="generateQR()">Generate QR Code</button>
+                                <button class="btn btn-secondary" onclick="downloadQR()" id="downloadBtn" style="display:none;">Download QR Code</button>
+                            </div>
+                            <div class="text-center">
+                                <div id="qrOutput"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="image-to-png.html">Image to PNG Converter</a></li>
+                            <li><a href="image-to-jpg.html">Image to JPG Converter</a></li>
+                            <li><a href="image-resizer.html">Image Resizer</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let qrDataUrl = null;
+
+        document.getElementById('qrSize').addEventListener('input', function(e) {
+            document.getElementById('sizeValue').textContent = e.target.value;
+        });
+
+        function generateQR() {
+            const text = document.getElementById('qrText').value.trim();
+            if (!text) {
+                alert('Please enter some text or URL');
+                return;
+            }
+            
+            const size = parseInt(document.getElementById('qrSize').value);
+            const color = document.getElementById('qrColor').value;
+            
+            const options = {
+                width: size,
+                color: {
+                    dark: color,
+                    light: '#FFFFFF'
+                }
+            };
+            
+            QRCode.toDataURL(text, options, function(err, url) {
+                if (err) {
+                    alert('Error generating QR code: ' + err);
+                    return;
+                }
+                
+                qrDataUrl = url;
+                document.getElementById('qrOutput').innerHTML = `<img src="${url}" class="img-fluid">`;
+                document.getElementById('downloadBtn').style.display = 'inline-block';
+            });
+        }
+
+        function downloadQR() {
+            if (!qrDataUrl) {
+                alert('Please generate a QR code first');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = 'qr-code.png';
+            link.href = qrDataUrl;
+            link.click();
+        }
+    </script>
+</body>
+</html> 

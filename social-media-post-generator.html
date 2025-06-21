@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Post Generator - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-edit"></i> Social Media Post Generator</h1>
+                        <p>Generate engaging social media posts for any platform</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="topic" class="form-label">Topic or Theme</label>
+                                    <input type="text" class="form-control" id="topic" placeholder="Enter your topic or theme..." oninput="generatePost()">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="platform" class="form-label">Platform</label>
+                                    <select class="form-select" id="platform" onchange="generatePost()">
+                                        <option value="instagram">Instagram</option>
+                                        <option value="twitter">Twitter</option>
+                                        <option value="facebook">Facebook</option>
+                                        <option value="linkedin">LinkedIn</option>
+                                        <option value="tiktok">TikTok</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="tone" class="form-label">Tone</label>
+                                    <select class="form-select" id="tone" onchange="generatePost()">
+                                        <option value="professional">Professional</option>
+                                        <option value="casual">Casual</option>
+                                        <option value="friendly">Friendly</option>
+                                        <option value="humorous">Humorous</option>
+                                        <option value="inspirational">Inspirational</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="postType" class="form-label">Post Type</label>
+                                    <select class="form-select" id="postType" onchange="generatePost()">
+                                        <option value="general">General</option>
+                                        <option value="promotional">Promotional</option>
+                                        <option value="educational">Educational</option>
+                                        <option value="question">Question</option>
+                                        <option value="story">Story</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearTool()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-info" onclick="showHelp()">
+                                        <i class="fas fa-question-circle"></i> Help
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="postResults" style="display: none;">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-edit"></i> Generated Post</h4>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div id="generatedPost">
+                                                <!-- Generated post will appear here -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="post-actions">
+                                                <h5>Actions</h5>
+                                                <button class="btn btn-sm btn-primary mb-2 w-100" onclick="copyPost()">
+                                                    <i class="fas fa-copy"></i> Copy Post
+                                                </button>
+                                                <button class="btn btn-sm btn-secondary mb-2 w-100" onclick="regeneratePost()">
+                                                    <i class="fas fa-sync-alt"></i> Regenerate
+                                                </button>
+                                                <button class="btn btn-sm btn-success mb-2 w-100" onclick="downloadPost()">
+                                                    <i class="fas fa-download"></i> Download
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> Post Analysis</h4>
+                                    <div id="postAnalysis">
+                                        <p class="text-muted">Post analysis will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-hashtag"></i> Suggested Hashtags</h4>
+                                    <div id="suggestedHashtags">
+                                        <p class="text-muted">Suggested hashtags will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+        });
+
+        let currentPost = '';
+
+        function generatePost() {
+            const topic = document.getElementById('topic').value;
+            const platform = document.getElementById('platform').value;
+            const tone = document.getElementById('tone').value;
+            const postType = document.getElementById('postType').value;
+
+            if (!topic.trim()) {
+                document.getElementById('postResults').style.display = 'none';
+                return;
+            }
+
+            const post = generateSocialMediaPost(topic, platform, tone, postType);
+            displayPost(post, platform);
+            updatePostAnalysis(post, platform);
+            updateSuggestedHashtags(topic, platform);
+        }
+
+        function generateSocialMediaPost(topic, platform, tone, postType) {
+            const templates = {
+                'instagram': {
+                    'professional': `📱 ${topic}\n\nDiscover the latest insights and trends in ${topic.toLowerCase()}. Stay ahead of the curve with our expert analysis and practical tips.\n\n#${topic.replace(/\s+/g, '')} #Professional #Insights`,
+                    'casual': `Hey there! 👋\n\nJust wanted to share some thoughts about ${topic.toLowerCase()}. What's your take on this? Drop a comment below! 💭\n\n#${topic.replace(/\s+/g, '')} #Casual #Thoughts`,
+                    'friendly': `Hello friends! 🌟\n\nLet's talk about ${topic.toLowerCase()} today! I'd love to hear your experiences and thoughts. Share in the comments! ❤️\n\n#${topic.replace(/\s+/g, '')} #Friendly #Community`,
+                    'humorous': `🤣 ${topic} - because life is too short to be serious all the time!\n\nAnyone else relate? 😂\n\n#${topic.replace(/\s+/g, '')} #Humor #Fun`,
+                    'inspirational': `✨ ${topic}\n\nRemember, every expert was once a beginner. Keep pushing forward, keep learning, keep growing. You've got this! 💪\n\n#${topic.replace(/\s+/g, '')} #Inspiration #Motivation`
+                },
+                'twitter': {
+                    'professional': `${topic}: Key insights and trends you need to know. #${topic.replace(/\s+/g, '')} #Professional`,
+                    'casual': `Thoughts on ${topic}? 🤔 #${topic.replace(/\s+/g, '')}`,
+                    'friendly': `Hey Twitter! What's your experience with ${topic}? Let's chat! 👋 #${topic.replace(/\s+/g, '')}`,
+                    'humorous': `${topic} - need I say more? 😂 #${topic.replace(/\s+/g, '')}`,
+                    'inspirational': `${topic} reminds us that growth comes from challenges. Keep pushing! 💪 #${topic.replace(/\s+/g, '')}`
+                },
+                'facebook': {
+                    'professional': `📊 ${topic}\n\nIn today's rapidly evolving landscape, understanding ${topic.toLowerCase()} is crucial for success. Here are some key points to consider:\n\n• Point 1\n• Point 2\n• Point 3\n\nWhat are your thoughts on this topic?`,
+                    'casual': `Hey everyone! 👋\n\nI've been thinking about ${topic.toLowerCase()} lately. Anyone else? Would love to hear your thoughts in the comments!`,
+                    'friendly': `Hello friends! 🌟\n\nLet's have a friendly discussion about ${topic.toLowerCase()}. Share your experiences and let's learn from each other! ❤️`,
+                    'humorous': `🤣 ${topic} - because sometimes you just need to laugh about it!\n\nAnyone else relate? 😂`,
+                    'inspirational': `✨ ${topic}\n\nRemember, every challenge is an opportunity for growth. Keep believing in yourself! 💪`
+                },
+                'linkedin': {
+                    'professional': `📈 ${topic}: A Professional Perspective\n\nIn today's competitive landscape, understanding ${topic.toLowerCase()} is essential for career growth and business success.\n\nKey takeaways:\n• Strategic importance\n• Implementation strategies\n• Future implications\n\nWhat's your professional experience with this topic?`,
+                    'casual': `${topic} - Let's discuss!\n\nI'm curious about your thoughts on ${topic.toLowerCase()}. What's your take?`,
+                    'friendly': `Hello connections! 👋\n\nI'd love to hear your thoughts on ${topic.toLowerCase()}. Let's share experiences and insights!`,
+                    'humorous': `${topic} - because even professionals need a good laugh! 😄\n\nAnyone else relate?`,
+                    'inspirational': `✨ ${topic}\n\nSuccess in ${topic.toLowerCase()} comes from persistence, learning, and growth. Keep pushing forward! 💪`
+                },
+                'tiktok': {
+                    'professional': `${topic} #fyp #foryou #${topic.replace(/\s+/g, '')} #professional #trending`,
+                    'casual': `${topic} thoughts? #fyp #foryou #${topic.replace(/\s+/g, '')} #casual`,
+                    'friendly': `Let's talk about ${topic}! #fyp #foryou #${topic.replace(/\s+/g, '')} #friendly`,
+                    'humorous': `${topic} - need I say more? 😂 #fyp #foryou #${topic.replace(/\s+/g, '')} #funny`,
+                    'inspirational': `${topic} motivation! 💪 #fyp #foryou #${topic.replace(/\s+/g, '')} #inspiration`
+                }
+            };
+
+            return templates[platform][tone] || templates[platform]['professional'];
+        }
+
+        function displayPost(post, platform) {
+            currentPost = post;
+            const container = document.getElementById('generatedPost');
+            
+            container.innerHTML = `
+                <div class="post-preview">
+                    <div class="post-content">
+                        <pre class="post-text">${post}</pre>
+                    </div>
+                    <div class="post-meta">
+                        <small class="text-muted">Platform: ${platform.charAt(0).toUpperCase() + platform.slice(1)}</small>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('postResults').style.display = 'block';
+        }
+
+        function copyPost() {
+            navigator.clipboard.writeText(currentPost).then(() => {
+                showAlert('Post copied to clipboard!', 'success');
+            }).catch(() => {
+                showAlert('Failed to copy post to clipboard', 'danger');
+            });
+        }
+
+        function regeneratePost() {
+            generatePost();
+            showAlert('Post regenerated!', 'info');
+        }
+
+        function downloadPost() {
+            const blob = new Blob([currentPost], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'social_media_post.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showAlert('Post downloaded as TXT file!', 'success');
+        }
+
+        function updatePostAnalysis(post, platform) {
+            const analysis = document.getElementById('postAnalysis');
+            
+            const wordCount = post.split(/\s+/).length;
+            const charCount = post.length;
+            const hashtagCount = (post.match(/#/g) || []).length;
+            const emojiCount = (post.match(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu) || []).length;
+            
+            analysis.innerHTML = `
+                <h5>Post Statistics</h5>
+                <p><strong>Words:</strong> ${wordCount}</p>
+                <p><strong>Characters:</strong> ${charCount}</p>
+                <p><strong>Hashtags:</strong> ${hashtagCount}</p>
+                <p><strong>Emojis:</strong> ${emojiCount}</p>
+                <p><strong>Platform:</strong> ${platform.charAt(0).toUpperCase() + platform.slice(1)}</p>
+            `;
+        }
+
+        function updateSuggestedHashtags(topic, platform) {
+            const hashtags = document.getElementById('suggestedHashtags');
+            
+            const platformHashtags = {
+                'instagram': ['#instagram', '#instagood', '#photooftheday', '#love', '#fashion', '#beautiful', '#happy', '#cute', '#followme', '#picoftheday'],
+                'twitter': ['#twitter', '#tweet', '#trending', '#viral', '#news', '#update', '#followme', '#retweet', '#like'],
+                'facebook': ['#facebook', '#friends', '#family', '#life', '#love', '#happy', '#blessed', '#grateful', '#social'],
+                'linkedin': ['#linkedin', '#professional', '#business', '#career', '#networking', '#industry', '#leadership', '#success'],
+                'tiktok': ['#tiktok', '#fyp', '#foryou', '#viral', '#trending', '#dance', '#comedy', '#funny', '#entertainment']
+            };
+
+            const suggested = platformHashtags[platform] || [];
+            const topicHashtag = '#' + topic.replace(/\s+/g, '');
+            
+            hashtags.innerHTML = `
+                <h5>Suggested Hashtags</h5>
+                <div class="hashtag-suggestions">
+                    <span class="suggested-tag">${topicHashtag}</span>
+                    ${suggested.slice(0, 5).map(tag => `<span class="suggested-tag">${tag}</span>`).join('')}
+                </div>
+            `;
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            const container = document.querySelector('.tool-content');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        function loadSample() {
+            document.getElementById('topic').value = 'Digital Marketing';
+            document.getElementById('platform').value = 'instagram';
+            document.getElementById('tone').value = 'professional';
+            document.getElementById('postType').value = 'educational';
+            generatePost();
+        }
+
+        function clearTool() {
+            document.getElementById('topic').value = '';
+            document.getElementById('postResults').style.display = 'none';
+            document.getElementById('postAnalysis').innerHTML = '<p class="text-muted">Post analysis will appear here</p>';
+            document.getElementById('suggestedHashtags').innerHTML = '<p class="text-muted">Suggested hashtags will appear here</p>';
+            currentPost = '';
+        }
+
+        function showHelp() {
+            const helpText = `
+                <h5>How to use Social Media Post Generator:</h5>
+                <ol>
+                    <li>Enter your topic or theme</li>
+                    <li>Select your target platform</li>
+                    <li>Choose the tone and post type</li>
+                    <li>Copy or regenerate the post as needed</li>
+                </ol>
+                <h5>Platform-specific tips:</h5>
+                <ul>
+                    <li><strong>Instagram:</strong> Use emojis and hashtags</li>
+                    <li><strong>Twitter:</strong> Keep it concise (280 characters)</li>
+                    <li><strong>Facebook:</strong> Longer, more detailed posts</li>
+                    <li><strong>LinkedIn:</strong> Professional tone</li>
+                    <li><strong>TikTok:</strong> Short and engaging</li>
+                </ul>
+            `;
+            
+            showAlert(helpText, 'info');
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .post-preview {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .post-text {
+            background: transparent;
+            border: none;
+            font-family: inherit;
+            font-size: inherit;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            padding: 0;
+        }
+
+        .post-meta {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .post-actions {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .hashtag-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .suggested-tag {
+            background: #007bff;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML to Markdown Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-exchange-alt"></i> HTML to Markdown Converter</h1>
+                        <p>Convert HTML code to clean Markdown format with customizable options</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="htmlInput" class="form-label">HTML Input</label>
+                                    <textarea class="form-control" id="htmlInput" rows="15" placeholder="<h1>Hello World</h1><p>This is a <strong>paragraph</strong> with <em>emphasis</em>.</p>"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="markdownOutput" class="form-label">Markdown Output</label>
+                                    <textarea class="form-control" id="markdownOutput" rows="15" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="convertHTML()">
+                                        <i class="fas fa-arrow-right"></i> Convert to Markdown
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="previewMarkdown()">
+                                        <i class="fas fa-eye"></i> Preview
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearAll()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-cog"></i> Conversion Options</h4>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="preserveLinks" checked>
+                                                <label class="form-check-label" for="preserveLinks">
+                                                    Preserve Links
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="preserveImages" checked>
+                                                <label class="form-check-label" for="preserveImages">
+                                                    Preserve Images
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="preserveTables" checked>
+                                                <label class="form-check-label" for="preserveTables">
+                                                    Preserve Tables
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="preserveLists" checked>
+                                                <label class="form-check-label" for="preserveLists">
+                                                    Preserve Lists
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="preserveCode" checked>
+                                                <label class="form-check-label" for="preserveCode">
+                                                    Preserve Code Blocks
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="removeEmptyTags">
+                                                <label class="form-check-label" for="removeEmptyTags">
+                                                    Remove Empty Tags
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Conversion Info</h4>
+                                    <div id="conversionInfo">
+                                        <p class="text-muted">Convert HTML to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-eye"></i> Markdown Preview</h4>
+                                    <div id="markdownPreview" class="markdown-preview">
+                                        <p class="text-muted">Click "Preview" to see rendered markdown</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-outline-primary" onclick="copyMarkdown()">
+                                <i class="fas fa-copy"></i> Copy Markdown
+                            </button>
+                            <button class="btn btn-outline-success" onclick="downloadMarkdown()">
+                                <i class="fas fa-download"></i> Download Markdown
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+        });
+
+        function convertHTML() {
+            const htmlInput = document.getElementById('htmlInput').value.trim();
+            
+            if (!htmlInput) {
+                alert('Please enter some HTML to convert');
+                return;
+            }
+
+            try {
+                const markdown = htmlToMarkdown(htmlInput);
+                document.getElementById('markdownOutput').value = markdown;
+                updateConversionInfo(htmlInput, markdown);
+            } catch (error) {
+                alert('Error converting HTML: ' + error.message);
+            }
+        }
+
+        function htmlToMarkdown(html) {
+            // Create a temporary div to parse HTML
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+
+            let markdown = '';
+
+            // Process each child node
+            for (let node of tempDiv.childNodes) {
+                markdown += processNode(node);
+            }
+
+            // Clean up
+            markdown = markdown.trim();
+            
+            // Apply options
+            if (document.getElementById('removeEmptyTags').checked) {
+                markdown = markdown.replace(/\n\s*\n\s*\n/g, '\n\n');
+            }
+
+            return markdown;
+        }
+
+        function processNode(node) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                return node.textContent;
+            }
+
+            if (node.nodeType === Node.ELEMENT_NODE) {
+                const tagName = node.tagName.toLowerCase();
+                const innerHTML = node.innerHTML;
+                const textContent = node.textContent.trim();
+
+                switch (tagName) {
+                    case 'h1':
+                        return `# ${textContent}\n\n`;
+                    case 'h2':
+                        return `## ${textContent}\n\n`;
+                    case 'h3':
+                        return `### ${textContent}\n\n`;
+                    case 'h4':
+                        return `#### ${textContent}\n\n`;
+                    case 'h5':
+                        return `##### ${textContent}\n\n`;
+                    case 'h6':
+                        return `###### ${textContent}\n\n`;
+                    case 'p':
+                        return `${textContent}\n\n`;
+                    case 'strong':
+                    case 'b':
+                        return `**${textContent}**`;
+                    case 'em':
+                    case 'i':
+                        return `*${textContent}*`;
+                    case 'code':
+                        return `\`${textContent}\``;
+                    case 'pre':
+                        return `\`\`\`\n${textContent}\n\`\`\`\n\n`;
+                    case 'a':
+                        if (document.getElementById('preserveLinks').checked) {
+                            const href = node.getAttribute('href') || '';
+                            return `[${textContent}](${href})`;
+                        }
+                        return textContent;
+                    case 'img':
+                        if (document.getElementById('preserveImages').checked) {
+                            const src = node.getAttribute('src') || '';
+                            const alt = node.getAttribute('alt') || '';
+                            return `![${alt}](${src})\n\n`;
+                        }
+                        return '';
+                    case 'ul':
+                        if (document.getElementById('preserveLists').checked) {
+                            let listMarkdown = '';
+                            for (let li of node.querySelectorAll('li')) {
+                                listMarkdown += `- ${li.textContent.trim()}\n`;
+                            }
+                            return listMarkdown + '\n';
+                        }
+                        return textContent + '\n\n';
+                    case 'ol':
+                        if (document.getElementById('preserveLists').checked) {
+                            let listMarkdown = '';
+                            let counter = 1;
+                            for (let li of node.querySelectorAll('li')) {
+                                listMarkdown += `${counter}. ${li.textContent.trim()}\n`;
+                                counter++;
+                            }
+                            return listMarkdown + '\n';
+                        }
+                        return textContent + '\n\n';
+                    case 'table':
+                        if (document.getElementById('preserveTables').checked) {
+                            return convertTableToMarkdown(node);
+                        }
+                        return textContent + '\n\n';
+                    case 'blockquote':
+                        return `> ${textContent}\n\n`;
+                    case 'hr':
+                        return `---\n\n`;
+                    case 'br':
+                        return '\n';
+                    default:
+                        // Recursively process child nodes
+                        let result = '';
+                        for (let child of node.childNodes) {
+                            result += processNode(child);
+                        }
+                        return result;
+                }
+            }
+
+            return '';
+        }
+
+        function convertTableToMarkdown(table) {
+            const rows = table.querySelectorAll('tr');
+            if (rows.length === 0) return '';
+
+            let markdown = '';
+            
+            // Process header row
+            const headerRow = rows[0];
+            const headers = headerRow.querySelectorAll('th, td');
+            markdown += '| ' + Array.from(headers).map(cell => cell.textContent.trim()).join(' | ') + ' |\n';
+            markdown += '| ' + Array.from(headers).map(() => '---').join(' | ') + ' |\n';
+
+            // Process data rows
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].querySelectorAll('td');
+                markdown += '| ' + Array.from(cells).map(cell => cell.textContent.trim()).join(' | ') + ' |\n';
+            }
+
+            return markdown + '\n';
+        }
+
+        function previewMarkdown() {
+            const markdown = document.getElementById('markdownOutput').value;
+            
+            if (!markdown) {
+                alert('No markdown to preview. Please convert HTML first.');
+                return;
+            }
+
+            try {
+                const html = marked.parse(markdown);
+                document.getElementById('markdownPreview').innerHTML = html;
+            } catch (error) {
+                document.getElementById('markdownPreview').innerHTML = '<p class="text-danger">Error rendering markdown: ' + error.message + '</p>';
+            }
+        }
+
+        function clearAll() {
+            document.getElementById('htmlInput').value = '';
+            document.getElementById('markdownOutput').value = '';
+            document.getElementById('markdownPreview').innerHTML = '<p class="text-muted">Click "Preview" to see rendered markdown</p>';
+            document.getElementById('conversionInfo').innerHTML = '<p class="text-muted">Convert HTML to see information</p>';
+        }
+
+        function loadSample() {
+            const sampleHTML = `<h1>Sample HTML Document</h1>
+<p>This is a <strong>sample paragraph</strong> with <em>emphasis</em> and a <a href="https://example.com">link</a>.</p>
+
+<h2>Features</h2>
+<ul>
+    <li>HTML to Markdown conversion</li>
+    <li>Support for various HTML elements</li>
+    <li>Customizable options</li>
+</ul>
+
+<h3>Code Example</h3>
+<pre><code>function hello() {
+    console.log("Hello, World!");
+}</code></pre>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Age</th>
+    </tr>
+    <tr>
+        <td>John</td>
+        <td>25</td>
+    </tr>
+</table>`;
+            
+            document.getElementById('htmlInput').value = sampleHTML;
+            convertHTML();
+        }
+
+        function updateConversionInfo(html, markdown) {
+            const info = document.getElementById('conversionInfo');
+            const htmlLength = html.length;
+            const markdownLength = markdown.length;
+            const compressionRatio = ((htmlLength - markdownLength) / htmlLength * 100).toFixed(1);
+            
+            info.innerHTML = `
+                <p><strong>HTML Length:</strong> ${htmlLength} characters</p>
+                <p><strong>Markdown Length:</strong> ${markdownLength} characters</p>
+                <p><strong>Compression:</strong> ${compressionRatio}% smaller</p>
+                <p><strong>Lines:</strong> ${markdown.split('\n').length}</p>
+            `;
+        }
+
+        function copyMarkdown() {
+            const markdown = document.getElementById('markdownOutput').value;
+            if (!markdown) {
+                alert('No markdown to copy');
+                return;
+            }
+            
+            navigator.clipboard.writeText(markdown).then(() => {
+                alert('Markdown copied to clipboard!');
+            }).catch(() => {
+                alert('Failed to copy to clipboard');
+            });
+        }
+
+        function downloadMarkdown() {
+            const markdown = document.getElementById('markdownOutput').value;
+            if (!markdown) {
+                alert('No markdown to download');
+                return;
+            }
+            
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'converted.md';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .markdown-preview {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        .markdown-preview h1,
+        .markdown-preview h2,
+        .markdown-preview h3 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .markdown-preview p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .markdown-preview ul,
+        .markdown-preview ol {
+            margin-bottom: 10px;
+            padding-left: 20px;
+        }
+
+        .markdown-preview table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .markdown-preview th,
+        .markdown-preview td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .markdown-preview th {
+            background-color: #f2f2f2;
+        }
+
+        .markdown-preview code {
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        .markdown-preview pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

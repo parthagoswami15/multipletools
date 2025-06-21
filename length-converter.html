@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Length Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-ruler"></i> Length Converter</h1>
+                        <p>Convert between different length units quickly and accurately</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit" class="form-label">From Unit</label>
+                                    <select class="form-select" id="fromUnit" onchange="convert()">
+                                        <option value="meter">Meter (m)</option>
+                                        <option value="kilometer">Kilometer (km)</option>
+                                        <option value="centimeter">Centimeter (cm)</option>
+                                        <option value="millimeter">Millimeter (mm)</option>
+                                        <option value="mile">Mile (mi)</option>
+                                        <option value="yard">Yard (yd)</option>
+                                        <option value="foot">Foot (ft)</option>
+                                        <option value="inch">Inch (in)</option>
+                                        <option value="nautical-mile">Nautical Mile (nmi)</option>
+                                        <option value="light-year">Light Year (ly)</option>
+                                        <option value="astronomical-unit">Astronomical Unit (AU)</option>
+                                        <option value="parsec">Parsec (pc)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit" class="form-label">To Unit</label>
+                                    <select class="form-select" id="toUnit" onchange="convert()">
+                                        <option value="meter">Meter (m)</option>
+                                        <option value="kilometer" selected>Kilometer (km)</option>
+                                        <option value="centimeter">Centimeter (cm)</option>
+                                        <option value="millimeter">Millimeter (mm)</option>
+                                        <option value="mile">Mile (mi)</option>
+                                        <option value="yard">Yard (yd)</option>
+                                        <option value="foot">Foot (ft)</option>
+                                        <option value="inch">Inch (in)</option>
+                                        <option value="nautical-mile">Nautical Mile (nmi)</option>
+                                        <option value="light-year">Light Year (ly)</option>
+                                        <option value="astronomical-unit">Astronomical Unit (AU)</option>
+                                        <option value="parsec">Parsec (pc)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromValue" class="form-label">From Value</label>
+                                    <input type="number" class="form-control" id="fromValue" value="1" oninput="convert()" step="any">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toValue" class="form-label">To Value</label>
+                                    <input type="number" class="form-control" id="toValue" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="swapUnits()">
+                                        <i class="fas fa-exchange-alt"></i> Swap Units
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearConverter()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> All Units Conversion</h4>
+                                    <div class="row" id="allConversions">
+                                        <!-- All conversions will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Unit Information</h4>
+                                    <div id="unitInfo">
+                                        <p class="text-muted">Select a unit to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Conversion History</h4>
+                                    <div id="conversionHistory">
+                                        <p class="text-muted">Recent conversions will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            convert();
+        });
+
+        // Conversion factors to meters
+        const lengthUnits = {
+            'meter': 1,
+            'kilometer': 1000,
+            'centimeter': 0.01,
+            'millimeter': 0.001,
+            'mile': 1609.344,
+            'yard': 0.9144,
+            'foot': 0.3048,
+            'inch': 0.0254,
+            'nautical-mile': 1852,
+            'light-year': 9.461e15,
+            'astronomical-unit': 1.496e11,
+            'parsec': 3.086e16
+        };
+
+        const unitNames = {
+            'meter': 'Meter',
+            'kilometer': 'Kilometer',
+            'centimeter': 'Centimeter',
+            'millimeter': 'Millimeter',
+            'mile': 'Mile',
+            'yard': 'Yard',
+            'foot': 'Foot',
+            'inch': 'Inch',
+            'nautical-mile': 'Nautical Mile',
+            'light-year': 'Light Year',
+            'astronomical-unit': 'Astronomical Unit',
+            'parsec': 'Parsec'
+        };
+
+        const unitSymbols = {
+            'meter': 'm',
+            'kilometer': 'km',
+            'centimeter': 'cm',
+            'millimeter': 'mm',
+            'mile': 'mi',
+            'yard': 'yd',
+            'foot': 'ft',
+            'inch': 'in',
+            'nautical-mile': 'nmi',
+            'light-year': 'ly',
+            'astronomical-unit': 'AU',
+            'parsec': 'pc'
+        };
+
+        const unitInfo = {
+            'meter': 'The base unit of length in the International System of Units (SI).',
+            'kilometer': 'Equal to 1,000 meters. Commonly used for measuring distances between cities.',
+            'centimeter': 'Equal to 0.01 meters. Used for smaller measurements.',
+            'millimeter': 'Equal to 0.001 meters. Used for very precise measurements.',
+            'mile': 'A unit of distance equal to 5,280 feet or 1,609.344 meters.',
+            'yard': 'Equal to 3 feet or 0.9144 meters.',
+            'foot': 'Equal to 12 inches or 0.3048 meters.',
+            'inch': 'Equal to 2.54 centimeters or 0.0254 meters.',
+            'nautical-mile': 'Used in maritime and aviation navigation. Equal to 1,852 meters.',
+            'light-year': 'The distance light travels in one year. Equal to about 9.461 trillion kilometers.',
+            'astronomical-unit': 'The average distance between Earth and the Sun. Equal to about 149.6 million kilometers.',
+            'parsec': 'A unit of length used in astronomy. Equal to about 3.26 light-years.'
+        };
+
+        let conversionHistory = [];
+
+        function convert() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
+
+            // Convert to meters first, then to target unit
+            const meters = fromValue * lengthUnits[fromUnit];
+            const result = meters / lengthUnits[toUnit];
+
+            document.getElementById('toValue').value = result.toFixed(6);
+
+            // Update all conversions
+            updateAllConversions(fromValue, fromUnit);
+            
+            // Update unit info
+            updateUnitInfo(fromUnit);
+            
+            // Add to history
+            addToHistory(fromValue, fromUnit, result, toUnit);
+        }
+
+        function updateAllConversions(value, fromUnit) {
+            const container = document.getElementById('allConversions');
+            let html = '';
+
+            Object.keys(lengthUnits).forEach(unit => {
+                if (unit !== fromUnit) {
+                    const meters = value * lengthUnits[fromUnit];
+                    const converted = meters / lengthUnits[unit];
+                    const symbol = unitSymbols[unit];
+                    const name = unitNames[unit];
+                    
+                    html += `
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="conversion-item">
+                                <strong>${name}</strong><br>
+                                <span class="conversion-value">${converted.toFixed(6)} ${symbol}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateUnitInfo(unit) {
+            const info = document.getElementById('unitInfo');
+            info.innerHTML = `
+                <h5>${unitNames[unit]} (${unitSymbols[unit]})</h5>
+                <p>${unitInfo[unit]}</p>
+                <p><strong>In meters:</strong> ${lengthUnits[unit]} m</p>
+            `;
+        }
+
+        function addToHistory(fromValue, fromUnit, toValue, toUnit) {
+            const conversion = {
+                from: `${fromValue} ${unitSymbols[fromUnit]}`,
+                to: `${toValue.toFixed(6)} ${unitSymbols[toUnit]}`,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            conversionHistory.unshift(conversion);
+            if (conversionHistory.length > 5) {
+                conversionHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('conversionHistory');
+            if (conversionHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No conversions yet</p>';
+                return;
+            }
+
+            let html = '';
+            conversionHistory.forEach(conv => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${conv.timestamp}</small><br>
+                        ${conv.from} → ${conv.to}
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = document.getElementById('fromValue').value;
+            const toValue = document.getElementById('toValue').value;
+
+            document.getElementById('fromUnit').value = toUnit;
+            document.getElementById('toUnit').value = fromUnit;
+            document.getElementById('fromValue').value = toValue;
+            document.getElementById('toValue').value = fromValue;
+
+            convert();
+        }
+
+        function clearConverter() {
+            document.getElementById('fromValue').value = '';
+            document.getElementById('toValue').value = '';
+            document.getElementById('allConversions').innerHTML = '';
+            document.getElementById('unitInfo').innerHTML = '<p class="text-muted">Select a unit to see information</p>';
+        }
+
+        function loadSample() {
+            document.getElementById('fromUnit').value = 'meter';
+            document.getElementById('toUnit').value = 'foot';
+            document.getElementById('fromValue').value = '100';
+            convert();
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversion-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .conversion-value {
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

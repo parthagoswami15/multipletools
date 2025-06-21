@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Keyboard - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-keyboard"></i> Emoji Keyboard</h1>
+                        <p>Search, browse, and copy emojis for your social media posts</p>
+                    </div>
+                    <div class="tool-content">
+                        <div class="mb-3 d-flex align-items-center gap-2">
+                            <input type="text" class="form-control" id="searchEmoji" placeholder="Search emojis..." oninput="searchEmojis()">
+                            <button class="btn btn-outline-secondary" onclick="clearSearch()"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="emoji-categories mb-3">
+                            <button class="category-btn active" onclick="showCategory('smileys')">😀 Smileys</button>
+                            <button class="category-btn" onclick="showCategory('animals')">🐻 Animals</button>
+                            <button class="category-btn" onclick="showCategory('food')">🍕 Food</button>
+                            <button class="category-btn" onclick="showCategory('activities')">🏆 Activities</button>
+                            <button class="category-btn" onclick="showCategory('travel')">✈️ Travel</button>
+                            <button class="category-btn" onclick="showCategory('objects')">💡 Objects</button>
+                            <button class="category-btn" onclick="showCategory('symbols')">💯 Symbols</button>
+                            <button class="category-btn" onclick="showCategory('flags')">🏁 Flags</button>
+                            <button class="category-btn" onclick="showRecentEmojis()">🕑 Recents</button>
+                            <button class="category-btn" onclick="clearRecents()">🗑️ Clear Recents</button>
+                        </div>
+                        <div id="emojiContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+    <div id="footer-placeholder"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Minimal emoji data for preview; expand as needed
+        const emojiData = {
+            smileys: [
+                { emoji: "😀", name: "grinning face" },
+                { emoji: "😂", name: "face with tears of joy" },
+                { emoji: "😍", name: "smiling face with heart-eyes" },
+                { emoji: "😎", name: "smiling face with sunglasses" },
+                { emoji: "😭", name: "loudly crying face" },
+                { emoji: "😊", name: "smiling face with smiling eyes" },
+                { emoji: "😉", name: "winking face" },
+                { emoji: "😇", name: "smiling face with halo" }
+            ],
+            animals: [
+                { emoji: "🐶", name: "dog face" },
+                { emoji: "🐱", name: "cat face" },
+                { emoji: "🐭", name: "mouse face" },
+                { emoji: "🐹", name: "hamster face" },
+                { emoji: "🐰", name: "rabbit face" },
+                { emoji: "🦊", name: "fox face" },
+                { emoji: "🐻", name: "bear face" },
+                { emoji: "🐼", name: "panda face" }
+            ],
+            food: [
+                { emoji: "🍏", name: "green apple" },
+                { emoji: "🍕", name: "pizza" },
+                { emoji: "🍔", name: "hamburger" },
+                { emoji: "🍟", name: "french fries" },
+                { emoji: "🍣", name: "sushi" },
+                { emoji: "🍦", name: "ice cream" },
+                { emoji: "🍩", name: "doughnut" },
+                { emoji: "🍪", name: "cookie" }
+            ],
+            activities: [
+                { emoji: "⚽", name: "soccer ball" },
+                { emoji: "🏀", name: "basketball" },
+                { emoji: "🏈", name: "american football" },
+                { emoji: "🎾", name: "tennis" },
+                { emoji: "🏓", name: "ping pong" },
+                { emoji: "🏸", name: "badminton" },
+                { emoji: "🥊", name: "boxing glove" },
+                { emoji: "🏆", name: "trophy" }
+            ],
+            travel: [
+                { emoji: "✈️", name: "airplane" },
+                { emoji: "🚗", name: "car" },
+                { emoji: "🚕", name: "taxi" },
+                { emoji: "🚂", name: "locomotive" },
+                { emoji: "🚢", name: "ship" },
+                { emoji: "🗽", name: "statue of liberty" },
+                { emoji: "🏝️", name: "desert island" },
+                { emoji: "🏰", name: "castle" }
+            ],
+            objects: [
+                { emoji: "💡", name: "light bulb" },
+                { emoji: "📱", name: "mobile phone" },
+                { emoji: "💻", name: "laptop" },
+                { emoji: "⌚", name: "watch" },
+                { emoji: "📷", name: "camera" },
+                { emoji: "🎧", name: "headphone" },
+                { emoji: "🔑", name: "key" },
+                { emoji: "🕹️", name: "joystick" }
+            ],
+            symbols: [
+                { emoji: "💕", name: "two hearts" },
+                { emoji: "💯", name: "hundred points" },
+                { emoji: "✔️", name: "check mark" },
+                { emoji: "❌", name: "cross mark" },
+                { emoji: "⚠️", name: "warning" },
+                { emoji: "🔔", name: "bell" },
+                { emoji: "🔒", name: "lock" },
+                { emoji: "🔑", name: "key" }
+            ],
+            flags: [
+                { emoji: "🏁", name: "chequered flag" },
+                { emoji: "🇺🇸", name: "flag: United States" },
+                { emoji: "🇬🇧", name: "flag: United Kingdom" },
+                { emoji: "🇨🇦", name: "flag: Canada" },
+                { emoji: "🇮🇳", name: "flag: India" },
+                { emoji: "🇯🇵", name: "flag: Japan" },
+                { emoji: "🇫🇷", name: "flag: France" },
+                { emoji: "🇩🇪", name: "flag: Germany" }
+            ]
+        };
+        let currentCategory = 'smileys';
+        let recentEmojis = JSON.parse(localStorage.getItem('recentEmojis') || '[]');
+        function renderEmojis(category, filter = '') {
+            const container = document.getElementById('emojiContainer');
+            let emojis = emojiData[category] || [];
+            if (filter) {
+                emojis = emojis.filter(e => e.name.includes(filter.toLowerCase()));
+            }
+            if (emojis.length === 0) {
+                container.innerHTML = '<p class="text-muted">No emojis found.</p>';
+                return;
+            }
+            container.innerHTML = '<div class="emoji-grid">' +
+                emojis.map(e => `<span class="emoji-btn" title="${e.name}" onclick="copyEmoji('${e.emoji}')">${e.emoji}</span>`).join('') +
+                '</div>';
+        }
+        function showCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.category-btn[onclick*=\"${category}\"]`).classList.add('active');
+            renderEmojis(category);
+        }
+        function searchEmojis() {
+            const query = document.getElementById('searchEmoji').value.trim().toLowerCase();
+            if (!query) {
+                renderEmojis(currentCategory);
+                return;
+            }
+            let found = [];
+            Object.keys(emojiData).forEach(cat => {
+                found = found.concat(emojiData[cat].filter(e => e.name.includes(query)));
+            });
+            const container = document.getElementById('emojiContainer');
+            if (found.length === 0) {
+                container.innerHTML = '<p class="text-muted">No emojis found.</p>';
+            } else {
+                container.innerHTML = '<div class="emoji-grid">' +
+                    found.map(e => `<span class="emoji-btn" title="${e.name}" onclick="copyEmoji('${e.emoji}')">${e.emoji}</span>`).join('') +
+                    '</div>';
+            }
+        }
+        function clearSearch() {
+            document.getElementById('searchEmoji').value = '';
+            renderEmojis(currentCategory);
+        }
+        function copyEmoji(emoji) {
+            navigator.clipboard.writeText(emoji).then(() => {
+                showAlert(`Copied ${emoji} to clipboard!`, 'success');
+                addRecentEmoji(emoji);
+            });
+        }
+        function addRecentEmoji(emoji) {
+            recentEmojis = recentEmojis.filter(e => e !== emoji);
+            recentEmojis.unshift(emoji);
+            if (recentEmojis.length > 12) recentEmojis.pop();
+            localStorage.setItem('recentEmojis', JSON.stringify(recentEmojis));
+        }
+        function showRecentEmojis() {
+            const container = document.getElementById('emojiContainer');
+            if (recentEmojis.length === 0) {
+                container.innerHTML = '<p class="text-muted">No recent emojis.</p>';
+                return;
+            }
+            container.innerHTML = '<div class="emoji-grid">' +
+                recentEmojis.map(e => `<span class="emoji-btn" onclick="copyEmoji('${e}')">${e}</span>`).join('') +
+                '</div>';
+        }
+        function clearRecents() {
+            recentEmojis = [];
+            localStorage.removeItem('recentEmojis');
+            showRecentEmojis();
+        }
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            const container = document.querySelector('.tool-content');
+            container.insertBefore(alertDiv, container.firstChild);
+            setTimeout(() => {
+                if (alertDiv.parentNode) alertDiv.remove();
+            }, 2500);
+        }
+        function showHelp() {
+            showAlert(
+                `<strong>How to use:</strong><br>
+                1. Search or browse emojis.<br>
+                2. Click any emoji to copy.<br>
+                3. Use recents for quick access.<br>
+                <strong>Tip:</strong> Emojis are grouped by category for easy navigation.`,
+                'info'
+            );
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            renderEmojis(currentCategory);
+        });
+    </script>
+    <style>
+        .emoji-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .category-btn {
+            border: none;
+            background: #f1f1f1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.2s;
+        }
+        .category-btn.active, .category-btn:hover {
+            background: #007bff;
+            color: #fff;
+        }
+        .emoji-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 2em;
+            margin-top: 10px;
+        }
+        .emoji-btn {
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 6px 10px;
+            transition: background 0.2s;
+        }
+        .emoji-btn:hover {
+            background: #e9ecef;
+        }
+        .alert {
+            margin-bottom: 20px;
+        }
+    </style>
+</body>
+</html> 

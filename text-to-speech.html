@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Text to Speech</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="textInput" class="form-label">Enter text to convert to speech</label>
+                                <textarea class="form-control" id="textInput" rows="6" placeholder="Type or paste your text here to convert it to speech..."></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="voiceSelect" class="form-label">Select Voice</label>
+                                    <select class="form-select" id="voiceSelect">
+                                        <option value="">Loading voices...</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="speedSlider" class="form-label">Speed: <span id="speedValue">1</span>x</label>
+                                    <input type="range" class="form-range" id="speedSlider" min="0.5" max="2" step="0.1" value="1">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="pitchSlider" class="form-label">Pitch: <span id="pitchValue">1</span></label>
+                                    <input type="range" class="form-range" id="pitchSlider" min="0.5" max="2" step="0.1" value="1">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="volumeSlider" class="form-label">Volume: <span id="volumeValue">1</span></label>
+                                    <input type="range" class="form-range" id="volumeSlider" min="0" max="1" step="0.1" value="1">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" onclick="speak()" id="speakBtn">
+                                    <i class="bi bi-play-fill"></i> Speak
+                                </button>
+                                <button class="btn btn-warning" onclick="pause()" id="pauseBtn" style="display:none;">
+                                    <i class="bi bi-pause-fill"></i> Pause
+                                </button>
+                                <button class="btn btn-danger" onclick="stop()" id="stopBtn" style="display:none;">
+                                    <i class="bi bi-stop-fill"></i> Stop
+                                </button>
+                                <button class="btn btn-secondary" onclick="clearText()">Clear Text</button>
+                            </div>
+                            <div class="mb-3">
+                                <div class="progress" style="display:none;" id="progressBar">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Preview</h5>
+                                    <div id="previewText" class="text-muted">Text preview will appear here...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="speech-to-text.html">Speech to Text</a></li>
+                            <li><a href="word-counter.html">Word Counter</a></li>
+                            <li><a href="grammar-checker.html">Grammar Checker</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let speechSynthesis = window.speechSynthesis;
+        let utterance = null;
+        let voices = [];
+
+        // Load voices when page loads
+        window.onload = function() {
+            loadVoices();
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = loadVoices;
+            }
+        };
+
+        function loadVoices() {
+            voices = speechSynthesis.getVoices();
+            const voiceSelect = document.getElementById('voiceSelect');
+            voiceSelect.innerHTML = '';
+            
+            voices.forEach((voice, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        // Update slider values
+        document.getElementById('speedSlider').addEventListener('input', function(e) {
+            document.getElementById('speedValue').textContent = e.target.value;
+        });
+
+        document.getElementById('pitchSlider').addEventListener('input', function(e) {
+            document.getElementById('pitchValue').textContent = e.target.value;
+        });
+
+        document.getElementById('volumeSlider').addEventListener('input', function(e) {
+            document.getElementById('volumeValue').textContent = e.target.value;
+        });
+
+        document.getElementById('textInput').addEventListener('input', function(e) {
+            const text = e.target.value;
+            const preview = document.getElementById('previewText');
+            if (text.trim()) {
+                preview.textContent = text.substring(0, 100) + (text.length > 100 ? '...' : '');
+            } else {
+                preview.textContent = 'Text preview will appear here...';
+            }
+        });
+
+        function speak() {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                alert('Please enter some text to speak');
+                return;
+            }
+
+            // Stop any current speech
+            if (utterance) {
+                speechSynthesis.cancel();
+            }
+
+            utterance = new SpeechSynthesisUtterance(text);
+            
+            // Set voice
+            const voiceIndex = document.getElementById('voiceSelect').value;
+            if (voiceIndex && voices[voiceIndex]) {
+                utterance.voice = voices[voiceIndex];
+            }
+            
+            // Set properties
+            utterance.rate = parseFloat(document.getElementById('speedSlider').value);
+            utterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+            utterance.volume = parseFloat(document.getElementById('volumeSlider').value);
+            
+            // Event handlers
+            utterance.onstart = function() {
+                document.getElementById('speakBtn').style.display = 'none';
+                document.getElementById('pauseBtn').style.display = 'inline-block';
+                document.getElementById('stopBtn').style.display = 'inline-block';
+                document.getElementById('progressBar').style.display = 'block';
+            };
+            
+            utterance.onend = function() {
+                document.getElementById('speakBtn').style.display = 'inline-block';
+                document.getElementById('pauseBtn').style.display = 'none';
+                document.getElementById('stopBtn').style.display = 'none';
+                document.getElementById('progressBar').style.display = 'none';
+                utterance = null;
+            };
+            
+            utterance.onpause = function() {
+                document.getElementById('pauseBtn').textContent = ' Resume';
+            };
+            
+            utterance.onresume = function() {
+                document.getElementById('pauseBtn').textContent = ' Pause';
+            };
+            
+            speechSynthesis.speak(utterance);
+        }
+
+        function pause() {
+            if (speechSynthesis.speaking) {
+                if (speechSynthesis.paused) {
+                    speechSynthesis.resume();
+                } else {
+                    speechSynthesis.pause();
+                }
+            }
+        }
+
+        function stop() {
+            speechSynthesis.cancel();
+            document.getElementById('speakBtn').style.display = 'inline-block';
+            document.getElementById('pauseBtn').style.display = 'none';
+            document.getElementById('stopBtn').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'none';
+            utterance = null;
+        }
+
+        function clearText() {
+            stop();
+            document.getElementById('textInput').value = '';
+            document.getElementById('previewText').textContent = 'Text preview will appear here...';
+        }
+    </script>
+</body>
+</html> 

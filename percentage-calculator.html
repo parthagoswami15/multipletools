@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentage Calculator | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Percentage Calculator</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="calculationType" class="form-label">Calculation Type</label>
+                                <select class="form-select" id="calculationType" onchange="updateCalculator()">
+                                    <option value="percentage-of">Percentage of a Number</option>
+                                    <option value="percentage-change">Percentage Change</option>
+                                    <option value="percentage-increase">Percentage Increase</option>
+                                    <option value="percentage-decrease">Percentage Decrease</option>
+                                    <option value="find-percentage">Find Percentage</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Percentage of a Number -->
+                            <div id="percentage-of" class="calculator-section">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="number1" class="form-label">Number</label>
+                                        <input type="number" class="form-control" id="number1" placeholder="Enter number">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="percentage1" class="form-label">Percentage (%)</label>
+                                        <input type="number" class="form-control" id="percentage1" placeholder="Enter percentage">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="calculatePercentageOf()">Calculate</button>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="alert alert-info" id="result1" style="display:none;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Percentage Change -->
+                            <div id="percentage-change" class="calculator-section" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="oldValue" class="form-label">Old Value</label>
+                                        <input type="number" class="form-control" id="oldValue" placeholder="Enter old value">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="newValue" class="form-label">New Value</label>
+                                        <input type="number" class="form-control" id="newValue" placeholder="Enter new value">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="calculatePercentageChange()">Calculate</button>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="alert alert-info" id="result2" style="display:none;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Percentage Increase -->
+                            <div id="percentage-increase" class="calculator-section" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="originalValue" class="form-label">Original Value</label>
+                                        <input type="number" class="form-control" id="originalValue" placeholder="Enter original value">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="increasePercent" class="form-label">Increase Percentage (%)</label>
+                                        <input type="number" class="form-control" id="increasePercent" placeholder="Enter increase %">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="calculatePercentageIncrease()">Calculate</button>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="alert alert-info" id="result3" style="display:none;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Percentage Decrease -->
+                            <div id="percentage-decrease" class="calculator-section" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="originalValue2" class="form-label">Original Value</label>
+                                        <input type="number" class="form-control" id="originalValue2" placeholder="Enter original value">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="decreasePercent" class="form-label">Decrease Percentage (%)</label>
+                                        <input type="number" class="form-control" id="decreasePercent" placeholder="Enter decrease %">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="calculatePercentageDecrease()">Calculate</button>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="alert alert-info" id="result4" style="display:none;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Find Percentage -->
+                            <div id="find-percentage" class="calculator-section" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="partValue" class="form-label">Part Value</label>
+                                        <input type="number" class="form-control" id="partValue" placeholder="Enter part value">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="wholeValue" class="form-label">Whole Value</label>
+                                        <input type="number" class="form-control" id="wholeValue" placeholder="Enter whole value">
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <button class="btn btn-primary" onclick="calculateFindPercentage()">Calculate</button>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="alert alert-info" id="result5" style="display:none;"></div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="discount-calculator.html">Discount Calculator</a></li>
+                            <li><a href="scientific-calculator.html">Scientific Calculator</a></li>
+                            <li><a href="bmi-calculator.html">BMI Calculator</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        function updateCalculator() {
+            const type = document.getElementById('calculationType').value;
+            const sections = document.querySelectorAll('.calculator-section');
+            
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            document.getElementById(type).style.display = 'block';
+        }
+
+        function calculatePercentageOf() {
+            const number = parseFloat(document.getElementById('number1').value);
+            const percentage = parseFloat(document.getElementById('percentage1').value);
+            
+            if (isNaN(number) || isNaN(percentage)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+            
+            const result = (number * percentage) / 100;
+            document.getElementById('result1').innerHTML = `
+                <strong>Result:</strong> ${percentage}% of ${number} = ${result.toFixed(2)}
+            `;
+            document.getElementById('result1').style.display = 'block';
+        }
+
+        function calculatePercentageChange() {
+            const oldValue = parseFloat(document.getElementById('oldValue').value);
+            const newValue = parseFloat(document.getElementById('newValue').value);
+            
+            if (isNaN(oldValue) || isNaN(newValue)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+            
+            const change = newValue - oldValue;
+            const percentageChange = (change / oldValue) * 100;
+            const direction = change >= 0 ? 'increase' : 'decrease';
+            
+            document.getElementById('result2').innerHTML = `
+                <strong>Result:</strong> ${Math.abs(percentageChange).toFixed(2)}% ${direction}<br>
+                Change: ${change.toFixed(2)}<br>
+                Old Value: ${oldValue}<br>
+                New Value: ${newValue}
+            `;
+            document.getElementById('result2').style.display = 'block';
+        }
+
+        function calculatePercentageIncrease() {
+            const original = parseFloat(document.getElementById('originalValue').value);
+            const increase = parseFloat(document.getElementById('increasePercent').value);
+            
+            if (isNaN(original) || isNaN(increase)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+            
+            const increaseAmount = (original * increase) / 100;
+            const newValue = original + increaseAmount;
+            
+            document.getElementById('result3').innerHTML = `
+                <strong>Result:</strong> ${original} + ${increase}% = ${newValue.toFixed(2)}<br>
+                Increase Amount: ${increaseAmount.toFixed(2)}
+            `;
+            document.getElementById('result3').style.display = 'block';
+        }
+
+        function calculatePercentageDecrease() {
+            const original = parseFloat(document.getElementById('originalValue2').value);
+            const decrease = parseFloat(document.getElementById('decreasePercent').value);
+            
+            if (isNaN(original) || isNaN(decrease)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+            
+            const decreaseAmount = (original * decrease) / 100;
+            const newValue = original - decreaseAmount;
+            
+            document.getElementById('result4').innerHTML = `
+                <strong>Result:</strong> ${original} - ${decrease}% = ${newValue.toFixed(2)}<br>
+                Decrease Amount: ${decreaseAmount.toFixed(2)}
+            `;
+            document.getElementById('result4').style.display = 'block';
+        }
+
+        function calculateFindPercentage() {
+            const part = parseFloat(document.getElementById('partValue').value);
+            const whole = parseFloat(document.getElementById('wholeValue').value);
+            
+            if (isNaN(part) || isNaN(whole) || whole === 0) {
+                alert('Please enter valid numbers (whole value cannot be zero)');
+                return;
+            }
+            
+            const percentage = (part / whole) * 100;
+            
+            document.getElementById('result5').innerHTML = `
+                <strong>Result:</strong> ${part} is ${percentage.toFixed(2)}% of ${whole}
+            `;
+            document.getElementById('result5').style.display = 'block';
+        }
+
+        function clearAll() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => input.value = '');
+            
+            const results = document.querySelectorAll('.alert');
+            results.forEach(result => result.style.display = 'none');
+        }
+    </script>
+</body>
+</html> 

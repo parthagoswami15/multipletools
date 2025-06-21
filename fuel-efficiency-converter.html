@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Efficiency Converter - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-gas-pump"></i> Fuel Efficiency Converter</h1>
+                        <p>Convert between different fuel efficiency units quickly and accurately</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromUnit" class="form-label">From Unit</label>
+                                    <select class="form-select" id="fromUnit" onchange="convert()">
+                                        <option value="mpg-us">Miles per Gallon (US) (mpg)</option>
+                                        <option value="mpg-uk">Miles per Gallon (UK) (mpg)</option>
+                                        <option value="l100km">Liters per 100 km (L/100km)</option>
+                                        <option value="km-l">Kilometers per Liter (km/L)</option>
+                                        <option value="gal100mi">Gallons per 100 Miles (gal/100mi)</option>
+                                        <option value="mi-gal">Miles per Gallon (mi/gal)</option>
+                                        <option value="km-gal">Kilometers per Gallon (km/gal)</option>
+                                        <option value="l-mi">Liters per Mile (L/mi)</option>
+                                        <option value="l-km">Liters per Kilometer (L/km)</option>
+                                        <option value="mpg-imp">Miles per Imperial Gallon (mpg)</option>
+                                        <option value="km-l-imp">Kilometers per Imperial Liter (km/L)</option>
+                                        <option value="l100mi">Liters per 100 Miles (L/100mi)</option>
+                                        <option value="gal100km">Gallons per 100 Kilometers (gal/100km)</option>
+                                        <option value="mi-l">Miles per Liter (mi/L)</option>
+                                        <option value="km-gal-imp">Kilometers per Imperial Gallon (km/gal)</option>
+                                        <option value="l-gal">Liters per Gallon (L/gal)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toUnit" class="form-label">To Unit</label>
+                                    <select class="form-select" id="toUnit" onchange="convert()">
+                                        <option value="mpg-us">Miles per Gallon (US) (mpg)</option>
+                                        <option value="mpg-uk">Miles per Gallon (UK) (mpg)</option>
+                                        <option value="l100km" selected>Liters per 100 km (L/100km)</option>
+                                        <option value="km-l">Kilometers per Liter (km/L)</option>
+                                        <option value="gal100mi">Gallons per 100 Miles (gal/100mi)</option>
+                                        <option value="mi-gal">Miles per Gallon (mi/gal)</option>
+                                        <option value="km-gal">Kilometers per Gallon (km/gal)</option>
+                                        <option value="l-mi">Liters per Mile (L/mi)</option>
+                                        <option value="l-km">Liters per Kilometer (L/km)</option>
+                                        <option value="mpg-imp">Miles per Imperial Gallon (mpg)</option>
+                                        <option value="km-l-imp">Kilometers per Imperial Liter (km/L)</option>
+                                        <option value="l100mi">Liters per 100 Miles (L/100mi)</option>
+                                        <option value="gal100km">Gallons per 100 Kilometers (gal/100km)</option>
+                                        <option value="mi-l">Miles per Liter (mi/L)</option>
+                                        <option value="km-gal-imp">Kilometers per Imperial Gallon (km/gal)</option>
+                                        <option value="l-gal">Liters per Gallon (L/gal)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fromValue" class="form-label">From Value</label>
+                                    <input type="number" class="form-control" id="fromValue" value="25" oninput="convert()" step="any">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="toValue" class="form-label">To Value</label>
+                                    <input type="number" class="form-control" id="toValue" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-primary" onclick="swapUnits()">
+                                        <i class="fas fa-exchange-alt"></i> Swap Units
+                                    </button>
+                                    <button type="button" class="btn btn-warning" onclick="clearConverter()">
+                                        <i class="fas fa-eraser"></i> Clear
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="loadSample()">
+                                        <i class="fas fa-file-code"></i> Load Sample
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-chart-bar"></i> All Units Conversion</h4>
+                                    <div class="row" id="allConversions">
+                                        <!-- All conversions will be displayed here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-info-circle"></i> Unit Information</h4>
+                                    <div id="unitInfo">
+                                        <p class="text-muted">Select a unit to see information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="result-card">
+                                    <h4><i class="fas fa-history"></i> Conversion History</h4>
+                                    <div id="conversionHistory">
+                                        <p class="text-muted">Recent conversions will appear here</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHeader();
+            loadFooter();
+            convert();
+        });
+
+        const unitNames = {
+            'mpg-us': 'Miles per Gallon (US)',
+            'mpg-uk': 'Miles per Gallon (UK)',
+            'l100km': 'Liters per 100 km',
+            'km-l': 'Kilometers per Liter',
+            'gal100mi': 'Gallons per 100 Miles',
+            'mi-gal': 'Miles per Gallon',
+            'km-gal': 'Kilometers per Gallon',
+            'l-mi': 'Liters per Mile',
+            'l-km': 'Liters per Kilometer',
+            'mpg-imp': 'Miles per Imperial Gallon',
+            'km-l-imp': 'Kilometers per Imperial Liter',
+            'l100mi': 'Liters per 100 Miles',
+            'gal100km': 'Gallons per 100 Kilometers',
+            'mi-l': 'Miles per Liter',
+            'km-gal-imp': 'Kilometers per Imperial Gallon',
+            'l-gal': 'Liters per Gallon'
+        };
+
+        const unitSymbols = {
+            'mpg-us': 'mpg',
+            'mpg-uk': 'mpg',
+            'l100km': 'L/100km',
+            'km-l': 'km/L',
+            'gal100mi': 'gal/100mi',
+            'mi-gal': 'mi/gal',
+            'km-gal': 'km/gal',
+            'l-mi': 'L/mi',
+            'l-km': 'L/km',
+            'mpg-imp': 'mpg',
+            'km-l-imp': 'km/L',
+            'l100mi': 'L/100mi',
+            'gal100km': 'gal/100km',
+            'mi-l': 'mi/L',
+            'km-gal-imp': 'km/gal',
+            'l-gal': 'L/gal'
+        };
+
+        const unitInfo = {
+            'mpg-us': 'Miles per US gallon. Standard fuel efficiency measure in the United States.',
+            'mpg-uk': 'Miles per UK gallon. Used in the United Kingdom and some Commonwealth countries.',
+            'l100km': 'Liters per 100 kilometers. Standard measure in most countries outside the US.',
+            'km-l': 'Kilometers per liter. Used in some countries for fuel efficiency.',
+            'gal100mi': 'Gallons per 100 miles. Inverse of miles per gallon.',
+            'mi-gal': 'Miles per gallon. General term for distance per fuel unit.',
+            'km-gal': 'Kilometers per gallon. Distance in km per gallon of fuel.',
+            'l-mi': 'Liters per mile. Fuel consumption per mile traveled.',
+            'l-km': 'Liters per kilometer. Fuel consumption per kilometer traveled.',
+            'mpg-imp': 'Miles per imperial gallon. Used in the UK and some other countries.',
+            'km-l-imp': 'Kilometers per imperial liter. Distance per imperial liter.',
+            'l100mi': 'Liters per 100 miles. Fuel consumption per 100 miles.',
+            'gal100km': 'Gallons per 100 kilometers. Fuel consumption per 100 km.',
+            'mi-l': 'Miles per liter. Distance traveled per liter of fuel.',
+            'km-gal-imp': 'Kilometers per imperial gallon. Distance per imperial gallon.',
+            'l-gal': 'Liters per gallon. Fuel volume per gallon capacity.'
+        };
+
+        let conversionHistory = [];
+
+        function convert() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = parseFloat(document.getElementById('fromValue').value) || 0;
+
+            // Convert to L/100km first, then to target unit
+            const l100km = toL100km(fromValue, fromUnit);
+            const result = fromL100km(l100km, toUnit);
+
+            document.getElementById('toValue').value = result.toFixed(6);
+
+            // Update all conversions
+            updateAllConversions(fromValue, fromUnit);
+            
+            // Update unit info
+            updateUnitInfo(fromUnit);
+            
+            // Add to history
+            addToHistory(fromValue, fromUnit, result, toUnit);
+        }
+
+        function toL100km(value, unit) {
+            switch(unit) {
+                case 'mpg-us': return 235.214 / value;
+                case 'mpg-uk': return 282.481 / value;
+                case 'l100km': return value;
+                case 'km-l': return 100 / value;
+                case 'gal100mi': return value * 3.78541;
+                case 'mi-gal': return 235.214 / value;
+                case 'km-gal': return 100 / (value / 3.78541);
+                case 'l-mi': return value * 62.1371;
+                case 'l-km': return value * 100;
+                case 'mpg-imp': return 282.481 / value;
+                case 'km-l-imp': return 100 / value;
+                case 'l100mi': return value * 0.621371;
+                case 'gal100km': return value * 3.78541;
+                case 'mi-l': return 100 / (value * 1.60934);
+                case 'km-gal-imp': return 100 / (value / 4.54609);
+                case 'l-gal': return value * 26.4172;
+                default: return value;
+            }
+        }
+
+        function fromL100km(l100km, unit) {
+            switch(unit) {
+                case 'mpg-us': return 235.214 / l100km;
+                case 'mpg-uk': return 282.481 / l100km;
+                case 'l100km': return l100km;
+                case 'km-l': return 100 / l100km;
+                case 'gal100mi': return l100km / 3.78541;
+                case 'mi-gal': return 235.214 / l100km;
+                case 'km-gal': return (100 / l100km) * 3.78541;
+                case 'l-mi': return l100km / 62.1371;
+                case 'l-km': return l100km / 100;
+                case 'mpg-imp': return 282.481 / l100km;
+                case 'km-l-imp': return 100 / l100km;
+                case 'l100mi': return l100km / 0.621371;
+                case 'gal100km': return l100km / 3.78541;
+                case 'mi-l': return (100 / l100km) / 1.60934;
+                case 'km-gal-imp': return (100 / l100km) * 4.54609;
+                case 'l-gal': return l100km / 26.4172;
+                default: return l100km;
+            }
+        }
+
+        function updateAllConversions(value, fromUnit) {
+            const container = document.getElementById('allConversions');
+            let html = '';
+
+            const units = ['mpg-us', 'l100km', 'km-l', 'gal100mi', 'mpg-uk'];
+            
+            units.forEach(unit => {
+                if (unit !== fromUnit) {
+                    const l100km = toL100km(value, fromUnit);
+                    const converted = fromL100km(l100km, unit);
+                    const symbol = unitSymbols[unit];
+                    const name = unitNames[unit];
+                    
+                    html += `
+                        <div class="col-md-4 col-sm-6 mb-3">
+                            <div class="conversion-item">
+                                <strong>${name}</strong><br>
+                                <span class="conversion-value">${converted.toFixed(2)} ${symbol}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+        }
+
+        function updateUnitInfo(unit) {
+            const info = document.getElementById('unitInfo');
+            info.innerHTML = `
+                <h5>${unitNames[unit]} (${unitSymbols[unit]})</h5>
+                <p>${unitInfo[unit]}</p>
+            `;
+        }
+
+        function addToHistory(fromValue, fromUnit, toValue, toUnit) {
+            const conversion = {
+                from: `${fromValue} ${unitSymbols[fromUnit]}`,
+                to: `${toValue.toFixed(2)} ${unitSymbols[toUnit]}`,
+                timestamp: new Date().toLocaleTimeString()
+            };
+
+            conversionHistory.unshift(conversion);
+            if (conversionHistory.length > 5) {
+                conversionHistory.pop();
+            }
+
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('conversionHistory');
+            if (conversionHistory.length === 0) {
+                history.innerHTML = '<p class="text-muted">No conversions yet</p>';
+                return;
+            }
+
+            let html = '';
+            conversionHistory.forEach(conv => {
+                html += `
+                    <div class="history-item">
+                        <small class="text-muted">${conv.timestamp}</small><br>
+                        ${conv.from} → ${conv.to}
+                    </div>
+                `;
+            });
+
+            history.innerHTML = html;
+        }
+
+        function swapUnits() {
+            const fromUnit = document.getElementById('fromUnit').value;
+            const toUnit = document.getElementById('toUnit').value;
+            const fromValue = document.getElementById('fromValue').value;
+            const toValue = document.getElementById('toValue').value;
+
+            document.getElementById('fromUnit').value = toUnit;
+            document.getElementById('toUnit').value = fromUnit;
+            document.getElementById('fromValue').value = toValue;
+            document.getElementById('toValue').value = fromValue;
+
+            convert();
+        }
+
+        function clearConverter() {
+            document.getElementById('fromValue').value = '';
+            document.getElementById('toValue').value = '';
+            document.getElementById('allConversions').innerHTML = '';
+            document.getElementById('unitInfo').innerHTML = '<p class="text-muted">Select a unit to see information</p>';
+        }
+
+        function loadSample() {
+            document.getElementById('fromUnit').value = 'mpg-us';
+            document.getElementById('toUnit').value = 'l100km';
+            document.getElementById('fromValue').value = '25';
+            convert();
+        }
+    </script>
+
+    <style>
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversion-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .conversion-value {
+            font-size: 1.1em;
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .history-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .btn-group .btn {
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</body>
+</html> 

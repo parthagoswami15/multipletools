@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitemap Generator | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Sitemap Generator</h1>
+                        <div id="tool-ui">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="websiteUrl" class="form-label">Website URL</label>
+                                    <input type="url" class="form-control" id="websiteUrl" placeholder="https://example.com">
+                                    <div class="form-text">Enter your website's base URL</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="sitemapType" class="form-label">Sitemap Type</label>
+                                    <select class="form-select" id="sitemapType">
+                                        <option value="xml">XML Sitemap</option>
+                                        <option value="html">HTML Sitemap</option>
+                                        <option value="txt">Text Sitemap</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="urls" class="form-label">URLs (One per line)</label>
+                                    <textarea class="form-control" id="urls" rows="8" placeholder="https://example.com/page1&#10;https://example.com/page2&#10;https://example.com/page3"></textarea>
+                                    <div class="form-text">Enter your website URLs, one per line</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="priority" class="form-label">Default Priority</label>
+                                    <select class="form-select" id="priority">
+                                        <option value="1.0">1.0 (Highest)</option>
+                                        <option value="0.9">0.9 (Very High)</option>
+                                        <option value="0.8" selected>0.8 (High)</option>
+                                        <option value="0.7">0.7 (Medium-High)</option>
+                                        <option value="0.6">0.6 (Medium)</option>
+                                        <option value="0.5">0.5 (Medium-Low)</option>
+                                        <option value="0.4">0.4 (Low)</option>
+                                        <option value="0.3">0.3 (Very Low)</option>
+                                        <option value="0.2">0.2 (Lowest)</option>
+                                        <option value="0.1">0.1 (Minimal)</option>
+                                    </select>
+                                    
+                                    <div class="mt-3">
+                                        <label for="changefreq" class="form-label">Default Change Frequency</label>
+                                        <select class="form-select" id="changefreq">
+                                            <option value="always">Always</option>
+                                            <option value="hourly">Hourly</option>
+                                            <option value="daily">Daily</option>
+                                            <option value="weekly" selected>Weekly</option>
+                                            <option value="monthly">Monthly</option>
+                                            <option value="yearly">Yearly</option>
+                                            <option value="never">Never</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <label for="lastmod" class="form-label">Last Modified</label>
+                                        <input type="date" class="form-control" id="lastmod">
+                                        <div class="form-text">Leave empty to use current date</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <button class="btn btn-primary" onclick="generateSitemap()">Generate Sitemap</button>
+                                <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+                                <button class="btn btn-outline-secondary" onclick="loadSampleUrls()">Load Sample</button>
+                                <button class="btn btn-outline-info" onclick="validateUrls()">Validate URLs</button>
+                            </div>
+                            
+                            <div id="sitemapResults" style="display:none;">
+                                <div class="row mt-4">
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-primary" id="totalUrls">0</h4>
+                                                <small class="text-muted">Total URLs</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-success" id="validUrls">0</h4>
+                                                <small class="text-muted">Valid URLs</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-info" id="sitemapSize">0 KB</h4>
+                                                <small class="text-muted">File Size</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-warning" id="sitemapTypeDisplay">XML</h4>
+                                                <small class="text-muted">Type</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Generated Sitemap</h5>
+                                        <div class="mb-3">
+                                            <button class="btn btn-sm btn-outline-primary" onclick="copySitemap()">Copy to Clipboard</button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="downloadSitemap()">Download File</button>
+                                            <button class="btn btn-sm btn-outline-info" onclick="previewSitemap()">Preview</button>
+                                        </div>
+                                        <pre class="bg-light p-3 rounded" id="generatedSitemap"></pre>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sitemap Information</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>URL Analysis</h6>
+                                                <ul id="urlAnalysis">
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>SEO Recommendations</h6>
+                                                <ul id="seoRecommendations">
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Sitemap Best Practices</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>XML Sitemap Guidelines</h6>
+                                <ul>
+                                    <li>Maximum 50,000 URLs per sitemap</li>
+                                    <li>File size should be under 50MB</li>
+                                    <li>Include only canonical URLs</li>
+                                    <li>Use absolute URLs</li>
+                                    <li>Update regularly</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Submission Tips</h6>
+                                <ul>
+                                    <li>Submit to Google Search Console</li>
+                                    <li>Submit to Bing Webmaster Tools</li>
+                                    <li>Add sitemap URL to robots.txt</li>
+                                    <li>Monitor sitemap status</li>
+                                    <li>Remove broken URLs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="meta-tag-generator.html">Meta Tag Generator</a></li>
+                            <li><a href="keyword-density-checker.html">Keyword Density Checker</a></li>
+                            <li><a href="robots-txt-generator.html">Robots.txt Generator</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        function generateSitemap() {
+            const websiteUrl = document.getElementById('websiteUrl').value;
+            const urls = document.getElementById('urls').value;
+            const sitemapType = document.getElementById('sitemapType').value;
+            const priority = document.getElementById('priority').value;
+            const changefreq = document.getElementById('changefreq').value;
+            const lastmod = document.getElementById('lastmod').value;
+            
+            if (!websiteUrl || !urls.trim()) {
+                alert('Please enter website URL and URLs');
+                return;
+            }
+            
+            const urlList = urls.split('\n')
+                .map(url => url.trim())
+                .filter(url => url.length > 0);
+            
+            if (urlList.length === 0) {
+                alert('Please enter at least one URL');
+                return;
+            }
+            
+            let sitemapContent = '';
+            const currentDate = lastmod || new Date().toISOString().split('T')[0];
+            
+            switch(sitemapType) {
+                case 'xml':
+                    sitemapContent = generateXMLSitemap(urlList, websiteUrl, priority, changefreq, currentDate);
+                    break;
+                case 'html':
+                    sitemapContent = generateHTMLSitemap(urlList, websiteUrl);
+                    break;
+                case 'txt':
+                    sitemapContent = generateTextSitemap(urlList);
+                    break;
+            }
+            
+            // Update display
+            document.getElementById('generatedSitemap').textContent = sitemapContent;
+            document.getElementById('totalUrls').textContent = urlList.length;
+            document.getElementById('validUrls').textContent = urlList.length;
+            document.getElementById('sitemapSize').textContent = (sitemapContent.length / 1024).toFixed(1) + ' KB';
+            document.getElementById('sitemapTypeDisplay').textContent = sitemapType.toUpperCase();
+            
+            // Generate analysis
+            generateAnalysis(urlList, websiteUrl);
+            
+            document.getElementById('sitemapResults').style.display = 'block';
+        }
+
+        function generateXMLSitemap(urls, baseUrl, priority, changefreq, lastmod) {
+            let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+`;
+            
+            urls.forEach(url => {
+                // Ensure URL is absolute
+                const absoluteUrl = url.startsWith('http') ? url : new URL(url, baseUrl).href;
+                
+                xml += `  <url>
+    <loc>${absoluteUrl}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>
+`;
+            });
+            
+            xml += '</urlset>';
+            return xml;
+        }
+
+        function generateHTMLSitemap(urls, baseUrl) {
+            let html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitemap - ${new URL(baseUrl).hostname}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        ul { list-style: none; padding: 0; }
+        li { margin: 10px 0; }
+        a { color: #0066cc; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Sitemap</h1>
+    <ul>
+`;
+            
+            urls.forEach(url => {
+                const absoluteUrl = url.startsWith('http') ? url : new URL(url, baseUrl).href;
+                const urlPath = new URL(absoluteUrl).pathname;
+                const displayName = urlPath === '/' ? 'Home' : urlPath.replace(/\//g, ' ').trim();
+                
+                html += `        <li><a href="${absoluteUrl}">${displayName}</a></li>
+`;
+            });
+            
+            html += `    </ul>
+</body>
+</html>`;
+            return html;
+        }
+
+        function generateTextSitemap(urls) {
+            return urls.join('\n');
+        }
+
+        function generateAnalysis(urls, baseUrl) {
+            const urlAnalysis = [];
+            const seoRecommendations = [];
+            
+            // URL analysis
+            urlAnalysis.push(`Total URLs: ${urls.length}`);
+            
+            const internalUrls = urls.filter(url => url.includes(baseUrl) || !url.startsWith('http'));
+            const externalUrls = urls.filter(url => url.startsWith('http') && !url.includes(baseUrl));
+            
+            urlAnalysis.push(`Internal URLs: ${internalUrls.length}`);
+            urlAnalysis.push(`External URLs: ${externalUrls.length}`);
+            
+            const hasHomepage = urls.some(url => {
+                const cleanUrl = url.replace(/\/$/, '');
+                const cleanBase = baseUrl.replace(/\/$/, '');
+                return cleanUrl === cleanBase || cleanUrl.endsWith('/');
+            });
+            
+            if (!hasHomepage) {
+                seoRecommendations.push('Add homepage URL to sitemap');
+            }
+            
+            if (urls.length > 50000) {
+                seoRecommendations.push('Consider splitting into multiple sitemaps (max 50,000 URLs)');
+            }
+            
+            if (urls.length < 10) {
+                seoRecommendations.push('Consider adding more pages to improve site coverage');
+            }
+            
+            seoRecommendations.push('Submit sitemap to search engines');
+            seoRecommendations.push('Update sitemap regularly');
+            
+            document.getElementById('urlAnalysis').innerHTML = urlAnalysis.map(item => `<li>${item}</li>`).join('');
+            document.getElementById('seoRecommendations').innerHTML = seoRecommendations.map(item => `<li>${item}</li>`).join('');
+        }
+
+        function validateUrls() {
+            const urls = document.getElementById('urls').value;
+            const urlList = urls.split('\n')
+                .map(url => url.trim())
+                .filter(url => url.length > 0);
+            
+            if (urlList.length === 0) {
+                alert('No URLs to validate');
+                return;
+            }
+            
+            const validUrls = [];
+            const invalidUrls = [];
+            
+            urlList.forEach(url => {
+                try {
+                    new URL(url);
+                    validUrls.push(url);
+                } catch (e) {
+                    invalidUrls.push(url);
+                }
+            });
+            
+            let message = `Validation Results:\n`;
+            message += `Valid URLs: ${validUrls.length}\n`;
+            message += `Invalid URLs: ${invalidUrls.length}\n\n`;
+            
+            if (invalidUrls.length > 0) {
+                message += `Invalid URLs:\n${invalidUrls.join('\n')}`;
+            }
+            
+            alert(message);
+        }
+
+        function copySitemap() {
+            const sitemap = document.getElementById('generatedSitemap').textContent;
+            navigator.clipboard.writeText(sitemap).then(() => {
+                alert('Sitemap copied to clipboard!');
+            });
+        }
+
+        function downloadSitemap() {
+            const sitemap = document.getElementById('generatedSitemap').textContent;
+            const sitemapType = document.getElementById('sitemapType').value;
+            const extension = sitemapType === 'xml' ? 'xml' : sitemapType === 'html' ? 'html' : 'txt';
+            const filename = `sitemap.${extension}`;
+            
+            const blob = new Blob([sitemap], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function previewSitemap() {
+            const sitemapType = document.getElementById('sitemapType').value;
+            if (sitemapType === 'html') {
+                const sitemap = document.getElementById('generatedSitemap').textContent;
+                const newWindow = window.open();
+                newWindow.document.write(sitemap);
+                newWindow.document.close();
+            } else {
+                alert('Preview is only available for HTML sitemaps');
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('websiteUrl').value = '';
+            document.getElementById('urls').value = '';
+            document.getElementById('lastmod').value = '';
+            document.getElementById('sitemapResults').style.display = 'none';
+        }
+
+        function loadSampleUrls() {
+            const sampleUrls = `https://example.com/
+https://example.com/about
+https://example.com/services
+https://example.com/contact
+https://example.com/blog
+https://example.com/products
+https://example.com/faq
+https://example.com/privacy-policy`;
+            
+            document.getElementById('websiteUrl').value = 'https://example.com';
+            document.getElementById('urls').value = sampleUrls;
+        }
+
+        // Set current date as default
+        document.getElementById('lastmod').value = new Date().toISOString().split('T')[0];
+    </script>
+</body>
+</html> 

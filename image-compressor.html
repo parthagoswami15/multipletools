@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compressor | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Image Compressor</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="imageInput" class="form-label">Select Image File</label>
+                                <input type="file" class="form-control" id="imageInput" accept="image/*">
+                            </div>
+                            <div class="mb-3">
+                                <label for="qualitySlider" class="form-label">Compression Quality: <span id="qualityValue">70</span>%</label>
+                                <input type="range" class="form-range" id="qualitySlider" min="1" max="100" value="70">
+                            </div>
+                            <div class="mb-3">
+                                <label for="maxWidthInput" class="form-label">Max Width (px)</label>
+                                <input type="number" class="form-control" id="maxWidthInput" placeholder="1920">
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" onclick="compressImage()">Compress Image</button>
+                                <button class="btn btn-secondary" onclick="downloadCompressed()" id="downloadBtn" style="display:none;">Download Compressed Image</button>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Original Image</h5>
+                                    <canvas id="originalCanvas" style="max-width:100%; border:1px solid #ddd;"></canvas>
+                                    <p class="text-muted mt-2" id="originalInfo"></p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Compressed Image</h5>
+                                    <canvas id="compressedCanvas" style="max-width:100%; border:1px solid #ddd;"></canvas>
+                                    <p class="text-muted mt-2" id="compressedInfo"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="image-to-png.html">Image to PNG Converter</a></li>
+                            <li><a href="image-to-jpg.html">Image to JPG Converter</a></li>
+                            <li><a href="image-resizer.html">Image Resizer</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let originalImage = null;
+        let compressedDataUrl = null;
+        let originalFileSize = 0;
+
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                originalFileSize = file.size;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    originalImage = new Image();
+                    originalImage.onload = function() {
+                        const canvas = document.getElementById('originalCanvas');
+                        canvas.width = originalImage.width;
+                        canvas.height = originalImage.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(originalImage, 0, 0);
+                        
+                        document.getElementById('originalInfo').textContent = 
+                            `${originalImage.width} × ${originalImage.height} pixels | ${formatFileSize(originalFileSize)}`;
+                    };
+                    originalImage.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('qualitySlider').addEventListener('input', function(e) {
+            document.getElementById('qualityValue').textContent = e.target.value;
+        });
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function compressImage() {
+            if (!originalImage) {
+                alert('Please select an image first');
+                return;
+            }
+            
+            const quality = document.getElementById('qualitySlider').value / 100;
+            const maxWidth = parseInt(document.getElementById('maxWidthInput').value) || originalImage.width;
+            
+            let newWidth = originalImage.width;
+            let newHeight = originalImage.height;
+            
+            if (newWidth > maxWidth) {
+                const ratio = maxWidth / newWidth;
+                newWidth = maxWidth;
+                newHeight = Math.round(newHeight * ratio);
+            }
+            
+            const canvas = document.getElementById('compressedCanvas');
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(originalImage, 0, 0, newWidth, newHeight);
+            
+            compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+            
+            // Calculate compressed file size
+            const base64Length = compressedDataUrl.length - 'data:image/jpeg;base64,'.length;
+            const compressedSize = Math.round(base64Length * 0.75);
+            
+            document.getElementById('compressedInfo').textContent = 
+                `${newWidth} × ${newHeight} pixels | ${formatFileSize(compressedSize)}`;
+            document.getElementById('downloadBtn').style.display = 'inline-block';
+        }
+
+        function downloadCompressed() {
+            if (!compressedDataUrl) {
+                alert('Please compress an image first');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = 'compressed-image.jpg';
+            link.href = compressedDataUrl;
+            link.click();
+        }
+    </script>
+</body>
+</html> 

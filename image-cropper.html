@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Cropper | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .crop-container {
+            position: relative;
+            display: inline-block;
+            border: 2px solid #007bff;
+        }
+        .crop-overlay {
+            position: absolute;
+            border: 2px dashed #fff;
+            background: rgba(0, 123, 255, 0.3);
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Image Cropper</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="imageInput" class="form-label">Select Image File</label>
+                                <input type="file" class="form-control" id="imageInput" accept="image/*">
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" onclick="cropImage()">Crop Image</button>
+                                <button class="btn btn-secondary" onclick="downloadCropped()" id="downloadBtn" style="display:none;">Download Cropped Image</button>
+                            </div>
+                            <div class="mb-3">
+                                <div class="crop-container" id="cropContainer" style="display:none;">
+                                    <canvas id="originalCanvas"></canvas>
+                                    <div class="crop-overlay" id="cropOverlay"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Original Image</h5>
+                                    <canvas id="previewCanvas" style="max-width:100%; border:1px solid #ddd;"></canvas>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Cropped Image</h5>
+                                    <canvas id="croppedCanvas" style="max-width:100%; border:1px solid #ddd;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="image-to-png.html">Image to PNG Converter</a></li>
+                            <li><a href="image-to-jpg.html">Image to JPG Converter</a></li>
+                            <li><a href="image-resizer.html">Image Resizer</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let originalImage = null;
+        let croppedDataUrl = null;
+        let isDragging = false;
+        let cropStartX, cropStartY;
+
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    originalImage = new Image();
+                    originalImage.onload = function() {
+                        const canvas = document.getElementById('previewCanvas');
+                        canvas.width = originalImage.width;
+                        canvas.height = originalImage.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(originalImage, 0, 0);
+                        
+                        setupCropArea();
+                    };
+                    originalImage.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function setupCropArea() {
+            const container = document.getElementById('cropContainer');
+            const canvas = document.getElementById('originalCanvas');
+            const overlay = document.getElementById('cropOverlay');
+            
+            canvas.width = originalImage.width;
+            canvas.height = originalImage.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(originalImage, 0, 0);
+            
+            // Set initial crop area
+            const cropSize = Math.min(originalImage.width, originalImage.height) * 0.5;
+            overlay.style.width = cropSize + 'px';
+            overlay.style.height = cropSize + 'px';
+            overlay.style.left = (originalImage.width - cropSize) / 2 + 'px';
+            overlay.style.top = (originalImage.height - cropSize) / 2 + 'px';
+            
+            container.style.display = 'inline-block';
+            
+            // Add drag functionality
+            overlay.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDrag);
+        }
+
+        function startDrag(e) {
+            isDragging = true;
+            cropStartX = e.clientX - parseInt(document.getElementById('cropOverlay').style.left);
+            cropStartY = e.clientY - parseInt(document.getElementById('cropOverlay').style.top);
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            
+            const overlay = document.getElementById('cropOverlay');
+            const container = document.getElementById('cropContainer');
+            const rect = container.getBoundingClientRect();
+            
+            let newX = e.clientX - cropStartX - rect.left;
+            let newY = e.clientY - cropStartY - rect.top;
+            
+            // Constrain to image bounds
+            newX = Math.max(0, Math.min(newX, originalImage.width - overlay.offsetWidth));
+            newY = Math.max(0, Math.min(newY, originalImage.height - overlay.offsetHeight));
+            
+            overlay.style.left = newX + 'px';
+            overlay.style.top = newY + 'px';
+        }
+
+        function stopDrag() {
+            isDragging = false;
+        }
+
+        function cropImage() {
+            if (!originalImage) {
+                alert('Please select an image first');
+                return;
+            }
+            
+            const overlay = document.getElementById('cropOverlay');
+            const cropX = parseInt(overlay.style.left);
+            const cropY = parseInt(overlay.style.top);
+            const cropWidth = overlay.offsetWidth;
+            const cropHeight = overlay.offsetHeight;
+            
+            const canvas = document.getElementById('croppedCanvas');
+            canvas.width = cropWidth;
+            canvas.height = cropHeight;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.drawImage(originalImage, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+            
+            croppedDataUrl = canvas.toDataURL('image/png');
+            document.getElementById('downloadBtn').style.display = 'inline-block';
+        }
+
+        function downloadCropped() {
+            if (!croppedDataUrl) {
+                alert('Please crop an image first');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.download = 'cropped-image.png';
+            link.href = croppedDataUrl;
+            link.click();
+        }
+    </script>
+</body>
+</html> 

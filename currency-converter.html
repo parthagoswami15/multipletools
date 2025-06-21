@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Converter | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Currency Converter</h1>
+                        <div id="tool-ui">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="fromCurrency" class="form-label">From Currency</label>
+                                    <select class="form-select" id="fromCurrency" onchange="convertCurrency()">
+                                        <option value="USD">USD - US Dollar</option>
+                                        <option value="EUR">EUR - Euro</option>
+                                        <option value="GBP">GBP - British Pound</option>
+                                        <option value="JPY">JPY - Japanese Yen</option>
+                                        <option value="CAD">CAD - Canadian Dollar</option>
+                                        <option value="AUD">AUD - Australian Dollar</option>
+                                        <option value="CHF">CHF - Swiss Franc</option>
+                                        <option value="CNY">CNY - Chinese Yuan</option>
+                                        <option value="INR">INR - Indian Rupee</option>
+                                        <option value="BRL">BRL - Brazilian Real</option>
+                                        <option value="MXN">MXN - Mexican Peso</option>
+                                        <option value="KRW">KRW - South Korean Won</option>
+                                        <option value="SGD">SGD - Singapore Dollar</option>
+                                        <option value="NZD">NZD - New Zealand Dollar</option>
+                                        <option value="SEK">SEK - Swedish Krona</option>
+                                        <option value="NOK">NOK - Norwegian Krone</option>
+                                        <option value="DKK">DKK - Danish Krone</option>
+                                        <option value="RUB">RUB - Russian Ruble</option>
+                                        <option value="ZAR">ZAR - South African Rand</option>
+                                        <option value="TRY">TRY - Turkish Lira</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="toCurrency" class="form-label">To Currency</label>
+                                    <select class="form-select" id="toCurrency" onchange="convertCurrency()">
+                                        <option value="EUR">EUR - Euro</option>
+                                        <option value="USD">USD - US Dollar</option>
+                                        <option value="GBP">GBP - British Pound</option>
+                                        <option value="JPY">JPY - Japanese Yen</option>
+                                        <option value="CAD">CAD - Canadian Dollar</option>
+                                        <option value="AUD">AUD - Australian Dollar</option>
+                                        <option value="CHF">CHF - Swiss Franc</option>
+                                        <option value="CNY">CNY - Chinese Yuan</option>
+                                        <option value="INR">INR - Indian Rupee</option>
+                                        <option value="BRL">BRL - Brazilian Real</option>
+                                        <option value="MXN">MXN - Mexican Peso</option>
+                                        <option value="KRW">KRW - South Korean Won</option>
+                                        <option value="SGD">SGD - Singapore Dollar</option>
+                                        <option value="NZD">NZD - New Zealand Dollar</option>
+                                        <option value="SEK">SEK - Swedish Krona</option>
+                                        <option value="NOK">NOK - Norwegian Krone</option>
+                                        <option value="DKK">DKK - Danish Krone</option>
+                                        <option value="RUB">RUB - Russian Ruble</option>
+                                        <option value="ZAR">ZAR - South African Rand</option>
+                                        <option value="TRY">TRY - Turkish Lira</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="amount" class="form-label">Amount</label>
+                                    <input type="number" class="form-control" id="amount" placeholder="Enter amount" min="0" step="0.01" oninput="convertCurrency()">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Exchange Rate</label>
+                                    <div class="form-control-plaintext" id="exchangeRate">1.0000</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <button class="btn btn-primary" onclick="convertCurrency()">Convert</button>
+                                <button class="btn btn-secondary" onclick="swapCurrencies()">Swap Currencies</button>
+                                <button class="btn btn-outline-secondary" onclick="clearConverter()">Clear</button>
+                            </div>
+                            
+                            <div id="conversionResult" style="display:none;">
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-primary" id="fromAmount">$0.00</h4>
+                                                <small class="text-muted" id="fromCurrencyLabel">USD</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card text-center">
+                                            <div class="card-body">
+                                                <h4 class="text-success" id="toAmount">€0.00</h4>
+                                                <small class="text-muted" id="toCurrencyLabel">EUR</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mt-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Conversion Details</h5>
+                                        <div id="conversionDetails"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Popular Currency Pairs</h5>
+                        <div class="row" id="popularPairs">
+                            <!-- Popular pairs will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Conversion History</h5>
+                        <div id="conversionHistory" style="max-height: 300px; overflow-y: auto;">
+                            <div class="text-muted">No conversions yet</div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary mt-2" onclick="clearHistory()">Clear History</button>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="percentage-calculator.html">Percentage Calculator</a></li>
+                            <li><a href="discount-calculator.html">Discount Calculator</a></li>
+                            <li><a href="tip-calculator.html">Tip Calculator</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Sample exchange rates (in real app, these would come from an API)
+        const exchangeRates = {
+            USD: { EUR: 0.85, GBP: 0.73, JPY: 110.0, CAD: 1.25, AUD: 1.35, CHF: 0.92, CNY: 6.45, INR: 74.5, BRL: 5.25, MXN: 20.1, KRW: 1150, SGD: 1.35, NZD: 1.42, SEK: 8.65, NOK: 8.85, DKK: 6.25, RUB: 75.5, ZAR: 14.8, TRY: 8.45 },
+            EUR: { USD: 1.18, GBP: 0.86, JPY: 129.4, CAD: 1.47, AUD: 1.59, CHF: 1.08, CNY: 7.59, INR: 87.6, BRL: 6.18, MXN: 23.6, KRW: 1353, SGD: 1.59, NZD: 1.67, SEK: 10.18, NOK: 10.41, DKK: 7.35, RUB: 88.8, ZAR: 17.4, TRY: 9.94 },
+            GBP: { USD: 1.37, EUR: 1.16, JPY: 150.7, CAD: 1.71, AUD: 1.85, CHF: 1.26, CNY: 8.84, INR: 102.1, BRL: 7.19, MXN: 27.5, KRW: 1575, SGD: 1.85, NZD: 1.95, SEK: 11.85, NOK: 12.12, DKK: 8.56, RUB: 103.4, ZAR: 20.3, TRY: 11.58 },
+            JPY: { USD: 0.0091, EUR: 0.0077, GBP: 0.0066, CAD: 0.0114, AUD: 0.0123, CHF: 0.0084, CNY: 0.0586, INR: 0.677, BRL: 0.0477, MXN: 0.183, KRW: 10.45, SGD: 0.0123, NZD: 0.0129, SEK: 0.0786, NOK: 0.0805, DKK: 0.0568, RUB: 0.686, ZAR: 0.135, TRY: 0.0768 },
+            CAD: { USD: 0.80, EUR: 0.68, GBP: 0.58, JPY: 87.7, AUD: 1.08, CHF: 0.74, CNY: 5.16, INR: 59.6, BRL: 4.20, MXN: 16.1, KRW: 920, SGD: 1.08, NZD: 1.14, SEK: 6.92, NOK: 7.08, DKK: 5.00, RUB: 60.4, ZAR: 11.8, TRY: 6.76 },
+            AUD: { USD: 0.74, EUR: 0.63, GBP: 0.54, JPY: 81.5, CAD: 0.93, CHF: 0.68, CNY: 4.78, INR: 55.2, BRL: 3.89, MXN: 14.9, KRW: 852, SGD: 1.00, NZD: 1.05, SEK: 6.41, NOK: 6.56, DKK: 4.63, RUB: 55.9, ZAR: 11.0, TRY: 6.26 },
+            CHF: { USD: 1.09, EUR: 0.93, GBP: 0.79, JPY: 119.6, CAD: 1.36, AUD: 1.47, CNY: 7.01, INR: 81.0, BRL: 5.71, MXN: 21.8, KRW: 1250, SGD: 1.47, NZD: 1.54, SEK: 9.40, NOK: 9.62, DKK: 6.79, RUB: 82.1, ZAR: 16.1, TRY: 9.18 },
+            CNY: { USD: 0.155, EUR: 0.132, GBP: 0.113, JPY: 17.1, CAD: 0.194, AUD: 0.209, CHF: 0.143, INR: 11.6, BRL: 0.814, MXN: 3.12, KRW: 178, SGD: 0.209, NZD: 0.220, SEK: 1.34, NOK: 1.37, DKK: 0.969, RUB: 11.7, ZAR: 2.29, TRY: 1.31 },
+            INR: { USD: 0.0134, EUR: 0.0114, GBP: 0.0098, JPY: 1.48, CAD: 0.0168, AUD: 0.0181, CHF: 0.0123, CNY: 0.0862, BRL: 0.0705, MXN: 0.270, KRW: 15.4, SGD: 0.0181, NZD: 0.0191, SEK: 0.116, NOK: 0.119, DKK: 0.0839, RUB: 1.01, ZAR: 0.199, TRY: 0.113 },
+            BRL: { USD: 0.190, EUR: 0.162, GBP: 0.139, JPY: 21.0, CAD: 0.238, AUD: 0.257, CHF: 0.175, CNY: 1.23, INR: 14.2, MXN: 3.83, KRW: 219, SGD: 0.257, NZD: 0.270, SEK: 1.65, NOK: 1.69, DKK: 1.19, RUB: 14.4, ZAR: 2.82, TRY: 1.61 },
+            MXN: { USD: 0.0498, EUR: 0.0424, GBP: 0.0364, JPY: 5.47, CAD: 0.0622, AUD: 0.0671, CHF: 0.0459, CNY: 0.321, INR: 3.70, BRL: 0.261, KRW: 57.2, SGD: 0.0671, NZD: 0.0706, SEK: 0.430, NOK: 0.440, DKK: 0.311, RUB: 3.76, ZAR: 0.736, TRY: 0.420 },
+            KRW: { USD: 0.000870, EUR: 0.000739, GBP: 0.000635, JPY: 0.0957, CAD: 0.00109, AUD: 0.00117, CHF: 0.000800, CNY: 0.00561, INR: 0.0648, BRL: 0.00457, MXN: 0.0175, SGD: 0.00117, NZD: 0.00123, SEK: 0.00752, NOK: 0.00770, DKK: 0.00544, RUB: 0.0657, ZAR: 0.0129, TRY: 0.00735 },
+            SGD: { USD: 0.741, EUR: 0.629, GBP: 0.541, JPY: 81.5, CAD: 0.926, AUD: 1.00, CHF: 0.680, CNY: 4.78, INR: 55.2, BRL: 3.89, MXN: 14.9, KRW: 852, NZD: 1.05, SEK: 6.41, NOK: 6.56, DKK: 4.63, RUB: 55.9, ZAR: 11.0, TRY: 6.26 },
+            NZD: { USD: 0.704, EUR: 0.599, GBP: 0.514, JPY: 77.5, CAD: 0.880, AUD: 0.952, CHF: 0.648, CNY: 4.55, INR: 52.5, BRL: 3.70, MXN: 14.2, KRW: 810, SGD: 0.952, SEK: 6.09, NOK: 6.23, DKK: 4.40, RUB: 53.2, ZAR: 10.4, TRY: 5.95 },
+            SEK: { USD: 0.116, EUR: 0.0982, GBP: 0.0844, JPY: 12.7, CAD: 0.144, AUD: 0.156, CHF: 0.106, CNY: 0.746, INR: 8.61, BRL: 0.607, MXN: 2.32, KRW: 133, SGD: 0.156, NZD: 0.164, NOK: 1.02, DKK: 0.722, RUB: 8.73, ZAR: 1.71, TRY: 0.976 },
+            NOK: { USD: 0.113, EUR: 0.0961, GBP: 0.0825, JPY: 12.4, CAD: 0.141, AUD: 0.152, CHF: 0.104, CNY: 0.730, INR: 8.43, BRL: 0.594, MXN: 2.27, KRW: 130, SGD: 0.152, NZD: 0.161, SEK: 0.980, DKK: 0.707, RUB: 8.54, ZAR: 1.67, TRY: 0.955 },
+            DKK: { USD: 0.160, EUR: 0.136, GBP: 0.117, JPY: 17.6, CAD: 0.200, AUD: 0.216, CHF: 0.147, CNY: 1.03, INR: 11.9, BRL: 0.840, MXN: 3.21, KRW: 184, SGD: 0.216, NZD: 0.227, SEK: 1.39, NOK: 1.41, RUB: 17.1, ZAR: 3.36, TRY: 1.92 },
+            RUB: { USD: 0.0132, EUR: 0.0113, GBP: 0.00967, JPY: 1.46, CAD: 0.0166, AUD: 0.0179, CHF: 0.0122, CNY: 0.0854, INR: 0.987, BRL: 0.0695, MXN: 0.266, KRW: 15.2, SGD: 0.0179, NZD: 0.0188, SEK: 0.115, NOK: 0.117, DKK: 0.0827, ZAR: 0.196, TRY: 0.112 },
+            ZAR: { USD: 0.0676, EUR: 0.0574, GBP: 0.0493, JPY: 7.43, CAD: 0.0845, AUD: 0.0912, CHF: 0.0622, CNY: 0.437, INR: 5.04, BRL: 0.355, MXN: 1.36, KRW: 77.7, SGD: 0.0912, NZD: 0.0961, SEK: 0.585, NOK: 0.599, DKK: 0.423, RUB: 5.11, TRY: 2.91 },
+            TRY: { USD: 0.118, EUR: 0.101, GBP: 0.0864, JPY: 13.0, CAD: 0.148, AUD: 0.160, CHF: 0.109, CNY: 0.764, INR: 8.82, BRL: 0.621, MXN: 2.38, KRW: 136, SGD: 0.160, NZD: 0.168, SEK: 1.02, NOK: 1.05, DKK: 0.740, RUB: 8.94, ZAR: 1.75 }
+        };
+
+        let conversionHistory = [];
+
+        function convertCurrency() {
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            
+            if (isNaN(amount) || amount < 0) {
+                document.getElementById('conversionResult').style.display = 'none';
+                return;
+            }
+            
+            let rate = 1;
+            if (fromCurrency === toCurrency) {
+                rate = 1;
+            } else if (exchangeRates[fromCurrency] && exchangeRates[fromCurrency][toCurrency]) {
+                rate = exchangeRates[fromCurrency][toCurrency];
+            } else if (exchangeRates[toCurrency] && exchangeRates[toCurrency][fromCurrency]) {
+                rate = 1 / exchangeRates[toCurrency][fromCurrency];
+            }
+            
+            const convertedAmount = amount * rate;
+            
+            // Update display
+            document.getElementById('exchangeRate').textContent = rate.toFixed(4);
+            document.getElementById('fromAmount').textContent = formatCurrency(amount, fromCurrency);
+            document.getElementById('toAmount').textContent = formatCurrency(convertedAmount, toCurrency);
+            document.getElementById('fromCurrencyLabel').textContent = fromCurrency;
+            document.getElementById('toCurrencyLabel').textContent = toCurrency;
+            
+            // Update details
+            const details = document.getElementById('conversionDetails');
+            details.innerHTML = `
+                <p><strong>Exchange Rate:</strong> 1 ${fromCurrency} = ${rate.toFixed(4)} ${toCurrency}</p>
+                <p><strong>Inverse Rate:</strong> 1 ${toCurrency} = ${(1/rate).toFixed(4)} ${fromCurrency}</p>
+                <p><strong>Amount:</strong> ${formatCurrency(amount, fromCurrency)}</p>
+                <p><strong>Converted Amount:</strong> ${formatCurrency(convertedAmount, toCurrency)}</p>
+            `;
+            
+            // Add to history
+            addToHistory(fromCurrency, toCurrency, amount, convertedAmount, rate);
+            
+            document.getElementById('conversionResult').style.display = 'block';
+        }
+
+        function formatCurrency(amount, currency) {
+            const symbols = {
+                USD: '$', EUR: '€', GBP: '£', JPY: '¥', CAD: 'C$', AUD: 'A$', 
+                CHF: 'CHF', CNY: '¥', INR: '₹', BRL: 'R$', MXN: '$', KRW: '₩',
+                SGD: 'S$', NZD: 'NZ$', SEK: 'kr', NOK: 'kr', DKK: 'kr', 
+                RUB: '₽', ZAR: 'R', TRY: '₺'
+            };
+            
+            const symbol = symbols[currency] || currency;
+            return `${symbol}${amount.toFixed(2)}`;
+        }
+
+        function swapCurrencies() {
+            const fromCurrency = document.getElementById('fromCurrency').value;
+            const toCurrency = document.getElementById('toCurrency').value;
+            
+            document.getElementById('fromCurrency').value = toCurrency;
+            document.getElementById('toCurrency').value = fromCurrency;
+            
+            convertCurrency();
+        }
+
+        function clearConverter() {
+            document.getElementById('amount').value = '';
+            document.getElementById('conversionResult').style.display = 'none';
+        }
+
+        function addToHistory(fromCurrency, toCurrency, amount, convertedAmount, rate) {
+            const historyItem = {
+                fromCurrency,
+                toCurrency,
+                amount,
+                convertedAmount,
+                rate,
+                timestamp: new Date()
+            };
+            
+            conversionHistory.unshift(historyItem);
+            if (conversionHistory.length > 10) {
+                conversionHistory.pop();
+            }
+            
+            updateHistory();
+        }
+
+        function updateHistory() {
+            const historyDiv = document.getElementById('conversionHistory');
+            
+            if (conversionHistory.length === 0) {
+                historyDiv.innerHTML = '<div class="text-muted">No conversions yet</div>';
+                return;
+            }
+            
+            historyDiv.innerHTML = conversionHistory.map(item => 
+                `<div class="history-item" onclick="loadFromHistory('${item.fromCurrency}', '${item.toCurrency}', ${item.amount})">
+                    <div><strong>${formatCurrency(item.amount, item.fromCurrency)} → ${formatCurrency(item.convertedAmount, item.toCurrency)}</strong></div>
+                    <div class="text-muted">${item.timestamp.toLocaleTimeString()}</div>
+                </div>`
+            ).join('');
+        }
+
+        function loadFromHistory(fromCurrency, toCurrency, amount) {
+            document.getElementById('fromCurrency').value = fromCurrency;
+            document.getElementById('toCurrency').value = toCurrency;
+            document.getElementById('amount').value = amount;
+            convertCurrency();
+        }
+
+        function clearHistory() {
+            conversionHistory = [];
+            updateHistory();
+        }
+
+        function loadPopularPairs() {
+            const popularPairs = [
+                { from: 'USD', to: 'EUR', name: 'USD to EUR' },
+                { from: 'EUR', to: 'USD', name: 'EUR to USD' },
+                { from: 'USD', to: 'GBP', name: 'USD to GBP' },
+                { from: 'GBP', to: 'USD', name: 'GBP to USD' },
+                { from: 'USD', to: 'JPY', name: 'USD to JPY' },
+                { from: 'JPY', to: 'USD', name: 'JPY to USD' }
+            ];
+            
+            const container = document.getElementById('popularPairs');
+            container.innerHTML = popularPairs.map(pair => {
+                const rate = exchangeRates[pair.from] && exchangeRates[pair.from][pair.to] ? 
+                    exchangeRates[pair.from][pair.to] : 
+                    (exchangeRates[pair.to] && exchangeRates[pair.to][pair.from] ? 1/exchangeRates[pair.to][pair.from] : 1);
+                
+                return `
+                    <div class="col-md-4 mb-2">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h6 class="card-title">${pair.name}</h6>
+                                <p class="card-text">1 ${pair.from} = ${rate.toFixed(4)} ${pair.to}</p>
+                                <button class="btn btn-sm btn-outline-primary" onclick="loadPair('${pair.from}', '${pair.to}')">Use</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadPair(fromCurrency, toCurrency) {
+            document.getElementById('fromCurrency').value = fromCurrency;
+            document.getElementById('toCurrency').value = toCurrency;
+            document.getElementById('amount').value = '1';
+            convertCurrency();
+        }
+
+        // Initialize
+        loadPopularPairs();
+        convertCurrency();
+    </script>
+</body>
+</html> 

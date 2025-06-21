@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Counter | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Character Counter</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="textInput" class="form-label">Enter or paste your text</label>
+                                <textarea class="form-control" id="textInput" rows="10" placeholder="Type or paste your text here to analyze characters..."></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-3 col-sm-6 mb-2">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h3 class="text-primary" id="totalChars">0</h3>
+                                            <small class="text-muted">Total Characters</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 mb-2">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h3 class="text-success" id="charsNoSpace">0</h3>
+                                            <small class="text-muted">Characters (no spaces)</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 mb-2">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h3 class="text-info" id="letters">0</h3>
+                                            <small class="text-muted">Letters</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 mb-2">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h3 class="text-warning" id="numbers">0</h3>
+                                            <small class="text-muted">Numbers</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Character Breakdown</h5>
+                                            <p class="mb-1">Spaces: <strong id="spaces">0</strong></p>
+                                            <p class="mb-1">Punctuation: <strong id="punctuation">0</strong></p>
+                                            <p class="mb-1">Special Characters: <strong id="specialChars">0</strong></p>
+                                            <p class="mb-1">Uppercase Letters: <strong id="uppercase">0</strong></p>
+                                            <p class="mb-1">Lowercase Letters: <strong id="lowercase">0</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Most Common Characters</h5>
+                                            <div id="charFrequency"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="word-counter.html">Word Counter</a></li>
+                            <li><a href="case-converter.html">Case Converter</a></li>
+                            <li><a href="fancy-text-generator.html">Fancy Text Generator</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        const textInput = document.getElementById('textInput');
+        
+        textInput.addEventListener('input', function() {
+            analyzeCharacters();
+        });
+
+        function analyzeCharacters() {
+            const text = textInput.value;
+            
+            // Total characters
+            document.getElementById('totalChars').textContent = text.length;
+            
+            // Characters without spaces
+            document.getElementById('charsNoSpace').textContent = text.replace(/\s/g, '').length;
+            
+            // Letters
+            const letters = text.match(/[a-zA-Z]/g) || [];
+            document.getElementById('letters').textContent = letters.length;
+            
+            // Numbers
+            const numbers = text.match(/[0-9]/g) || [];
+            document.getElementById('numbers').textContent = numbers.length;
+            
+            // Spaces
+            const spaces = text.match(/\s/g) || [];
+            document.getElementById('spaces').textContent = spaces.length;
+            
+            // Punctuation
+            const punctuation = text.match(/[.,!?;:'"()]/g) || [];
+            document.getElementById('punctuation').textContent = punctuation.length;
+            
+            // Special characters
+            const specialChars = text.match(/[^a-zA-Z0-9\s.,!?;:'"()]/g) || [];
+            document.getElementById('specialChars').textContent = specialChars.length;
+            
+            // Uppercase letters
+            const uppercase = text.match(/[A-Z]/g) || [];
+            document.getElementById('uppercase').textContent = uppercase.length;
+            
+            // Lowercase letters
+            const lowercase = text.match(/[a-z]/g) || [];
+            document.getElementById('lowercase').textContent = lowercase.length;
+            
+            // Character frequency
+            analyzeCharacterFrequency(text);
+        }
+
+        function analyzeCharacterFrequency(text) {
+            const charCount = {};
+            const cleanText = text.toLowerCase().replace(/\s/g, '');
+            
+            for (let char of cleanText) {
+                charCount[char] = (charCount[char] || 0) + 1;
+            }
+            
+            const sortedChars = Object.entries(charCount)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5);
+            
+            let frequencyHtml = '';
+            sortedChars.forEach(([char, count]) => {
+                frequencyHtml += `<p class="mb-1">"${char}": <strong>${count}</strong></p>`;
+            });
+            
+            document.getElementById('charFrequency').innerHTML = frequencyHtml || '<p class="text-muted">No characters found</p>';
+        }
+    </script>
+</body>
+</html> 

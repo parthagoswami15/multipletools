@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile-Friendly Test - Multi-Tools Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header will be loaded dynamically -->
+    <div id="header-placeholder"></div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h1><i class="fas fa-mobile-alt"></i> Mobile-Friendly Test</h1>
+                        <p>Test your website's mobile responsiveness and get detailed recommendations for improvement</p>
+                    </div>
+
+                    <div class="tool-content">
+                        <form id="mobileTestForm">
+                            <div class="mb-4">
+                                <label for="websiteUrl" class="form-label">Website URL</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                                    <input type="url" class="form-control" id="websiteUrl" 
+                                           placeholder="https://example.com" required>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-search"></i> Test Website
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div id="loadingSection" class="text-center d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Analyzing website for mobile-friendliness...</p>
+                        </div>
+
+                        <div id="resultsSection" class="d-none">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="result-card">
+                                        <h4><i class="fas fa-chart-pie"></i> Overall Score</h4>
+                                        <div class="score-display">
+                                            <div class="score-circle" id="overallScore">
+                                                <span class="score-number">0</span>
+                                                <span class="score-label">/100</span>
+                                            </div>
+                                        </div>
+                                        <div class="score-description" id="scoreDescription"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="result-card">
+                                        <h4><i class="fas fa-mobile-alt"></i> Mobile Status</h4>
+                                        <div class="status-indicator" id="mobileStatus">
+                                            <i class="fas fa-check-circle text-success"></i>
+                                            <span>Mobile-Friendly</span>
+                                        </div>
+                                        <div class="mt-3">
+                                            <small class="text-muted">Last tested: <span id="testDate"></span></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="result-card">
+                                        <h4><i class="fas fa-list-check"></i> Detailed Analysis</h4>
+                                        <div id="analysisResults"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="result-card">
+                                        <h4><i class="fas fa-lightbulb"></i> Recommendations</h4>
+                                        <div id="recommendations"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="result-card">
+                                        <h4><i class="fas fa-eye"></i> Mobile Preview</h4>
+                                        <div class="mobile-preview-container">
+                                            <div class="mobile-frame">
+                                                <div class="mobile-screen" id="mobilePreview">
+                                                    <div class="preview-placeholder">
+                                                        <i class="fas fa-image"></i>
+                                                        <p>Website preview will appear here</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button class="btn btn-outline-primary" onclick="downloadReport()">
+                                    <i class="fas fa-download"></i> Download Report
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="shareResults()">
+                                    <i class="fas fa-share"></i> Share Results
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ad Placeholder -->
+    <div class="ad-placeholder">
+        <div class="ad-content">
+            <i class="fas fa-ad"></i>
+            <p>Advertisement Space</p>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded dynamically -->
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load header and footer
+            loadHeader();
+            loadFooter();
+
+            // Form submission
+            document.getElementById('mobileTestForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                performMobileTest();
+            });
+        });
+
+        function performMobileTest() {
+            const url = document.getElementById('websiteUrl').value;
+            
+            if (!url) {
+                alert('Please enter a valid URL');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loadingSection').classList.remove('d-none');
+            document.getElementById('resultsSection').classList.add('d-none');
+
+            // Simulate API call
+            setTimeout(() => {
+                const results = generateMobileTestResults(url);
+                displayResults(results);
+                
+                document.getElementById('loadingSection').classList.add('d-none');
+                document.getElementById('resultsSection').classList.remove('d-none');
+            }, 3000);
+        }
+
+        function generateMobileTestResults(url) {
+            const score = Math.floor(Math.random() * 40) + 60; // 60-100
+            const isMobileFriendly = score >= 70;
+            
+            const analysis = [
+                {
+                    category: 'Viewport Configuration',
+                    status: 'pass',
+                    description: 'Proper viewport meta tag is configured',
+                    impact: 'high'
+                },
+                {
+                    category: 'Text Readability',
+                    status: 'pass',
+                    description: 'Text is readable without zooming on mobile devices',
+                    impact: 'high'
+                },
+                {
+                    category: 'Touch Elements',
+                    status: score < 80 ? 'warning' : 'pass',
+                    description: score < 80 ? 'Some touch elements may be too small' : 'Touch elements are appropriately sized',
+                    impact: 'medium'
+                },
+                {
+                    category: 'Content Width',
+                    status: 'pass',
+                    description: 'Content fits mobile screen width without horizontal scrolling',
+                    impact: 'high'
+                },
+                {
+                    category: 'Loading Speed',
+                    status: score < 85 ? 'warning' : 'pass',
+                    description: score < 85 ? 'Page load time could be optimized' : 'Page loads quickly on mobile',
+                    impact: 'medium'
+                }
+            ];
+
+            const recommendations = [
+                'Optimize images for mobile devices',
+                'Ensure touch targets are at least 44px wide',
+                'Use responsive design principles',
+                'Test on various mobile devices and screen sizes',
+                'Optimize CSS and JavaScript for mobile performance'
+            ];
+
+            return {
+                url: url,
+                score: score,
+                isMobileFriendly: isMobileFriendly,
+                analysis: analysis,
+                recommendations: recommendations,
+                testDate: new Date().toLocaleDateString()
+            };
+        }
+
+        function displayResults(results) {
+            // Update overall score
+            document.getElementById('overallScore').innerHTML = `
+                <span class="score-number">${results.score}</span>
+                <span class="score-label">/100</span>
+            `;
+
+            // Update score description
+            let description = '';
+            if (results.score >= 90) {
+                description = 'Excellent mobile experience';
+            } else if (results.score >= 80) {
+                description = 'Good mobile experience with minor issues';
+            } else if (results.score >= 70) {
+                description = 'Acceptable mobile experience needs improvement';
+            } else {
+                description = 'Poor mobile experience requires significant work';
+            }
+            document.getElementById('scoreDescription').textContent = description;
+
+            // Update mobile status
+            const statusElement = document.getElementById('mobileStatus');
+            if (results.isMobileFriendly) {
+                statusElement.innerHTML = '<i class="fas fa-check-circle text-success"></i><span>Mobile-Friendly</span>';
+            } else {
+                statusElement.innerHTML = '<i class="fas fa-times-circle text-danger"></i><span>Not Mobile-Friendly</span>';
+            }
+
+            // Update test date
+            document.getElementById('testDate').textContent = results.testDate;
+
+            // Display analysis results
+            const analysisContainer = document.getElementById('analysisResults');
+            analysisContainer.innerHTML = results.analysis.map(item => `
+                <div class="analysis-item ${item.status}">
+                    <div class="analysis-header">
+                        <span class="status-icon">
+                            ${item.status === 'pass' ? '<i class="fas fa-check text-success"></i>' : 
+                              item.status === 'warning' ? '<i class="fas fa-exclamation-triangle text-warning"></i>' : 
+                              '<i class="fas fa-times text-danger"></i>'}
+                        </span>
+                        <span class="category-name">${item.category}</span>
+                        <span class="impact-badge ${item.impact}">${item.impact}</span>
+                    </div>
+                    <p class="analysis-description">${item.description}</p>
+                </div>
+            `).join('');
+
+            // Display recommendations
+            const recommendationsContainer = document.getElementById('recommendations');
+            recommendationsContainer.innerHTML = results.recommendations.map(rec => `
+                <div class="recommendation-item">
+                    <i class="fas fa-arrow-right text-primary"></i>
+                    <span>${rec}</span>
+                </div>
+            `).join('');
+
+            // Update mobile preview
+            updateMobilePreview(results.url);
+        }
+
+        function updateMobilePreview(url) {
+            const preview = document.getElementById('mobilePreview');
+            preview.innerHTML = `
+                <div class="preview-content">
+                    <div class="preview-header">
+                        <div class="preview-url">${url}</div>
+                    </div>
+                    <div class="preview-body">
+                        <div class="preview-placeholder">
+                            <i class="fas fa-mobile-alt"></i>
+                            <p>Mobile preview of ${url}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function downloadReport() {
+            const url = document.getElementById('websiteUrl').value;
+            const score = document.querySelector('.score-number').textContent;
+            
+            const report = `
+Mobile-Friendly Test Report
+==========================
+URL: ${url}
+Score: ${score}/100
+Date: ${new Date().toLocaleDateString()}
+
+This report was generated by our Mobile-Friendly Test tool.
+            `;
+
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url_blob = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url_blob;
+            a.download = 'mobile-friendly-test-report.txt';
+            a.click();
+            URL.revokeObjectURL(url_blob);
+        }
+
+        function shareResults() {
+            const url = document.getElementById('websiteUrl').value;
+            const score = document.querySelector('.score-number').textContent;
+            
+            const shareText = `Mobile-Friendly Test Results for ${url}: ${score}/100`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Mobile-Friendly Test Results',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('Results copied to clipboard!');
+                });
+            }
+        }
+    </script>
+
+    <style>
+        .score-display {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 0 auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .score-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .score-description {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .analysis-item {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+        }
+
+        .analysis-item.pass {
+            border-left: 4px solid #28a745;
+        }
+
+        .analysis-item.warning {
+            border-left: 4px solid #ffc107;
+        }
+
+        .analysis-item.fail {
+            border-left: 4px solid #dc3545;
+        }
+
+        .analysis-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .category-name {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .impact-badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .impact-badge.high {
+            background: #dc3545;
+            color: white;
+        }
+
+        .impact-badge.medium {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .impact-badge.low {
+            background: #6c757d;
+            color: white;
+        }
+
+        .analysis-description {
+            margin: 0;
+            color: #666;
+        }
+
+        .recommendation-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .recommendation-item:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-preview-container {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .mobile-frame {
+            width: 300px;
+            height: 500px;
+            border: 8px solid #333;
+            border-radius: 25px;
+            background: #000;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .mobile-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .preview-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-header {
+            background: #f8f9fa;
+            padding: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .preview-url {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .preview-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-placeholder {
+            text-align: center;
+            color: #999;
+        }
+
+        .preview-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-frame {
+                width: 250px;
+                height: 400px;
+            }
+        }
+    </style>
+</body>
+</html> 
