@@ -11,7 +11,174 @@
 </head>
 <body>
     <!-- Header will be loaded dynamically -->
-    <div id="header-placeholder"></div>
+    <header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">
+        <i class="fas fa-tools"></i> Multi-Tools
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="imageToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-image"></i> Image Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="imageToolsDropdown">
+              <li><a class="dropdown-item" href="image-to-png.html">Image to PNG</a></li>
+              <li><a class="dropdown-item" href="image-to-jpg.html">Image to JPG</a></li>
+              <li><a class="dropdown-item" href="image-resizer.html">Image Resizer</a></li>
+              <li><a class="dropdown-item" href="image-compressor.html">Image Compressor</a></li>
+              <li><a class="dropdown-item" href="image-cropper.html">Image Cropper</a></li>
+              <li><a class="dropdown-item" href="image-to-base64.html">Image to Base64</a></li>
+              <li><a class="dropdown-item" href="webp-to-png.html">WebP to PNG</a></li>
+              <li><a class="dropdown-item" href="gif-maker.html">GIF Maker</a></li>
+              <li><a class="dropdown-item" href="qr-code-generator.html">QR Code Generator</a></li>
+              <li><a class="dropdown-item" href="screenshot-to-pdf.html">Screenshot to PDF</a></li>
+              <li><a class="dropdown-item" href="image-to-jpeg.html">Image to JPEG</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="textToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-font"></i> Text Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="textToolsDropdown">
+              <li><a class="dropdown-item" href="word-counter.html">Word Counter</a></li>
+              <li><a class="dropdown-item" href="character-counter.html">Character Counter</a></li>
+              <li><a class="dropdown-item" href="case-converter.html">Case Converter</a></li>
+              <li><a class="dropdown-item" href="plagiarism-checker.html">Plagiarism Checker</a></li>
+              <li><a class="dropdown-item" href="grammar-checker.html">Grammar Checker</a></li>
+              <li><a class="dropdown-item" href="text-to-speech.html">Text-to-Speech</a></li>
+              <li><a class="dropdown-item" href="speech-to-text.html">Speech-to-Text</a></li>
+              <li><a class="dropdown-item" href="url-encoder-decoder.html">URL Encoder/Decoder</a></li>
+              <li><a class="dropdown-item" href="fancy-text-generator.html">Fancy Text Generator</a></li>
+              <li><a class="dropdown-item" href="random-text-generator.html">Random Text Generator</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="convertToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-exchange-alt"></i> Convert Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="convertToolsDropdown">
+              <li><a class="dropdown-item" href="word-to-pdf.html">Word to PDF</a></li>
+              <li><a class="dropdown-item" href="pdf-to-word.html">PDF to Word</a></li>
+              <li><a class="dropdown-item" href="image-to-pdf.html">Image to PDF</a></li>
+              <li><a class="dropdown-item" href="pdf-to-ppt.html">PDF to PPT</a></li>
+              <li><a class="dropdown-item" href="ppt-to-pdf.html">PPT to PDF</a></li>
+              <li><a class="dropdown-item" href="word-to-ppt.html">Word to PPT</a></li>
+              <li><a class="dropdown-item" href="ppt-to-word.html">PPT to Word</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="unitConvertersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-ruler-combined"></i> Unit Converters
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="unitConvertersDropdown">
+              <li><a class="dropdown-item" href="length-converter.html">Length Converter</a></li>
+              <li><a class="dropdown-item" href="weight-converter.html">Weight Converter</a></li>
+              <li><a class="dropdown-item" href="speed-converter.html">Speed Converter</a></li>
+              <li><a class="dropdown-item" href="temperature-converter.html">Temperature Converter</a></li>
+              <li><a class="dropdown-item" href="volume-converter.html">Volume Converter</a></li>
+              <li><a class="dropdown-item" href="data-storage-converter.html">Data Storage Converter</a></li>
+              <li><a class="dropdown-item" href="energy-converter.html">Energy Converter</a></li>
+              <li><a class="dropdown-item" href="pressure-converter.html">Pressure Converter</a></li>
+              <li><a class="dropdown-item" href="fuel-efficiency-converter.html">Fuel Efficiency Converter</a></li>
+              <li><a class="dropdown-item" href="angle-converter.html">Angle Converter</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="seoToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-search"></i> SEO Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="seoToolsDropdown">
+              <li><a class="dropdown-item" href="mobile-friendly-test.html">Mobile-Friendly Test</a></li>
+              <li><a class="dropdown-item" href="page-speed-checker.html">Page Speed Checker</a></li>
+              <li><a class="dropdown-item" href="keyword-density-checker.html">Keyword Density Checker</a></li>
+              <li><a class="dropdown-item" href="backlink-checker.html">Backlink Checker</a></li>
+              <li><a class="dropdown-item" href="domain-authority-checker.html">Domain Authority Checker</a></li>
+              <li><a class="dropdown-item" href="google-index-checker.html">Google Index Checker</a></li>
+              <li><a class="dropdown-item" href="meta-tag-generator.html">Meta Tag Generator</a></li>
+              <li><a class="dropdown-item" href="robots-txt-generator.html">Robots.txt Generator</a></li>
+              <li><a class="dropdown-item" href="sitemap-generator.html">Sitemap Generator</a></li>
+              <li><a class="dropdown-item" href="xml-sitemap-validator.html">XML Sitemap Validator</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="developerToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-code"></i> Developer Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="developerToolsDropdown">
+              <li><a class="dropdown-item" href="json-formatter.html">JSON Formatter</a></li>
+              <li><a class="dropdown-item" href="html-to-markdown.html">HTML to Markdown</a></li>
+              <li><a class="dropdown-item" href="css-minifier.html">CSS Minifier</a></li>
+              <li><a class="dropdown-item" href="javascript-minifier.html">JavaScript Minifier</a></li>
+              <li><a class="dropdown-item" href="sql-formatter.html">SQL Formatter</a></li>
+              <li><a class="dropdown-item" href="htaccess-redirect-generator.html">HTACCESS Redirect</a></li>
+              <li><a class="dropdown-item" href="markdown-to-html.html">Markdown to HTML</a></li>
+              <li><a class="dropdown-item" href="color-code-picker.html">Color Code Picker</a></li>
+              <li><a class="dropdown-item" href="base64-encoder-decoder.html">Base64 Encoder/Decoder</a></li>
+              <li><a class="dropdown-item" href="ip-address-lookup.html">IP Address Lookup</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="socialMediaToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-share-alt"></i> Social Media Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="socialMediaToolsDropdown">
+              <li><a class="dropdown-item" href="youtube-thumbnail-downloader.html">YouTube Thumbnail Downloader</a></li>
+              <li><a class="dropdown-item" href="instagram-photo-downloader.html">Instagram Photo Downloader</a></li>
+              <li><a class="dropdown-item" href="twitter-video-downloader.html">Twitter Video Downloader</a></li>
+              <li><a class="dropdown-item" href="facebook-video-downloader.html">Facebook Video Downloader</a></li>
+              <li><a class="dropdown-item" href="tiktok-video-downloader.html">TikTok Video Downloader</a></li>
+              <li><a class="dropdown-item" href="youtube-tags-extractor.html">YouTube Tags Extractor</a></li>
+              <li><a class="dropdown-item" href="hashtag-generator.html">Hashtag Generator</a></li>
+              <li><a class="dropdown-item" href="social-media-post-generator.html">Social Media Post Generator</a></li>
+              <li><a class="dropdown-item" href="emoji-keyboard.html">Emoji Keyboard</a></li>
+              <li><a class="dropdown-item" href="twitter-character-counter.html">Twitter Character Counter</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="mathToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-calculator"></i> Math & Calculators
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="mathToolsDropdown">
+              <li><a class="dropdown-item" href="percentage-calculator.html">Percentage Calculator</a></li>
+              <li><a class="dropdown-item" href="age-calculator.html">Age Calculator</a></li>
+              <li><a class="dropdown-item" href="bmi-calculator.html">BMI Calculator</a></li>
+              <li><a class="dropdown-item" href="loan-emi-calculator.html">Loan EMI Calculator</a></li>
+              <li><a class="dropdown-item" href="scientific-calculator.html">Scientific Calculator</a></li>
+              <li><a class="dropdown-item" href="discount-calculator.html">Discount Calculator</a></li>
+              <li><a class="dropdown-item" href="currency-converter.html">Currency Converter</a></li>
+              <li><a class="dropdown-item" href="time-zone-converter.html">Time Zone Converter</a></li>
+              <li><a class="dropdown-item" href="binary-to-decimal-converter.html">Binary to Decimal</a></li>
+              <li><a class="dropdown-item" href="tip-calculator.html">Tip Calculator</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-info-circle"></i> About
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-envelope"></i> Contact
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
 
     <!-- Ad Placeholder -->
     <div class="ad-placeholder">
@@ -158,7 +325,29 @@
     </div>
 
     <!-- Footer will be loaded dynamically -->
-    <div id="footer-placeholder"></div>
+    <footer class="bg-light text-center text-lg-start mt-4">
+  <div class="container p-4">
+    <div class="row">
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Contact Us</h5>
+        <p>Email: info@multitools.com</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Follow Us</h5>
+        <a href="#" class="me-2">Twitter</a>
+        <a href="#" class="me-2">Facebook</a>
+        <a href="#">Instagram</a>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Legal</h5>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2024 Multi-Tools. All rights reserved.
+  </div>
+</footer> 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>

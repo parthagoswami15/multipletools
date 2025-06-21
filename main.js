@@ -1,8 +1,4 @@
 window.onload = function() {
-    // Load header and footer
-    loadHeader();
-    loadFooter();
-    
     // Check if the tool-search element exists before adding an event listener
     const toolSearch = document.getElementById('tool-search');
     if (toolSearch) {
@@ -10,38 +6,6 @@ window.onload = function() {
         toolSearch.addEventListener('input', searchTools);
     }
 };
-
-// Load header content
-function loadHeader() {
-    const headerPlaceholder = document.getElementById('header-placeholder');
-    if (headerPlaceholder) {
-        fetch('header.html')
-            .then(response => response.text())
-            .then(data => {
-                headerPlaceholder.innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading header:', error);
-                headerPlaceholder.innerHTML = '<div class="alert alert-warning">Header could not be loaded</div>';
-            });
-    }
-}
-
-// Load footer content
-function loadFooter() {
-    const footerPlaceholder = document.getElementById('footer-placeholder');
-    if (footerPlaceholder) {
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                footerPlaceholder.innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading footer:', error);
-                footerPlaceholder.innerHTML = '<div class="alert alert-warning">Footer could not be loaded</div>';
-            });
-    }
-}
 
 // Complete tool data with all Image Tools, Text Tools, Convert Tools, Math & Calculators, SEO Tools, Developer Tools, Unit Converters, and Social Media Tools
 const tools = [
@@ -102,6 +66,132 @@ const tools = [
     { name: 'Robots.txt Generator', category: 'SEO Tools', file: 'robots-txt-generator.html' },
     { name: 'Sitemap Generator', category: 'SEO Tools', file: 'sitemap-generator.html' },
     { name: 'XML Sitemap Validator', category: 'SEO Tools', file: 'xml-sitemap-validator.html' },
+    {
+        name: "Barcode Generator",
+        category: "Miscellaneous Tools",
+        url: "barcode-generator.html",
+        icon: "fas fa-barcode",
+        description: "Generate various types of barcodes."
+    },
+    {
+        name: "Meme Generator",
+        category: "Miscellaneous Tools",
+        url: "meme-generator.html",
+        icon: "fas fa-laugh-beam",
+        description: "Create your own memes by adding text to images."
+    },
+    {
+        name: "Resume Builder",
+        category: "Miscellaneous Tools",
+        url: "resume-builder.html",
+        icon: "fas fa-file-alt",
+        description: "Create a professional resume and download it as a PDF."
+    },
+    {
+        name: "Invoice Generator",
+        category: "Miscellaneous Tools",
+        url: "invoice-generator.html",
+        icon: "fas fa-file-invoice-dollar",
+        description: "Create and download professional invoices."
+    },
+    {
+        name: "Business Name Generator",
+        category: "Miscellaneous Tools",
+        url: "business-name-generator.html",
+        icon: "fas fa-lightbulb",
+        description: "Generate creative names for your business."
+    },
+    {
+        name: "Lottery Number Generator",
+        category: "Miscellaneous Tools",
+        url: "lottery-number-generator.html",
+        icon: "fas fa-ticket-alt",
+        description: "Generate random numbers for the lottery."
+    },
+    {
+        name: "Flip a Coin Simulator",
+        category: "Miscellaneous Tools",
+        url: "flip-a-coin-simulator.html",
+        icon: "fas fa-coins",
+        description: "Flip a virtual coin to make a decision."
+    },
+    {
+        name: "Random Number Generator",
+        category: "Miscellaneous Tools",
+        url: "random-number-generator.html",
+        icon: "fas fa-random",
+        description: "Generate a random number within a range."
+    },
+    {
+        name: "Dice Roller Simulator",
+        category: "Miscellaneous Tools",
+        url: "dice-roller-simulator.html",
+        icon: "fas fa-dice-d6",
+        description: "Roll one or more virtual dice."
+    },
+    {
+        name: "Password Strength Checker",
+        category: "Miscellaneous Tools",
+        url: "password-strength-checker.html",
+        icon: "fas fa-shield-alt",
+        description: "Check the strength of your password."
+    },
+    {
+        name: "Color Palette Generator",
+        category: "Miscellaneous Tools",
+        url: "color-palette-generator.html",
+        icon: "fas fa-palette",
+        description: "Generate beautiful color palettes for your projects."
+    },
+    {
+        name: "Unit Price Calculator",
+        category: "Miscellaneous Tools",
+        url: "unit-price-calculator.html",
+        icon: "fas fa-tags",
+        description: "Calculate the unit price from total price and quantity."
+    },
+    {
+        name: "Age Difference Calculator",
+        category: "Miscellaneous Tools",
+        url: "age-difference-calculator.html",
+        icon: "fas fa-birthday-cake",
+        description: "Calculate the age difference between two dates of birth."
+    },
+    {
+        name: "Random Team Generator",
+        category: "Miscellaneous Tools",
+        url: "random-team-generator.html",
+        icon: "fas fa-users",
+        description: "Randomly assign people to teams."
+    },
+    {
+        name: "Roman Numeral Converter",
+        category: "Miscellaneous Tools",
+        url: "roman-numeral-converter.html",
+        icon: "fas fa-sort-numeric-up",
+        description: "Convert between numbers and Roman numerals."
+    },
+    {
+        name: "Text Case Converter",
+        category: "Miscellaneous Tools",
+        url: "text-case-converter.html",
+        icon: "fas fa-font",
+        description: "Convert text between different case formats (camelCase, snake_case, etc.)."
+    },
+    {
+        name: "Password Generator",
+        category: "Miscellaneous Tools",
+        url: "password-generator.html",
+        icon: "fas fa-key",
+        description: "Generate strong, random passwords with custom options."
+    },
+    {
+        name: "Text Reverser",
+        category: "Miscellaneous Tools",
+        url: "text-reverser.html",
+        icon: "fas fa-exchange-alt",
+        description: "Reverse text by characters or words."
+    },
     
     // Developer Tools
     { name: 'JSON Formatter', category: 'Developer Tools', file: 'json-formatter.html' },
