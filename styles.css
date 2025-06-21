@@ -21,4 +21,48 @@ header .navbar {
 
 body {
     padding-top: 70px; /* Adjust this value based on the actual height of your sticky header */
+}
+
+/* Additional utility classes */
+.tool-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .card:hover {
+        transform: none;
+    }
+    
+    body {
+        padding-top: 60px;
+    }
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Error states */
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Success states */
+.success-message {
+    color: #198754;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
 } 

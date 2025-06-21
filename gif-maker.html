@@ -1,1 +1,148 @@
- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Maker | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">GIF Maker</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="imageInput" class="form-label">Upload Images</label>
+                                <input type="file" class="form-control" id="imageInput" multiple accept="image/*">
+                                <small class="form-text text-muted">Select multiple images to create an animated GIF</small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="frameDelay" class="form-label">Frame Delay (milliseconds)</label>
+                                <input type="number" class="form-control" id="frameDelay" value="500" min="100" max="3000">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="gifQuality" class="form-label">GIF Quality</label>
+                                <select class="form-control" id="gifQuality">
+                                    <option value="10">High Quality</option>
+                                    <option value="20" selected>Medium Quality</option>
+                                    <option value="30">Low Quality</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <button class="btn btn-primary me-2" onclick="createGIF()">Create GIF</button>
+                                <button class="btn btn-secondary" onclick="clearImages()">Clear Images</button>
+                            </div>
+                            
+                            <div id="imagePreview" class="mb-3">
+                                <!-- Image previews will be shown here -->
+                            </div>
+                            
+                            <div id="gifResult" class="mb-3" style="display: none;">
+                                <h5>Generated GIF</h5>
+                                <img id="generatedGif" class="img-fluid border" alt="Generated GIF">
+                                <div class="mt-2">
+                                    <button class="btn btn-success" onclick="downloadGIF()">Download GIF</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="image-resizer.html">Image Resizer</a></li>
+                            <li><a href="image-compressor.html">Image Compressor</a></li>
+                            <li><a href="image-cropper.html">Image Cropper</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        let uploadedImages = [];
+        
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            uploadedImages = [];
+            
+            files.forEach((file, index) => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedImages.push(e.target.result);
+                        updateImagePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+        
+        function updateImagePreview() {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '<h6>Uploaded Images:</h6>';
+            
+            uploadedImages.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.style.width = '100px';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                img.style.margin = '5px';
+                img.style.border = '1px solid #ddd';
+                preview.appendChild(img);
+            });
+        }
+        
+        function createGIF() {
+            if (uploadedImages.length < 2) {
+                alert('Please upload at least 2 images to create a GIF');
+                return;
+            }
+            
+            // Simple GIF creation simulation
+            alert('GIF creation feature requires additional libraries. This is a demonstration version.');
+            
+            // In a real implementation, you would use a library like gif.js
+            // For now, we'll show a placeholder
+            document.getElementById('gifResult').style.display = 'block';
+            document.getElementById('generatedGif').src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+        }
+        
+        function downloadGIF() {
+            alert('Download feature would be implemented with the GIF creation library.');
+        }
+        
+        function clearImages() {
+            uploadedImages = [];
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('gifResult').style.display = 'none';
+        }
+    </script>
+</body>
+</html> 

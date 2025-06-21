@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Formatter | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">SQL Formatter</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="sqlInput" class="form-label">Enter your SQL query</label>
+                                <textarea class="form-control" id="sqlInput" rows="10" placeholder="Paste your SQL query here to format it..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary me-2" onclick="formatSQL()">Format SQL</button>
+                                <button class="btn btn-secondary me-2" onclick="minifySQL()">Minify SQL</button>
+                                <button class="btn btn-outline-secondary" onclick="clearSQL()">Clear</button>
+                            </div>
+                            <div class="mb-3">
+                                <label for="formattedSQL" class="form-label">Formatted SQL</label>
+                                <textarea class="form-control" id="formattedSQL" rows="15" readonly></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-success" onclick="copyToClipboard()">Copy to Clipboard</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="json-formatter.html">JSON Formatter</a></li>
+                            <li><a href="css-minifier.html">CSS Minifier</a></li>
+                            <li><a href="javascript-minifier.html">JavaScript Minifier</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        function formatSQL() {
+            const input = document.getElementById('sqlInput').value;
+            if (!input.trim()) {
+                alert('Please enter SQL to format');
+                return;
+            }
+            
+            // Simple SQL formatting logic
+            let formatted = input
+                .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+                .replace(/\s*,\s*/g, ', ') // Format commas
+                .replace(/\s*=\s*/g, ' = ') // Format equals
+                .replace(/\s*\(\s*/g, ' (') // Format opening parentheses
+                .replace(/\s*\)\s*/g, ') ') // Format closing parentheses
+                .replace(/\s*SELECT\s+/gi, '\nSELECT ') // Format SELECT
+                .replace(/\s*FROM\s+/gi, '\nFROM ') // Format FROM
+                .replace(/\s*WHERE\s+/gi, '\nWHERE ') // Format WHERE
+                .replace(/\s*GROUP BY\s+/gi, '\nGROUP BY ') // Format GROUP BY
+                .replace(/\s*ORDER BY\s+/gi, '\nORDER BY ') // Format ORDER BY
+                .replace(/\s*HAVING\s+/gi, '\nHAVING ') // Format HAVING
+                .replace(/\s*JOIN\s+/gi, '\nJOIN ') // Format JOIN
+                .replace(/\s*LEFT JOIN\s+/gi, '\nLEFT JOIN ') // Format LEFT JOIN
+                .replace(/\s*RIGHT JOIN\s+/gi, '\nRIGHT JOIN ') // Format RIGHT JOIN
+                .replace(/\s*INNER JOIN\s+/gi, '\nINNER JOIN ') // Format INNER JOIN
+                .replace(/\s*OUTER JOIN\s+/gi, '\nOUTER JOIN ') // Format OUTER JOIN
+                .replace(/\s*UNION\s+/gi, '\nUNION ') // Format UNION
+                .replace(/\s*INSERT INTO\s+/gi, '\nINSERT INTO ') // Format INSERT INTO
+                .replace(/\s*UPDATE\s+/gi, '\nUPDATE ') // Format UPDATE
+                .replace(/\s*DELETE FROM\s+/gi, '\nDELETE FROM ') // Format DELETE FROM
+                .replace(/\s*CREATE TABLE\s+/gi, '\nCREATE TABLE ') // Format CREATE TABLE
+                .replace(/\s*ALTER TABLE\s+/gi, '\nALTER TABLE ') // Format ALTER TABLE
+                .replace(/\s*DROP TABLE\s+/gi, '\nDROP TABLE ') // Format DROP TABLE
+                .trim();
+            
+            document.getElementById('formattedSQL').value = formatted;
+        }
+        
+        function minifySQL() {
+            const input = document.getElementById('sqlInput').value;
+            if (!input.trim()) {
+                alert('Please enter SQL to minify');
+                return;
+            }
+            
+            // Remove extra whitespace and newlines
+            const minified = input
+                .replace(/\s+/g, ' ')
+                .replace(/\s*,\s*/g, ',')
+                .replace(/\s*=\s*/g, '=')
+                .replace(/\s*\(\s*/g, '(')
+                .replace(/\s*\)\s*/g, ')')
+                .trim();
+            
+            document.getElementById('formattedSQL').value = minified;
+        }
+        
+        function clearSQL() {
+            document.getElementById('sqlInput').value = '';
+            document.getElementById('formattedSQL').value = '';
+        }
+        
+        function copyToClipboard() {
+            const formattedSQL = document.getElementById('formattedSQL');
+            formattedSQL.select();
+            formattedSQL.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand('copy');
+            alert('SQL copied to clipboard!');
+        }
+    </script>
+</body>
+</html> 

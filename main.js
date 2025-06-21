@@ -1,27 +1,47 @@
-// Dynamically load header and footer
-function loadComponent(id, file) {
-    fetch(file)
-        .then(res => res.text())
-        .then(data => {
-            const placeholder = document.getElementById(id);
-            if (placeholder) {
-                // Use DOMParser to ensure the string is treated as HTML
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data, 'text/html');
-                const component = doc.body.firstChild;
-                if (component) {
-                    placeholder.replaceWith(component);
-                }
-            }
-        });
+window.onload = function() {
+    // Load header and footer
+    loadHeader();
+    loadFooter();
+    
+    // Check if the tool-search element exists before adding an event listener
+    const toolSearch = document.getElementById('tool-search');
+    if (toolSearch) {
+        renderTools();
+        toolSearch.addEventListener('input', searchTools);
+    }
+};
+
+// Load header content
+function loadHeader() {
+    const headerPlaceholder = document.getElementById('header-placeholder');
+    if (headerPlaceholder) {
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                headerPlaceholder.innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading header:', error);
+                headerPlaceholder.innerHTML = '<div class="alert alert-warning">Header could not be loaded</div>';
+            });
+    }
 }
 
-window.onload = function() {
-    loadComponent('header-placeholder', 'header.html');
-    loadComponent('footer-placeholder', 'footer.html');
-    renderTools();
-    document.getElementById('tool-search').addEventListener('input', searchTools);
-};
+// Load footer content
+function loadFooter() {
+    const footerPlaceholder = document.getElementById('footer-placeholder');
+    if (footerPlaceholder) {
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                footerPlaceholder.innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+                footerPlaceholder.innerHTML = '<div class="alert alert-warning">Footer could not be loaded</div>';
+            });
+    }
+}
 
 // Complete tool data with all Image Tools, Text Tools, Convert Tools, Math & Calculators, SEO Tools, Developer Tools, Unit Converters, and Social Media Tools
 const tools = [
@@ -129,18 +149,20 @@ const categories = [
 
 function renderTools(filter = '') {
     const container = document.getElementById('tool-categories');
-    container.innerHTML = '';
-    categories.forEach(cat => {
-        const catTools = tools.filter(t => t.category === cat && t.name.toLowerCase().includes(filter.toLowerCase()));
-        if (catTools.length) {
-            let section = `<h3 class='mt-4 mb-3'>${cat}</h3><div class='row'>`;
-            catTools.forEach(tool => {
-                section += `<div class='col-md-3 col-sm-6 mb-4'><div class='card h-100'><div class='card-body d-flex flex-column'><h5 class='card-title'>${tool.name}</h5><a href='${tool.file}' class='btn btn-primary mt-auto'>Open</a></div></div></div>`;
-            });
-            section += '</div>';
-            container.innerHTML += section;
-        }
-    });
+    if (container) {
+        container.innerHTML = '';
+        categories.forEach(cat => {
+            const catTools = tools.filter(t => t.category === cat && t.name.toLowerCase().includes(filter.toLowerCase()));
+            if (catTools.length) {
+                let section = `<h3 class='mt-4 mb-3'>${cat}</h3><div class='row'>`;
+                catTools.forEach(tool => {
+                    section += `<div class='col-md-3 col-sm-6 mb-4'><div class='card h-100'><div class='card-body d-flex flex-column'><h5 class='card-title'>${tool.name}</h5><a href='${tool.file}' class='btn btn-primary mt-auto'>Open</a></div></div></div>`;
+                });
+                section += '</div>';
+                container.innerHTML += section;
+            }
+        });
+    }
 }
 
 function searchTools(e) {
