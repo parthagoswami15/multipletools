@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Checker | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .file-exists { color: green; }
+        .file-missing { color: red; }
+    </style>
+</head>
+<body>
+    <div class="container my-4">
+        <h1>Multi-Tools File Checker</h1>
+        <p>This page checks if all referenced files exist and are accessible.</p>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const files = [
+            'index.html', 'main.js', 'styles.css', 'header.html', 'footer.html',
+            'image-to-png.html', 'image-to-jpg.html', 'image-resizer.html', 'image-compressor.html',
+            'image-cropper.html', 'image-to-base64.html', 'webp-to-png.html', 'gif-maker.html',
+            'qr-code-generator.html', 'screenshot-to-pdf.html', 'image-to-jpeg.html',
+            'word-counter.html', 'character-counter.html', 'case-converter.html', 'plagiarism-checker.html',
+            'grammar-checker.html', 'text-to-speech.html', 'speech-to-text.html', 'url-encoder-decoder.html',
+            'fancy-text-generator.html', 'random-text-generator.html',
+            'word-to-pdf.html', 'pdf-to-word.html', 'image-to-pdf.html', 'pdf-to-ppt.html',
+            'ppt-to-pdf.html', 'word-to-ppt.html', 'ppt-to-word.html',
+            'percentage-calculator.html', 'age-calculator.html', 'bmi-calculator.html', 'loan-emi-calculator.html',
+            'scientific-calculator.html', 'discount-calculator.html', 'currency-converter.html',
+            'time-zone-converter.html', 'binary-to-decimal-converter.html', 'tip-calculator.html',
+            'mobile-friendly-test.html', 'page-speed-checker.html', 'keyword-density-checker.html',
+            'backlink-checker.html', 'domain-authority-checker.html', 'google-index-checker.html',
+            'meta-tag-generator.html', 'robots-txt-generator.html', 'sitemap-generator.html',
+            'xml-sitemap-validator.html',
+            'json-formatter.html', 'html-to-markdown.html', 'css-minifier.html', 'javascript-minifier.html',
+            'sql-formatter.html', 'htaccess-redirect-generator.html', 'markdown-to-html.html',
+            'color-code-picker.html', 'base64-encoder-decoder.html', 'ip-address-lookup.html',
+            'length-converter.html', 'weight-converter.html', 'speed-converter.html', 'temperature-converter.html',
+            'volume-converter.html', 'data-storage-converter.html', 'energy-converter.html',
+            'pressure-converter.html', 'fuel-efficiency-converter.html', 'angle-converter.html',
+            'youtube-thumbnail-downloader.html', 'instagram-photo-downloader.html', 'twitter-video-downloader.html',
+            'facebook-video-downloader.html', 'tiktok-video-downloader.html', 'youtube-tags-extractor.html',
+            'hashtag-generator.html', 'social-media-post-generator.html', 'emoji-keyboard.html',
+            'twitter-character-counter.html'
+        ];
+
+        async function checkFiles() {
+            const results = document.getElementById('results');
+            let html = '<div class="row">';
+            let exists = 0;
+            let missing = 0;
+
+            for (const file of files) {
+                try {
+                    const response = await fetch(file);
+                    if (response.ok) {
+                        html += `<div class="col-md-4 mb-2"><span class="file-exists">✓ ${file}</span></div>`;
+                        exists++;
+                    } else {
+                        html += `<div class="col-md-4 mb-2"><span class="file-missing">✗ ${file}</span></div>`;
+                        missing++;
+                    }
+                } catch (error) {
+                    html += `<div class="col-md-4 mb-2"><span class="file-missing">✗ ${file}</span></div>`;
+                    missing++;
+                }
+            }
+
+            html += '</div>';
+            html += `<div class="mt-3"><strong>Summary:</strong> ${exists} files exist, ${missing} files missing</div>`;
+            
+            results.innerHTML = html;
+        }
+
+        checkFiles();
+    </script>
+</body>
+</html> 
