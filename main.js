@@ -3,7 +3,16 @@ function loadComponent(id, file) {
     fetch(file)
         .then(res => res.text())
         .then(data => {
-            document.getElementById(id).innerHTML = data;
+            const placeholder = document.getElementById(id);
+            if (placeholder) {
+                // Use DOMParser to ensure the string is treated as HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+                const component = doc.body.firstChild;
+                if (component) {
+                    placeholder.replaceWith(component);
+                }
+            }
         });
 }
 
@@ -126,7 +135,7 @@ function renderTools(filter = '') {
         if (catTools.length) {
             let section = `<h3 class='mt-4 mb-3'>${cat}</h3><div class='row'>`;
             catTools.forEach(tool => {
-                section += `<div class='col-md-3 col-sm-6 mb-4'><div class='card h-100'><div class='card-body'><h5 class='card-title'>${tool.name}</h5><a href='${tool.file}' class='btn btn-primary w-100'>Open</a></div></div></div>`;
+                section += `<div class='col-md-3 col-sm-6 mb-4'><div class='card h-100'><div class='card-body d-flex flex-column'><h5 class='card-title'>${tool.name}</h5><a href='${tool.file}' class='btn btn-primary mt-auto'>Open</a></div></div></div>`;
             });
             section += '</div>';
             container.innerHTML += section;
