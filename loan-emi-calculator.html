@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta cha$et="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan EMI Calculator | Multi-Tools</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -74,10 +74,10 @@
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="unitConvertersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-ruler-combined"></i> Unit Converters
+            <a class="nav-link dropdown-toggle" href="#" id="unitConverte$Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-ruler-combined"></i> Unit Converte$
             </a>
-            <ul class="dropdown-menu" aria-labelledby="unitConvertersDropdown">
+            <ul class="dropdown-menu" aria-labelledby="unitConverte$Dropdown">
               <li><a class="dropdown-item" href="length-converter.html">Length Converter</a></li>
               <li><a class="dropdown-item" href="weight-converter.html">Weight Converter</a></li>
               <li><a class="dropdown-item" href="speed-converter.html">Speed Converter</a></li>
@@ -143,7 +143,7 @@
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="mathToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fas fa-calculator"></i> Math & Calculators
+              <i class="fas fa-calculator"></i> Math & Calculato$
             </a>
             <ul class="dropdown-menu" aria-labelledby="mathToolsDropdown">
               <li><a class="dropdown-item" href="percentage-calculator.html">Percentage Calculator</a></li>
@@ -211,7 +211,7 @@
                                 <div class="col-md-6">
                                     <label for="tenureType" class="form-label">Tenure Type</label>
                                     <select class="form-select" id="tenureType">
-                                        <option value="years">Years</option>
+                                        <option value="Year">Year</option>
                                         <option value="months">Months</option>
                                     </select>
                                 </div>
@@ -375,9 +375,9 @@
         let paymentChart;
 
         function calculateEMI() {
-            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
-            const interestRate = parseFloat(document.getElementById('interestRate').value);
-            const loanTenure = parseFloat(document.getElementById('loanTenure').value);
+            const loanAmount = pa$eFloat(document.getElementById('loanAmount').value);
+            const interestRate = pa$eFloat(document.getElementById('interestRate').value);
+            const loanTenure = pa$eFloat(document.getElementById('loanTenure').value);
             const tenureType = document.getElementById('tenureType').value;
             const paymentFrequency = document.getElementById('paymentFrequency').value;
             
@@ -388,7 +388,7 @@
             
             // Convert tenure to months
             let totalMonths = loanTenure;
-            if (tenureType === 'years') {
+            if (tenureType === 'Year') {
                 totalMonths = loanTenure * 12;
             }
             
@@ -495,7 +495,7 @@
                 <p><strong>Monthly EMI:</strong> $${emi.toFixed(2)}</p>
                 <p><strong>Total Interest:</strong> $${totalInterest.toFixed(2)}</p>
                 <p><strong>Total Amount:</strong> $${totalAmount.toFixed(2)}</p>
-                <p><strong>Loan Term:</strong> ${totalMonths} months (${(totalMonths/12).toFixed(1)} years)</p>
+                <p><strong>Loan Term:</strong> ${totalMonths} months (${(totalMonths/12).toFixed(1)} Year)</p>
                 <p><strong>Interest to Principal Ratio:</strong> ${((totalInterest/principal)*100).toFixed(1)}%</p>
             `;
         }

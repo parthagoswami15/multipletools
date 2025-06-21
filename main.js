@@ -66,132 +66,22 @@ const tools = [
     { name: 'Robots.txt Generator', category: 'SEO Tools', file: 'robots-txt-generator.html' },
     { name: 'Sitemap Generator', category: 'SEO Tools', file: 'sitemap-generator.html' },
     { name: 'XML Sitemap Validator', category: 'SEO Tools', file: 'xml-sitemap-validator.html' },
-    {
-        name: "Barcode Generator",
-        category: "Miscellaneous Tools",
-        url: "barcode-generator.html",
-        icon: "fas fa-barcode",
-        description: "Generate various types of barcodes."
-    },
-    {
-        name: "Meme Generator",
-        category: "Miscellaneous Tools",
-        url: "meme-generator.html",
-        icon: "fas fa-laugh-beam",
-        description: "Create your own memes by adding text to images."
-    },
-    {
-        name: "Resume Builder",
-        category: "Miscellaneous Tools",
-        url: "resume-builder.html",
-        icon: "fas fa-file-alt",
-        description: "Create a professional resume and download it as a PDF."
-    },
-    {
-        name: "Invoice Generator",
-        category: "Miscellaneous Tools",
-        url: "invoice-generator.html",
-        icon: "fas fa-file-invoice-dollar",
-        description: "Create and download professional invoices."
-    },
-    {
-        name: "Business Name Generator",
-        category: "Miscellaneous Tools",
-        url: "business-name-generator.html",
-        icon: "fas fa-lightbulb",
-        description: "Generate creative names for your business."
-    },
-    {
-        name: "Lottery Number Generator",
-        category: "Miscellaneous Tools",
-        url: "lottery-number-generator.html",
-        icon: "fas fa-ticket-alt",
-        description: "Generate random numbers for the lottery."
-    },
-    {
-        name: "Flip a Coin Simulator",
-        category: "Miscellaneous Tools",
-        url: "flip-a-coin-simulator.html",
-        icon: "fas fa-coins",
-        description: "Flip a virtual coin to make a decision."
-    },
-    {
-        name: "Random Number Generator",
-        category: "Miscellaneous Tools",
-        url: "random-number-generator.html",
-        icon: "fas fa-random",
-        description: "Generate a random number within a range."
-    },
-    {
-        name: "Dice Roller Simulator",
-        category: "Miscellaneous Tools",
-        url: "dice-roller-simulator.html",
-        icon: "fas fa-dice-d6",
-        description: "Roll one or more virtual dice."
-    },
-    {
-        name: "Password Strength Checker",
-        category: "Miscellaneous Tools",
-        url: "password-strength-checker.html",
-        icon: "fas fa-shield-alt",
-        description: "Check the strength of your password."
-    },
-    {
-        name: "Color Palette Generator",
-        category: "Miscellaneous Tools",
-        url: "color-palette-generator.html",
-        icon: "fas fa-palette",
-        description: "Generate beautiful color palettes for your projects."
-    },
-    {
-        name: "Unit Price Calculator",
-        category: "Miscellaneous Tools",
-        url: "unit-price-calculator.html",
-        icon: "fas fa-tags",
-        description: "Calculate the unit price from total price and quantity."
-    },
-    {
-        name: "Age Difference Calculator",
-        category: "Miscellaneous Tools",
-        url: "age-difference-calculator.html",
-        icon: "fas fa-birthday-cake",
-        description: "Calculate the age difference between two dates of birth."
-    },
-    {
-        name: "Random Team Generator",
-        category: "Miscellaneous Tools",
-        url: "random-team-generator.html",
-        icon: "fas fa-users",
-        description: "Randomly assign people to teams."
-    },
-    {
-        name: "Roman Numeral Converter",
-        category: "Miscellaneous Tools",
-        url: "roman-numeral-converter.html",
-        icon: "fas fa-sort-numeric-up",
-        description: "Convert between numbers and Roman numerals."
-    },
-    {
-        name: "Text Case Converter",
-        category: "Miscellaneous Tools",
-        url: "text-case-converter.html",
-        icon: "fas fa-font",
-        description: "Convert text between different case formats (camelCase, snake_case, etc.)."
-    },
-    {
-        name: "Password Generator",
-        category: "Miscellaneous Tools",
-        url: "password-generator.html",
-        icon: "fas fa-key",
-        description: "Generate strong, random passwords with custom options."
-    },
-    {
-        name: "Text Reverser",
-        category: "Miscellaneous Tools",
-        url: "text-reverser.html",
-        icon: "fas fa-exchange-alt",
-        description: "Reverse text by characters or words."
-    },
+    
+    // Miscellaneous Tools
+    { name: "Barcode Generator", category: "Miscellaneous Tools", file: "barcode-generator.html" },
+    { name: "Meme Generator", category: "Miscellaneous Tools", file: "meme-generator.html" },
+    { name: "Resume Builder", category: "Miscellaneous Tools", file: "resume-builder.html" },
+    { name: "Invoice Generator", category: "Miscellaneous Tools", file: "invoice-generator.html" },
+    { name: "Business Name Generator", category: "Miscellaneous Tools", file: "business-name-generator.html" },
+    { name: "Lottery Number Generator", category: "Miscellaneous Tools", file: "lottery-number-generator.html" },
+    { name: "Flip a Coin Simulator", category: "Miscellaneous Tools", file: "flip-a-coin-simulator.html" },
+    { name: "Random Number Generator", category: "Miscellaneous Tools", file: "random-number-generator.html" },
+    { name: "Dice Roller Simulator", category: "Miscellaneous Tools", file: "dice-roller-simulator.html" },
+    { name: "Password Strength Checker", category: "Miscellaneous Tools", file: "password-strength-checker.html" },
+    { name: "Color Palette Generator", category: "Miscellaneous Tools", file: "color-palette-generator.html" },
+    { name: "Daily Planner Creator", category: "Miscellaneous Tools", file: "daily-planner-creator.html" },
+    { name: "Wedding Invitation Generator", category: "Miscellaneous Tools", file: "wedding-invitation-generator.html" },
+    { name: "Story Plot Generator", category: "Miscellaneous Tools", file: "story-plot-generator.html" },
     
     // Developer Tools
     { name: 'JSON Formatter', category: 'Developer Tools', file: 'json-formatter.html' },
@@ -228,8 +118,6 @@ const tools = [
     { name: 'Social Media Post Generator', category: 'Social Media Tools', file: 'social-media-post-generator.html' },
     { name: 'Emoji Keyboard', category: 'Social Media Tools', file: 'emoji-keyboard.html' },
     { name: 'Twitter Character Counter', category: 'Social Media Tools', file: 'twitter-character-counter.html' },
-    
-    // ... add all other tools here ...
 ];
 
 const categories = [
@@ -241,16 +129,51 @@ function renderTools(filter = '') {
     const container = document.getElementById('tool-categories');
     if (container) {
         container.innerHTML = '';
-        categories.forEach(cat => {
+        categories.forEach((cat, index) => {
             const catTools = tools.filter(t => t.category === cat && t.name.toLowerCase().includes(filter.toLowerCase()));
             if (catTools.length) {
-                let section = `<h3 class='mt-4 mb-3'>${cat}</h3><div class='row'>`;
+                let toolLinks = '';
                 catTools.forEach(tool => {
-                    section += `<div class='col-md-3 col-sm-6 mb-4'><div class='card h-100'><div class='card-body d-flex flex-column'><h5 class='card-title'>${tool.name}</h5><a href='${tool.file}' class='btn btn-primary mt-auto'>Open</a></div></div></div>`;
+                    toolLinks += `<a href="${tool.file}" class="list-group-item list-group-item-action">${tool.name}</a>`;
                 });
-                section += '</div>';
-                container.innerHTML += section;
+
+                // Unique IDs for collapse functionality
+                const collapseId = `collapse-${index}`;
+                const headerId = `header-${index}`;
+
+                container.innerHTML += `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="category-card">
+                            <div class="category-header" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="true" aria-controls="${collapseId}">
+                                <h5 class="category-title d-flex justify-content-between align-items-center">
+                                    ${cat}
+                                    <i class="fas fa-chevron-down"></i>
+                                </h5>
+                            </div>
+                            <div id="${collapseId}" class="collapse show" aria-labelledby="${headerId}">
+                                <div class="list-group list-group-flush tool-list">
+                                    ${toolLinks}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
+        });
+        
+        // Add event listeners for rotating the chevron icons
+        const headers = document.querySelectorAll('.category-header');
+        headers.forEach(header => {
+            const collapseElement = document.getElementById(header.getAttribute('data-bs-target').substring(1));
+            const icon = header.querySelector('i');
+
+            collapseElement.addEventListener('show.bs.collapse', function () {
+                icon.style.transform = 'rotate(-180deg)';
+            });
+
+            collapseElement.addEventListener('hide.bs.collapse', function () {
+                icon.style.transform = 'rotate(0deg)';
+            });
         });
     }
 }
@@ -258,5 +181,3 @@ function renderTools(filter = '') {
 function searchTools(e) {
     renderTools(e.target.value);
 }
-
-// ... add all other tools here ...
