@@ -1,3 +1,4 @@
+
 /* Custom styles for Multi-Tools Website */
 .ad-placeholder {
     display: flex;
@@ -11,4 +12,10 @@
     box-shadow: 0 4px 16px rgba(0,0,0,0.12);
     transform: translateY(-4px) scale(1.02);
     transition: 0.2s;
+}
+
+/* Header z-index fix */
+header .navbar {
+    position: relative;
+    z-index: 1050; /* Higher than default Bootstrap components */
 } 
