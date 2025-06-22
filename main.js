@@ -229,7 +229,9 @@ const tools = [
     { name: 'Screenshot to PDF Converter', category: 'Image Tools', file: 'screenshot-to-pdf.html' },
     { name: 'Image to JPEG', category: 'Image Tools', file: 'image-to-jpeg.html' },
     { name: 'Remove Background', category: 'Image Tools', file: 'remove-background.html' },
-    { name: 'Video Editor', category: 'Miscellaneous Tools', file: 'video-editor.html' },
+    
+    // Audio Tools
+    { name: 'Video Editor', category: 'Audio Tools', file: 'video-editor.html' },
     
     // Text Tools
     { name: 'Word Counter', category: 'Text Tools', file: 'word-counter.html' },
@@ -291,7 +293,6 @@ const tools = [
     { name: "Daily Planner Creator", category: "Miscellaneous Tools", file: "daily-planner-creator.html" },
     { name: "Wedding Invitation Generator", category: "Miscellaneous Tools", file: "wedding-invitation-generator.html" },
     { name: "Story Plot Generator", category: "Miscellaneous Tools", file: "story-plot-generator.html" },
-    { name: "Video Editor", category: "Miscellaneous Tools", file: "video-editor.html" },
     
     // Developer Tools
     { name: 'JSON Formatter', category: 'Developer Tools', file: 'json-formatter.html' },
