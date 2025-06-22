@@ -238,6 +238,7 @@ const tools = [
     { name: 'Audio Converter', category: 'Audio Tools', file: 'audio-converter.html' },
     { name: 'Text-to-Speech', category: 'Audio Tools', file: 'text-to-speech.html' },
     { name: 'Speech-to-Text', category: 'Audio Tools', file: 'speech-to-text.html' },
+    { name: 'Video Creator', category: 'Audio Tools', file: 'video-creator.html', description: 'Combine video clips and add audio to create a new video.', keywords: ['video', 'creator', 'merge', 'join', 'combine', 'audio'] },
     
     // Text Tools
     { name: 'Word Counter', category: 'Text Tools', file: 'word-counter.html' },
