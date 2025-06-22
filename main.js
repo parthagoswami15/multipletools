@@ -181,3 +181,39 @@ function renderTools(filter = '') {
 function searchTools(e) {
     renderTools(e.target.value);
 }
+
+// Accordion functionality for category cards
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryCards = document.querySelectorAll('.category-card');
+    
+    categoryCards.forEach(card => {
+        const header = card.querySelector('.category-header');
+        const content = card.querySelector('.category-content');
+        
+        header.addEventListener('click', function() {
+            const isActive = card.classList.contains('active');
+            
+            // Close all other cards
+            categoryCards.forEach(otherCard => {
+                otherCard.classList.remove('active');
+            });
+            
+            // Toggle current card
+            if (!isActive) {
+                card.classList.add('active');
+            }
+        });
+    });
+});
+
+// Mobile navigation toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.querySelector('.mobile-nav-toggle');
+    const nav = document.querySelector('.nav');
+    
+    if (mobileToggle && nav) {
+        mobileToggle.addEventListener('click', function() {
+            nav.classList.toggle('active');
+        });
+    }
+});
