@@ -26,7 +26,7 @@
                         <a href="percentage-calculator.html">Percentage Calculator</a>
                         <a href="scientific-calculator.html">Scientific Calculator</a>
                         <a href="tip-calculator.html">Tip Calculator</a>
-                    </div>
+                            </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="dropbtn">Converters</a>
@@ -43,7 +43,7 @@
                         <a href="temperature-converter.html">Temperature Converter</a>
                         <a href="volume-converter.html">Volume Converter</a>
                         <a href="weight-converter.html">Weight Converter</a>
-                    </div>
+                                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="dropbtn">Image Tools</a>
@@ -57,7 +57,7 @@
                         <a href="image-to-pdf.html">Image to PDF</a>
                         <a href="image-to-png.html">Image to PNG</a>
                         <a href="webp-to-png.html">WebP to PNG</a>
-                    </div>
+                                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="dropbtn">PDF Tools</a>
@@ -66,7 +66,7 @@
                         <a href="pdf-to-word.html">PDF to Word</a>
                         <a href="ppt-to-pdf.html">PPT to PDF</a>
                         <a href="word-to-pdf.html">Word to PDF</a>
-                    </div>
+                                </div>
                 </li>
                  <li class="nav-item dropdown">
                     <a href="#" class="dropbtn">Generators</a>
@@ -86,7 +86,7 @@
                         <a href="sitemap-generator.html">Sitemap Generator</a>
                         <a href="story-plot-generator.html">Story Plot Generator</a>
                         <a href="wedding-invitation-generator.html">Wedding Invitation Generator</a>
-                    </div>
+                            </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="dropbtn">Web Tools</a>
@@ -108,7 +108,7 @@
                         <a href="url-encoder-decoder.html">URL Encoder/Decoder</a>
                         <a href="xml-sitemap-validator.html">XML Sitemap Validator</a>
                         <a href="youtube-tags-extractor.html">YouTube Tags Extractor</a>
-                    </div>
+                                    </div>
                 </li>
                  <li class="nav-item dropdown">
                     <a href="#" class="dropbtn">Miscellaneous Tools</a>
@@ -158,7 +158,7 @@
                 <div class="input-group">
                     <label for="height">Height (cm):</label>
                     <input type="number" id="height" placeholder="Enter height in centimeters">
-                </div>
+            </div>
                 <button id="calculateBtn">Calculate BMI</button>
                 <div class="result-group">
                     <label for="bmiResult">Your BMI:</label>
@@ -177,8 +177,8 @@
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
                 <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            </div>
         </div>
+    </div>
     </footer>
     <script src="main.js"></script>
     <script>
@@ -187,14 +187,14 @@
             const height = parseFloat(document.getElementById('height').value);
             const bmiResult = document.getElementById('bmiResult');
             const bmiCategory = document.getElementById('bmiCategory');
-
+            
             if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
                 alert("Please enter valid weight and height.");
                 bmiResult.value = '';
                 bmiCategory.textContent = '';
                 return;
             }
-
+            
             const heightInMeters = height / 100;
             const bmi = weight / (heightInMeters * heightInMeters);
             bmiResult.value = bmi.toFixed(2);
