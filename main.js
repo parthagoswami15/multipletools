@@ -60,16 +60,23 @@ function loadComponents() {
 
     if (headerPlaceholder) {
         fetch('header.html')
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
             .then(data => {
                 headerPlaceholder.innerHTML = data;
-                initializeSearch(); // Initialize search after header is loaded
 
-                // Manually initialize Bootstrap dropdowns for the dynamically loaded header
-                const dropdownToggles = headerPlaceholder.querySelectorAll('[data-bs-toggle="dropdown"]');
-                dropdownToggles.forEach(toggle => {
-                    new bootstrap.Dropdown(toggle);
-                });
+                // We need to make sure the scripts are loaded and the DOM is ready
+                // so we re-initialize the dropdowns from bootstrap
+                var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'))
+                var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                  return new bootstrap.Dropdown(dropdownToggleEl)
+                })
+
+                initializeSearch(); // Initialize search after header is loaded
             })
             .catch(error => console.error('Error loading header:', error));
     }
