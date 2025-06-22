@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Search</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .error { background: #ffebee; color: #c62828; }
+        .success { background: #e8f5e8; color: #2e7d32; }
+    </style>
+</head>
+<body>
+    <h1>Search Debug</h1>
+    <div id="debug"></div>
+    
+    <script>
+        function log(message, type = 'info') {
+            const debug = document.getElementById('debug');
+            const div = document.createElement('div');
+            div.className = `debug ${type}`;
+            div.textContent = message;
+            debug.appendChild(div);
+            console.log(message);
+        }
+        
+        // Test if main.js loads
+        try {
+            log('Loading main.js...', 'info');
+        } catch (e) {
+            log('Error loading main.js: ' + e.message, 'error');
+        }
+    </script>
+    
+    <script src="main.js"></script>
+    
+    <script>
+        // Test after main.js loads
+        setTimeout(() => {
+            try {
+                log('Testing tools array...', 'info');
+                if (typeof tools !== 'undefined') {
+                    log(`Tools array found with ${tools.length} items`, 'success');
+                    log(`First tool: ${tools[0].name}`, 'info');
+                } else {
+                    log('Tools array not found', 'error');
+                }
+                
+                log('Testing toolsDatabase...', 'info');
+                if (typeof toolsDatabase !== 'undefined') {
+                    log(`ToolsDatabase found with ${toolsDatabase.length} items`, 'success');
+                    log(`First tool: ${toolsDatabase[0].name}`, 'info');
+                } else {
+                    log('ToolsDatabase not found', 'error');
+                }
+                
+                log('Testing search functions...', 'info');
+                if (typeof performHeaderSearch !== 'undefined') {
+                    log('performHeaderSearch function found', 'success');
+                } else {
+                    log('performHeaderSearch function not found', 'error');
+                }
+                
+                if (typeof getToolIcon !== 'undefined') {
+                    log('getToolIcon function found', 'success');
+                } else {
+                    log('getToolIcon function not found', 'error');
+                }
+                
+                if (typeof getToolKeywords !== 'undefined') {
+                    log('getToolKeywords function found', 'success');
+                } else {
+                    log('getToolKeywords function not found', 'error');
+                }
+                
+            } catch (e) {
+                log('Error during testing: ' + e.message, 'error');
+            }
+        }, 1000);
+    </script>
+</body>
+</html> 
