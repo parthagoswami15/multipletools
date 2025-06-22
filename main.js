@@ -352,32 +352,76 @@ const toolsDatabase = tools.map(tool => ({
 }));
 
 function renderTools(filter = '') {
-    const container = document.getElementById('tool-categories');
-    if (container) {
-        container.innerHTML = '';
-        categories.forEach(cat => {
-            const catTools = tools.filter(t => t.category === cat && t.name.toLowerCase().includes(filter.toLowerCase()));
-            if (catTools.length) {
-                let toolLinks = '';
-                catTools.forEach(tool => {
-                    toolLinks += `<a href="${tool.file}" class="list-group-item list-group-item-action">${tool.name}</a>`;
-                });
-
-                container.innerHTML += `
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card h-100 category-card">
-                            <div class="card-body">
-                                <h5 class="card-title category-title">${cat}</h5>
-                                <div class="list-group list-group-flush tool-list">
-                                    ${toolLinks}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-        });
+    const categoriesContainer = document.getElementById('tool-categories');
+    if (!categoriesContainer) {
+        // If the main container isn't on the page, do nothing.
+        return;
     }
+
+    // Start with a clean slate
+    categoriesContainer.innerHTML = '';
+
+    // Filter the tool data based on the search query
+    const filteredData = toolData.map(category => {
+        const filteredTools = category.tools.filter(tool => 
+            tool.name.toLowerCase().includes(filter.toLowerCase()) ||
+            (tool.keywords && tool.keywords.some(k => k.toLowerCase().includes(filter.toLowerCase())))
+        );
+        // Return a new category object with the filtered tools
+        return { ...category, tools: filteredTools };
+    }).filter(category => category.tools.length > 0); // Only keep categories that still have tools
+
+    // If no tools match the filter, show a message
+    if (filteredData.length === 0) {
+        categoriesContainer.innerHTML = '<p class="no-results">No tools found. Please try another search term.</p>';
+        return;
+    }
+
+    // Create and append the category cards to the container
+    filteredData.forEach(category => {
+        const card = document.createElement('div');
+        card.className = 'category-card';
+
+        // Create the list of tool links
+        const toolLinks = category.tools.map(tool => 
+            `<a href="${tool.url}">${tool.name}</a>`
+        ).join('');
+
+        // Set the full HTML content for the card
+        card.innerHTML = `
+            <div class="category-header">
+                <i class="${category.icon || 'fas fa-star'}"></i>
+                <h3>${category.name}</h3>
+            </div>
+            <div class="category-content">
+                ${toolLinks}
+            </div>
+        `;
+
+        categoriesContainer.appendChild(card);
+    });
+}
+
+// Helper function to create a card
+function createCategoryCard(category, spanClass) {
+    const card = document.createElement('div');
+    card.className = `bento-card ${spanClass}`;
+
+    let toolsHTML = '';
+    category.tools.slice(0, 5).forEach(tool => { // Show max 5 tools per card initially
+        toolsHTML += `<a href="${tool.url}">${tool.name}</a>`;
+    });
+
+    card.innerHTML = `
+        <div class="category-header">
+            <i class="${category.icon} category-icon"></i>
+            <h3 class="category-title">${category.name}</h3>
+        </div>
+        <div class="tool-list">
+            ${toolsHTML}
+        </div>
+    `;
+    return card;
 }
 
 function searchTools(e) {
