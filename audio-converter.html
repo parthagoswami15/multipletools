@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Converter - Multi-Tools</title>
+    <meta name="description" content="Free online audio converter. Convert audio between MP3, WAV, AAC, and more formats.">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        .audio-converter-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 2rem;
+        }
+        
+        .upload-area:hover {
+            border-color: #764ba2;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .format-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .format-option {
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .format-option:hover {
+            border-color: #667eea;
+        }
+        
+        .format-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .convert-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .convert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <a href="index.html">
+                <i class="fas fa-tools"></i>
+                <span>Multi-Tools</span>
+            </a>
+        </div>
+        <nav class="nav">
+            <ul class="nav-list">
+                <li class="nav-item dropdown">
+                    <a href="#" class="dropbtn">Audio Tools</a>
+                    <div class="dropdown-content">
+                        <a href="audio-converter.html">Audio Converter</a>
+                        <a href="text-to-speech.html">Text to Speech</a>
+                        <a href="speech-to-text.html">Speech to Text</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="dropbtn">Image Tools</a>
+                    <div class="dropdown-content">
+                        <a href="image-compressor.html">Image Compressor</a>
+                        <a href="image-cropper.html">Image Cropper</a>
+                        <a href="image-resizer.html">Image Resizer</a>
+                        <a href="image-to-base64.html">Image to Base64</a>
+                        <a href="image-to-jpeg.html">Image to JPEG</a>
+                        <a href="image-to-jpg.html">Image to JPG</a>
+                        <a href="image-to-pdf.html">Image to PDF</a>
+                        <a href="image-to-png.html">Image to PNG</a>
+                        <a href="remove-background.html">Remove Background</a>
+                        <a href="webp-to-png.html">WebP to PNG</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="dropbtn">PDF Tools</a>
+                    <div class="dropdown-content">
+                        <a href="pdf-to-ppt.html">PDF to PPT</a>
+                        <a href="pdf-to-word.html">PDF to Word</a>
+                        <a href="ppt-to-pdf.html">PPT to PDF</a>
+                        <a href="word-to-pdf.html">Word to PDF</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="dropbtn">Generators</a>
+                    <div class="dropdown-content">
+                        <a href="barcode-generator.html">Barcode Generator</a>
+                        <a href="business-name-generator.html">Business Name Generator</a>
+                        <a href="color-palette-generator.html">Color Palette Generator</a>
+                        <a href="fancy-text-generator.html">Fancy Text Generator</a>
+                        <a href="hashtag-generator.html">Hashtag Generator</a>
+                        <a href="htaccess-redirect-generator.html">HTAccess Redirect Generator</a>
+                        <a href="invoice-generator.html">Invoice Generator</a>
+                        <a href="lottery-number-generator.html">Lottery Number Generator</a>
+                        <a href="meta-tag-generator.html">Meta Tag Generator</a>
+                        <a href="qr-code-generator.html">QR Code Generator</a>
+                        <a href="random-number-generator.html">Random Number Generator</a>
+                        <a href="robots-txt-generator.html">Robots.txt Generator</a>
+                        <a href="sitemap-generator.html">Sitemap Generator</a>
+                        <a href="story-plot-generator.html">Story Plot Generator</a>
+                        <a href="wedding-invitation-generator.html">Wedding Invitation Generator</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="dropbtn">Web Tools</a>
+                    <div class="dropdown-content">
+                        <a href="backlink-checker.html">Backlink Checker</a>
+                        <a href="color-code-picker.html">Color Code Picker</a>
+                        <a href="css-minifier.html">CSS Minifier</a>
+                        <a href="domain-authority-checker.html">Domain Authority Checker</a>
+                        <a href="google-index-checker.html">Google Index Checker</a>
+                        <a href="html-to-markdown.html">HTML to Markdown</a>
+                        <a href="ip-address-lookup.html">IP Address Lookup</a>
+                        <a href="javascript-minifier.html">JavaScript Minifier</a>
+                        <a href="json-formatter.html">JSON Formatter</a>
+                        <a href="keyword-density-checker.html">Keyword Density Checker</a>
+                        <a href="markdown-to-html.html">Markdown to HTML</a>
+                        <a href="mobile-friendly-test.html">Mobile Friendly Test</a>
+                        <a href="page-speed-checker.html">Page Speed Checker</a>
+                        <a href="sql-formatter.html">SQL Formatter</a>
+                        <a href="url-encoder-decoder.html">URL Encoder/Decoder</a>
+                        <a href="xml-sitemap-validator.html">XML Sitemap Validator</a>
+                        <a href="youtube-tags-extractor.html">YouTube Tags Extractor</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="dropbtn">Miscellaneous Tools</a>
+                    <div class="dropdown-content">
+                        <a href="character-counter.html">Character Counter</a>
+                        <a href="currency-converter.html">Currency Converter</a>
+                        <a href="daily-planner-creator.html">Daily Planner Creator</a>
+                        <a href="dice-roller-simulator.html">Dice Roller Simulator</a>
+                        <a href="emoji-keyboard.html">Emoji Keyboard</a>
+                        <a href="facebook-video-downloader.html">Facebook Video Downloader</a>
+                        <a href="flip-a-coin-simulator.html">Flip a Coin Simulator</a>
+                        <a href="gif-maker.html">GIF Maker</a>
+                        <a href="grammar-checker.html">Grammar Checker</a>
+                        <a href="instagram-photo-downloader.html">Instagram Photo Downloader</a>
+                        <a href="internet-speed-test.html">Internet Speed Test</a>
+                        <a href="meme-generator.html">Meme Generator</a>
+                        <a href="password-strength-checker.html">Password Strength Checker</a>
+                        <a href="plagiarism-checker.html">Plagiarism Checker</a>
+                        <a href="random-text-generator.html">Random Text Generator</a>
+                        <a href="resume-builder.html">Resume Builder</a>
+                        <a href="screenshot-to-pdf.html">Screenshot to PDF</a>
+                        <a href="social-media-post-generator.html">Social Media Post Generator</a>
+                        <a href="speech-to-text.html">Speech to Text</a>
+                        <a href="text-to-speech.html">Text to Speech</a>
+                        <a href="tiktok-video-downloader.html">TikTok Video Downloader</a>
+                        <a href="time-zone-converter.html">Time Zone Converter</a>
+                        <a href="twitter-character-counter.html">Twitter Character Counter</a>
+                        <a href="twitter-video-downloader.html">Twitter Video Downloader</a>
+                        <a href="word-counter.html">Word Counter</a>
+                        <a href="youtube-thumbnail-downloader.html">YouTube Thumbnail Downloader</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <div class="mobile-nav-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="audio-converter-container">
+            <div class="tool-header">
+                <h1><i class="fas fa-music"></i> Audio Converter</h1>
+                <p>Convert your audio files between different formats with high quality</p>
+            </div>
+
+            <!-- Upload Area -->
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">Drop your audio file here or click to browse</div>
+                <div class="upload-subtext">Supports MP3, WAV, AAC, FLAC, and more</div>
+                <input type="file" id="audioFile" class="file-input" accept="audio/*">
+            </div>
+
+            <!-- Format Selection -->
+            <div class="format-selector" id="formatSelector" style="display: none;">
+                <div class="format-option" data-format="mp3">
+                    <div>🎵</div>
+                    <div>MP3</div>
+                    <small>Most Compatible</small>
+                </div>
+                <div class="format-option" data-format="wav">
+                    <div>🎶</div>
+                    <div>WAV</div>
+                    <small>High Quality</small>
+                </div>
+                <div class="format-option" data-format="aac">
+                    <div>🎧</div>
+                    <div>AAC</div>
+                    <small>Apple Devices</small>
+                </div>
+                <div class="format-option" data-format="flac">
+                    <div>🎼</div>
+                    <div>FLAC</div>
+                    <small>Lossless</small>
+                </div>
+            </div>
+
+            <!-- Convert Button -->
+            <button class="convert-btn" id="convertBtn" onclick="convertAudio()" style="display: none;">
+                <i class="fas fa-cog"></i> Convert Audio
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Multi-Tools</h3>
+                <p>Your ultimate online toolkit with 80+ powerful tools for developers, designers, and everyday users.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html#tools">All Tools</a></li>
+                    <li><a href="index.html#popular">Popular Tools</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Categories</h4>
+                <ul>
+                    <li><a href="index.html#calculators">Calculators</a></li>
+                    <li><a href="index.html#converters">Converters</a></li>
+                    <li><a href="index.html#image-tools">Image Tools</a></li>
+                    <li><a href="index.html#web-tools">Web Tools</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Report Bug</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Multi-Tools. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        let selectedFile = null;
+        let selectedFormat = 'mp3';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAudioConverter();
+        });
+
+        function initializeAudioConverter() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('audioFile');
+
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+
+            document.querySelectorAll('.format-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.format-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedFormat = option.dataset.format;
+                });
+            });
+        }
+
+        function handleFileSelect(file) {
+            if (!file.type.startsWith('audio/')) {
+                alert('Please select a valid audio file');
+                return;
+            }
+
+            selectedFile = file;
+            document.getElementById('formatSelector').style.display = 'grid';
+            document.getElementById('convertBtn').style.display = 'block';
+            
+            // Select first format by default
+            document.querySelector('.format-option[data-format="mp3"]').classList.add('selected');
+        }
+
+        function convertAudio() {
+            if (!selectedFile) {
+                alert('Please select an audio file first');
+                return;
+            }
+
+            const convertBtn = document.getElementById('convertBtn');
+            convertBtn.disabled = true;
+            convertBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting...';
+
+            // Simulate conversion
+            setTimeout(() => {
+                const originalName = selectedFile.name;
+                const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.'));
+                const newFileName = `${nameWithoutExt}.${selectedFormat}`;
+                
+                // Create download link
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(selectedFile);
+                downloadLink.download = newFileName;
+                downloadLink.click();
+                
+                convertBtn.disabled = false;
+                convertBtn.innerHTML = '<i class="fas fa-cog"></i> Convert Audio';
+                
+                alert('Audio converted successfully!');
+            }, 2000);
+        }
+    </script>
+</body>
+</html> 
