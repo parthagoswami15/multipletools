@@ -273,10 +273,160 @@ body {
     font-weight: 500;
 }
 
+/* Main Content Wrapper */
+.main-content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Sidebar Ads */
+.sidebar-ads {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.ad-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.ad-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.ad-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.ad-header i {
+    font-size: 1.2rem;
+}
+
+.ad-content {
+    padding: 1.5rem;
+}
+
+.ad-content h3 {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.ad-content p {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.ad-content ul {
+    list-style: none;
+    margin-bottom: 1.5rem;
+}
+
+.ad-content ul li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.ad-content ul li i {
+    color: #28a745;
+    font-size: 0.8rem;
+}
+
+.ad-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ad-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.offer-badge {
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.discount {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.period {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.social-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+}
+
+.social-stats .stat {
+    text-align: center;
+}
+
+.social-stats .number {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #667eea;
+}
+
+.social-stats .label {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Main Content */
+.main-content {
+    min-width: 0;
+}
+
 /* Tools Section */
 .tools-section {
     background: #f8f9ff;
     padding: 4rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
 }
 
 .section-header {
@@ -296,8 +446,6 @@ body {
 }
 
 .categories-grid {
-    max-width: 1200px;
-    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
@@ -382,11 +530,10 @@ body {
 .features-section {
     background: white;
     padding: 4rem 2rem;
+    border-radius: 16px;
 }
 
 .features-grid {
-    max-width: 1200px;
-    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
@@ -430,6 +577,85 @@ body {
 .feature-card p {
     color: #666;
     line-height: 1.6;
+}
+
+/* Bottom Ads Section */
+.bottom-ads {
+    background: white;
+    padding: 3rem 2rem;
+    margin-top: 2rem;
+}
+
+.bottom-ads-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.bottom-ad-card {
+    background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.bottom-ad-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.ad-image {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ad-image i {
+    font-size: 2rem;
+    color: white;
+}
+
+.ad-text {
+    flex: 1;
+}
+
+.ad-text h3 {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.ad-text p {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.bottom-ad-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bottom-ad-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
 }
 
 /* Footer */
@@ -656,6 +882,21 @@ button:hover {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .main-content-wrapper {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .sidebar-ads {
+        position: static;
+        order: 2;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+}
+
 @media (max-width: 768px) {
     .header {
         padding: 1rem;
@@ -701,6 +942,15 @@ button:hover {
         grid-template-columns: 1fr;
     }
     
+    .bottom-ads-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .bottom-ad-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
     .footer-content {
         grid-template-columns: 1fr;
         text-align: center;
@@ -739,5 +989,9 @@ button:hover {
     .btn {
         padding: 0.8rem 1.5rem;
         font-size: 0.9rem;
+    }
+    
+    .sidebar-ads {
+        grid-template-columns: 1fr;
     }
 } 

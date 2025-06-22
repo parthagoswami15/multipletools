@@ -206,217 +206,320 @@
             </div>
         </section>
 
-        <!-- Tools Categories -->
-        <section id="tools" class="tools-section">
-            <div class="section-header">
-                <h2>All Tools</h2>
-                <p>Organized by category for easy navigation</p>
+        <!-- Main Content with Sidebar -->
+        <div class="main-content-wrapper">
+            <!-- Sidebar Ad Section -->
+            <aside class="sidebar-ads">
+                <div class="ad-card">
+                    <div class="ad-header">
+                        <i class="fas fa-star"></i>
+                        <span>Premium Tools</span>
+                    </div>
+                    <div class="ad-content">
+                        <h3>Upgrade to Pro</h3>
+                        <p>Get access to advanced features and priority support</p>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Unlimited conversions</li>
+                            <li><i class="fas fa-check"></i> Priority processing</li>
+                            <li><i class="fas fa-check"></i> Advanced analytics</li>
+                            <li><i class="fas fa-check"></i> 24/7 support</li>
+                        </ul>
+                        <button class="ad-btn">Upgrade Now</button>
+                    </div>
+                </div>
+
+                <div class="ad-card">
+                    <div class="ad-header">
+                        <i class="fas fa-gift"></i>
+                        <span>Special Offer</span>
+                    </div>
+                    <div class="ad-content">
+                        <h3>Free Trial</h3>
+                        <p>Try our premium features for 7 days</p>
+                        <div class="offer-badge">
+                            <span class="discount">50% OFF</span>
+                            <span class="period">First Month</span>
+                        </div>
+                        <button class="ad-btn">Start Free Trial</button>
+                    </div>
+                </div>
+
+                <div class="ad-card">
+                    <div class="ad-header">
+                        <i class="fas fa-users"></i>
+                        <span>Community</span>
+                    </div>
+                    <div class="ad-content">
+                        <h3>Join Our Community</h3>
+                        <p>Connect with developers and designers</p>
+                        <div class="social-stats">
+                            <div class="stat">
+                                <span class="number">10K+</span>
+                                <span class="label">Members</span>
+                            </div>
+                            <div class="stat">
+                                <span class="number">500+</span>
+                                <span class="label">Tools</span>
+                            </div>
+                        </div>
+                        <button class="ad-btn">Join Now</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Tools Categories -->
+                <section id="tools" class="tools-section">
+                    <div class="section-header">
+                        <h2>All Tools</h2>
+                        <p>Organized by category for easy navigation</p>
+                    </div>
+                    
+                    <div class="categories-grid">
+                        <!-- Calculators -->
+                        <div class="category-card">
+                            <div class="category-header">
+                                <i class="fas fa-calculator"></i>
+                                <h3>Calculators</h3>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="category-content">
+                                <a href="age-calculator.html">Age Calculator</a>
+                                <a href="bmi-calculator.html">BMI Calculator</a>
+                                <a href="discount-calculator.html">Discount Calculator</a>
+                                <a href="loan-emi-calculator.html">Loan EMI Calculator</a>
+                                <a href="percentage-calculator.html">Percentage Calculator</a>
+                                <a href="scientific-calculator.html">Scientific Calculator</a>
+                                <a href="tip-calculator.html">Tip Calculator</a>
+                            </div>
+                        </div>
+
+                        <!-- Converters -->
+                        <div class="category-card">
+                            <div class="category-header">
+                                <i class="fas fa-exchange-alt"></i>
+                                <h3>Converters</h3>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="category-content">
+                                <a href="angle-converter.html">Angle Converter</a>
+                                <a href="binary-to-decimal-converter.html">Binary to Decimal Converter</a>
+                                <a href="case-converter.html">Case Converter</a>
+                                <a href="data-storage-converter.html">Data Storage Converter</a>
+                                <a href="energy-converter.html">Energy Converter</a>
+                                <a href="fuel-efficiency-converter.html">Fuel Efficiency Converter</a>
+                                <a href="length-converter.html">Length Converter</a>
+                                <a href="pressure-converter.html">Pressure Converter</a>
+                                <a href="speed-converter.html">Speed Converter</a>
+                                <a href="temperature-converter.html">Temperature Converter</a>
+                                <a href="volume-converter.html">Volume Converter</a>
+                                <a href="weight-converter.html">Weight Converter</a>
+                            </div>
+                        </div>
+
+                        <!-- Image Tools -->
+                        <div class="category-card">
+                            <div class="category-header">
+                                <i class="fas fa-image"></i>
+                                <h3>Image Tools</h3>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="category-content">
+                                <a href="image-compressor.html">Image Compressor</a>
+                                <a href="image-cropper.html">Image Cropper</a>
+                                <a href="image-resizer.html">Image Resizer</a>
+                                <a href="image-to-base64.html">Image to Base64</a>
+                                <a href="image-to-jpeg.html">Image to JPEG</a>
+                                <a href="image-to-jpg.html">Image to JPG</a>
+                                <a href="image-to-pdf.html">Image to PDF</a>
+                                <a href="image-to-png.html">Image to PNG</a>
+                                <a href="webp-to-png.html">WebP to PNG</a>
+                            </div>
+                        </div>
+
+                        <!-- PDF Tools -->
+                        <div class="category-card">
+                            <div class="category-header">
+                                <i class="fas fa-file-pdf"></i>
+                                <h3>PDF Tools</h3>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="category-content">
+                                <a href="pdf-to-ppt.html">PDF to PPT</a>
+                                <a href="pdf-to-word.html">PDF to Word</a>
+                                <a href="ppt-to-pdf.html">PPT to PDF</a>
+                                <a href="word-to-pdf.html">Word to PDF</a>
+                            </div>
+                        </div>
+
+                        <!-- Generators -->
+                        <div class="category-card">
+                            <div class="category-header">
+                                <i class="fas fa-magic"></i>
+                                <h3>Generators</h3>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="category-content">
+                                <a href="barcode-generator.html">Barcode Generator</a>
+                                <a href="business-name-generator.html">Business Name Generator</a>
+                                <a href="color-palette-generator.html">Color Palette Generator</a>
+                                <a href="fancy-text-generator.html">Fancy Text Generator</a>
+                                <a href="hashtag-generator.html">Hashtag Generator</a>
+                                <a href="htaccess-redirect-generator.html">HTAccess Redirect Generator</a>
+                                <a href="invoice-generator.html">Invoice Generator</a>
+                                <a href="lottery-number-generator.html">Lottery Number Generator</a>
+                                <a href="meta-tag-generator.html">Meta Tag Generator</a>
+                                <a href="qr-code-generator.html">QR Code Generator</a>
+                                <a href="random-number-generator.html">Random Number Generator</a>
+                                <a href="robots-txt-generator.html">Robots.txt Generator</a>
+                                <a href="sitemap-generator.html">Sitemap Generator</a>
+                                <a href="story-plot-generator.html">Story Plot Generator</a>
+                                <a href="wedding-invitation-generator.html">Wedding Invitation Generator</a>
+                            </div>
+                        </div>
+
+                        <!-- Web Tools -->
+                        <div class="category-card">
+                            <div class="category-header">
+                                <i class="fas fa-code"></i>
+                                <h3>Web Tools</h3>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="category-content">
+                                <a href="backlink-checker.html">Backlink Checker</a>
+                                <a href="color-code-picker.html">Color Code Picker</a>
+                                <a href="css-minifier.html">CSS Minifier</a>
+                                <a href="domain-authority-checker.html">Domain Authority Checker</a>
+                                <a href="google-index-checker.html">Google Index Checker</a>
+                                <a href="html-to-markdown.html">HTML to Markdown</a>
+                                <a href="ip-address-lookup.html">IP Address Lookup</a>
+                                <a href="javascript-minifier.html">JavaScript Minifier</a>
+                                <a href="json-formatter.html">JSON Formatter</a>
+                                <a href="keyword-density-checker.html">Keyword Density Checker</a>
+                                <a href="markdown-to-html.html">Markdown to HTML</a>
+                                <a href="mobile-friendly-test.html">Mobile Friendly Test</a>
+                                <a href="page-speed-checker.html">Page Speed Checker</a>
+                                <a href="sql-formatter.html">SQL Formatter</a>
+                                <a href="url-encoder-decoder.html">URL Encoder/Decoder</a>
+                                <a href="xml-sitemap-validator.html">XML Sitemap Validator</a>
+                                <a href="youtube-tags-extractor.html">YouTube Tags Extractor</a>
+                            </div>
+                        </div>
+
+                        <!-- Miscellaneous Tools -->
+                        <div class="category-card">
+                            <div class="category-header">
+                                <i class="fas fa-tools"></i>
+                                <h3>Miscellaneous Tools</h3>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="category-content">
+                                <a href="character-counter.html">Character Counter</a>
+                                <a href="currency-converter.html">Currency Converter</a>
+                                <a href="daily-planner-creator.html">Daily Planner Creator</a>
+                                <a href="dice-roller-simulator.html">Dice Roller Simulator</a>
+                                <a href="emoji-keyboard.html">Emoji Keyboard</a>
+                                <a href="facebook-video-downloader.html">Facebook Video Downloader</a>
+                                <a href="flip-a-coin-simulator.html">Flip a Coin Simulator</a>
+                                <a href="gif-maker.html">GIF Maker</a>
+                                <a href="grammar-checker.html">Grammar Checker</a>
+                                <a href="instagram-photo-downloader.html">Instagram Photo Downloader</a>
+                                <a href="internet-speed-test.html">Internet Speed Test</a>
+                                <a href="meme-generator.html">Meme Generator</a>
+                                <a href="password-strength-checker.html">Password Strength Checker</a>
+                                <a href="plagiarism-checker.html">Plagiarism Checker</a>
+                                <a href="random-text-generator.html">Random Text Generator</a>
+                                <a href="resume-builder.html">Resume Builder</a>
+                                <a href="screenshot-to-pdf.html">Screenshot to PDF</a>
+                                <a href="social-media-post-generator.html">Social Media Post Generator</a>
+                                <a href="speech-to-text.html">Speech to Text</a>
+                                <a href="text-to-speech.html">Text to Speech</a>
+                                <a href="tiktok-video-downloader.html">TikTok Video Downloader</a>
+                                <a href="time-zone-converter.html">Time Zone Converter</a>
+                                <a href="twitter-character-counter.html">Twitter Character Counter</a>
+                                <a href="twitter-video-downloader.html">Twitter Video Downloader</a>
+                                <a href="word-counter.html">Word Counter</a>
+                                <a href="youtube-thumbnail-downloader.html">YouTube Thumbnail Downloader</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Features Section -->
+                <section class="features-section">
+                    <div class="section-header">
+                        <h2>Why Choose Multi-Tools?</h2>
+                        <p>Everything you need in one powerful platform</p>
+                    </div>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3>Lightning Fast</h3>
+                            <p>All tools work instantly in your browser. No waiting, no downloads required.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>100% Secure</h3>
+                            <p>Your data never leaves your device. All processing happens locally for maximum privacy.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h3>Mobile Friendly</h3>
+                            <p>Perfect experience on any device - desktop, tablet, or smartphone.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-gift"></i>
+                            </div>
+                            <h3>Completely Free</h3>
+                            <p>No hidden costs, no premium features. Everything is free to use forever.</p>
+                        </div>
+                    </div>
+                </section>
             </div>
-            
-            <div class="categories-grid">
-                <!-- Calculators -->
-                <div class="category-card">
-                    <div class="category-header">
-                        <i class="fas fa-calculator"></i>
-                        <h3>Calculators</h3>
-                        <i class="fas fa-chevron-down toggle-icon"></i>
+        </div>
+
+        <!-- Bottom Ad Section -->
+        <section class="bottom-ads">
+            <div class="bottom-ads-container">
+                <div class="bottom-ad-card">
+                    <div class="ad-image">
+                        <i class="fas fa-rocket"></i>
                     </div>
-                    <div class="category-content">
-                        <a href="age-calculator.html">Age Calculator</a>
-                        <a href="bmi-calculator.html">BMI Calculator</a>
-                        <a href="discount-calculator.html">Discount Calculator</a>
-                        <a href="loan-emi-calculator.html">Loan EMI Calculator</a>
-                        <a href="percentage-calculator.html">Percentage Calculator</a>
-                        <a href="scientific-calculator.html">Scientific Calculator</a>
-                        <a href="tip-calculator.html">Tip Calculator</a>
+                    <div class="ad-text">
+                        <h3>Boost Your Productivity</h3>
+                        <p>Get access to premium tools and features</p>
+                        <button class="bottom-ad-btn">Learn More</button>
                     </div>
                 </div>
 
-                <!-- Converters -->
-                <div class="category-card">
-                    <div class="category-header">
-                        <i class="fas fa-exchange-alt"></i>
-                        <h3>Converters</h3>
-                        <i class="fas fa-chevron-down toggle-icon"></i>
+                <div class="bottom-ad-card">
+                    <div class="ad-image">
+                        <i class="fas fa-users"></i>
                     </div>
-                    <div class="category-content">
-                        <a href="angle-converter.html">Angle Converter</a>
-                        <a href="binary-to-decimal-converter.html">Binary to Decimal Converter</a>
-                        <a href="case-converter.html">Case Converter</a>
-                        <a href="data-storage-converter.html">Data Storage Converter</a>
-                        <a href="energy-converter.html">Energy Converter</a>
-                        <a href="fuel-efficiency-converter.html">Fuel Efficiency Converter</a>
-                        <a href="length-converter.html">Length Converter</a>
-                        <a href="pressure-converter.html">Pressure Converter</a>
-                        <a href="speed-converter.html">Speed Converter</a>
-                        <a href="temperature-converter.html">Temperature Converter</a>
-                        <a href="volume-converter.html">Volume Converter</a>
-                        <a href="weight-converter.html">Weight Converter</a>
+                    <div class="ad-text">
+                        <h3>Join Our Community</h3>
+                        <p>Connect with developers worldwide</p>
+                        <button class="bottom-ad-btn">Join Now</button>
                     </div>
                 </div>
 
-                <!-- Image Tools -->
-                <div class="category-card">
-                    <div class="category-header">
-                        <i class="fas fa-image"></i>
-                        <h3>Image Tools</h3>
-                        <i class="fas fa-chevron-down toggle-icon"></i>
-                    </div>
-                    <div class="category-content">
-                        <a href="image-compressor.html">Image Compressor</a>
-                        <a href="image-cropper.html">Image Cropper</a>
-                        <a href="image-resizer.html">Image Resizer</a>
-                        <a href="image-to-base64.html">Image to Base64</a>
-                        <a href="image-to-jpeg.html">Image to JPEG</a>
-                        <a href="image-to-jpg.html">Image to JPG</a>
-                        <a href="image-to-pdf.html">Image to PDF</a>
-                        <a href="image-to-png.html">Image to PNG</a>
-                        <a href="webp-to-png.html">WebP to PNG</a>
-                    </div>
-                </div>
-
-                <!-- PDF Tools -->
-                <div class="category-card">
-                    <div class="category-header">
-                        <i class="fas fa-file-pdf"></i>
-                        <h3>PDF Tools</h3>
-                        <i class="fas fa-chevron-down toggle-icon"></i>
-                    </div>
-                    <div class="category-content">
-                        <a href="pdf-to-ppt.html">PDF to PPT</a>
-                        <a href="pdf-to-word.html">PDF to Word</a>
-                        <a href="ppt-to-pdf.html">PPT to PDF</a>
-                        <a href="word-to-pdf.html">Word to PDF</a>
-                    </div>
-                </div>
-
-                <!-- Generators -->
-                <div class="category-card">
-                    <div class="category-header">
-                        <i class="fas fa-magic"></i>
-                        <h3>Generators</h3>
-                        <i class="fas fa-chevron-down toggle-icon"></i>
-                    </div>
-                    <div class="category-content">
-                        <a href="barcode-generator.html">Barcode Generator</a>
-                        <a href="business-name-generator.html">Business Name Generator</a>
-                        <a href="color-palette-generator.html">Color Palette Generator</a>
-                        <a href="fancy-text-generator.html">Fancy Text Generator</a>
-                        <a href="hashtag-generator.html">Hashtag Generator</a>
-                        <a href="htaccess-redirect-generator.html">HTAccess Redirect Generator</a>
-                        <a href="invoice-generator.html">Invoice Generator</a>
-                        <a href="lottery-number-generator.html">Lottery Number Generator</a>
-                        <a href="meta-tag-generator.html">Meta Tag Generator</a>
-                        <a href="qr-code-generator.html">QR Code Generator</a>
-                        <a href="random-number-generator.html">Random Number Generator</a>
-                        <a href="robots-txt-generator.html">Robots.txt Generator</a>
-                        <a href="sitemap-generator.html">Sitemap Generator</a>
-                        <a href="story-plot-generator.html">Story Plot Generator</a>
-                        <a href="wedding-invitation-generator.html">Wedding Invitation Generator</a>
-                    </div>
-                </div>
-
-                <!-- Web Tools -->
-                <div class="category-card">
-                    <div class="category-header">
-                        <i class="fas fa-code"></i>
-                        <h3>Web Tools</h3>
-                        <i class="fas fa-chevron-down toggle-icon"></i>
-                    </div>
-                    <div class="category-content">
-                        <a href="backlink-checker.html">Backlink Checker</a>
-                        <a href="color-code-picker.html">Color Code Picker</a>
-                        <a href="css-minifier.html">CSS Minifier</a>
-                        <a href="domain-authority-checker.html">Domain Authority Checker</a>
-                        <a href="google-index-checker.html">Google Index Checker</a>
-                        <a href="html-to-markdown.html">HTML to Markdown</a>
-                        <a href="ip-address-lookup.html">IP Address Lookup</a>
-                        <a href="javascript-minifier.html">JavaScript Minifier</a>
-                        <a href="json-formatter.html">JSON Formatter</a>
-                        <a href="keyword-density-checker.html">Keyword Density Checker</a>
-                        <a href="markdown-to-html.html">Markdown to HTML</a>
-                        <a href="mobile-friendly-test.html">Mobile Friendly Test</a>
-                        <a href="page-speed-checker.html">Page Speed Checker</a>
-                        <a href="sql-formatter.html">SQL Formatter</a>
-                        <a href="url-encoder-decoder.html">URL Encoder/Decoder</a>
-                        <a href="xml-sitemap-validator.html">XML Sitemap Validator</a>
-                        <a href="youtube-tags-extractor.html">YouTube Tags Extractor</a>
-                    </div>
-                </div>
-
-                <!-- Miscellaneous Tools -->
-                <div class="category-card">
-                    <div class="category-header">
-                        <i class="fas fa-tools"></i>
-                        <h3>Miscellaneous Tools</h3>
-                        <i class="fas fa-chevron-down toggle-icon"></i>
-                    </div>
-                    <div class="category-content">
-                        <a href="character-counter.html">Character Counter</a>
-                        <a href="currency-converter.html">Currency Converter</a>
-                        <a href="daily-planner-creator.html">Daily Planner Creator</a>
-                        <a href="dice-roller-simulator.html">Dice Roller Simulator</a>
-                        <a href="emoji-keyboard.html">Emoji Keyboard</a>
-                        <a href="facebook-video-downloader.html">Facebook Video Downloader</a>
-                        <a href="flip-a-coin-simulator.html">Flip a Coin Simulator</a>
-                        <a href="gif-maker.html">GIF Maker</a>
-                        <a href="grammar-checker.html">Grammar Checker</a>
-                        <a href="instagram-photo-downloader.html">Instagram Photo Downloader</a>
-                        <a href="internet-speed-test.html">Internet Speed Test</a>
-                        <a href="meme-generator.html">Meme Generator</a>
-                        <a href="password-strength-checker.html">Password Strength Checker</a>
-                        <a href="plagiarism-checker.html">Plagiarism Checker</a>
-                        <a href="random-text-generator.html">Random Text Generator</a>
-                        <a href="resume-builder.html">Resume Builder</a>
-                        <a href="screenshot-to-pdf.html">Screenshot to PDF</a>
-                        <a href="social-media-post-generator.html">Social Media Post Generator</a>
-                        <a href="speech-to-text.html">Speech to Text</a>
-                        <a href="text-to-speech.html">Text to Speech</a>
-                        <a href="tiktok-video-downloader.html">TikTok Video Downloader</a>
-                        <a href="time-zone-converter.html">Time Zone Converter</a>
-                        <a href="twitter-character-counter.html">Twitter Character Counter</a>
-                        <a href="twitter-video-downloader.html">Twitter Video Downloader</a>
-                        <a href="word-counter.html">Word Counter</a>
-                        <a href="youtube-thumbnail-downloader.html">YouTube Thumbnail Downloader</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="features-section">
-            <div class="section-header">
-                <h2>Why Choose Multi-Tools?</h2>
-                <p>Everything you need in one powerful platform</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>Lightning Fast</h3>
-                    <p>All tools work instantly in your browser. No waiting, no downloads required.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>100% Secure</h3>
-                    <p>Your data never leaves your device. All processing happens locally for maximum privacy.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Mobile Friendly</h3>
-                    <p>Perfect experience on any device - desktop, tablet, or smartphone.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
+                <div class="bottom-ad-card">
+                    <div class="ad-image">
                         <i class="fas fa-gift"></i>
                     </div>
-                    <h3>Completely Free</h3>
-                    <p>No hidden costs, no premium features. Everything is free to use forever.</p>
+                    <div class="ad-text">
+                        <h3>Special Offer</h3>
+                        <p>50% off premium features this month</p>
+                        <button class="bottom-ad-btn">Get Offer</button>
+                    </div>
                 </div>
             </div>
         </section>
