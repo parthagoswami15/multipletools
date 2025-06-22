@@ -10,6 +10,39 @@
     <style>
         .clip-list-item { display: flex; align-items: center; justify-content: space-between; padding: 5px; border-bottom: 1px solid #ddd; }
         .clip-list-item span { flex-grow: 1; }
+        
+        /* Ensure dropdown menu is visible */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            min-width: 200px;
+        }
+        
+        .dropdown-menu.show {
+            display: block;
+        }
+        
+        .dropdown-item {
+            display: block;
+            padding: 8px 16px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .dropdown-item:hover {
+            background: #f8f9fa;
+            color: #333;
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body>
@@ -82,8 +115,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.2/dist/ffmpeg.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
-        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) { return new bootstrap.Dropdown(dropdownToggleEl) });
+        // Initialize Bootstrap dropdowns properly for Bootstrap 5
+        const dropdownElementList = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+        const dropdownList = [...dropdownElementList].map(dropdownToggleEl => new bootstrap.Dropdown(dropdownToggleEl));
     
         const { createFFmpeg, fetchFile } = FFmpeg;
         let ffmpeg;
