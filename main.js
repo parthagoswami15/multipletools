@@ -232,6 +232,9 @@ const tools = [
     
     // Audio Tools
     { name: 'Video Editor', category: 'Audio Tools', file: 'video-editor.html' },
+    { name: 'Audio Converter', category: 'Audio Tools', file: 'audio-converter.html' },
+    { name: 'Text-to-Speech', category: 'Audio Tools', file: 'text-to-speech.html' },
+    { name: 'Speech-to-Text', category: 'Audio Tools', file: 'speech-to-text.html' },
     
     // Text Tools
     { name: 'Word Counter', category: 'Text Tools', file: 'word-counter.html' },
@@ -239,8 +242,6 @@ const tools = [
     { name: 'Case Converter', category: 'Text Tools', file: 'case-converter.html' },
     { name: 'Plagiarism Checker', category: 'Text Tools', file: 'plagiarism-checker.html' },
     { name: 'Grammar Checker', category: 'Text Tools', file: 'grammar-checker.html' },
-    { name: 'Text-to-Speech', category: 'Text Tools', file: 'text-to-speech.html' },
-    { name: 'Speech-to-Text', category: 'Text Tools', file: 'speech-to-text.html' },
     { name: 'URL Encoder & Decoder', category: 'Text Tools', file: 'url-encoder-decoder.html' },
     { name: 'Fancy Text Generator', category: 'Text Tools', file: 'fancy-text-generator.html' },
     { name: 'Random Text Generator', category: 'Text Tools', file: 'random-text-generator.html' },
@@ -332,7 +333,7 @@ const tools = [
 ];
 
 const categories = [
-    'Image Tools', 'Text Tools', 'Convert Tools', 'SEO Tools', 'Developer Tools', 'Math & Calculators',
+    'Image Tools', 'Audio Tools', 'Text Tools', 'Convert Tools', 'SEO Tools', 'Developer Tools', 'Math & Calculators',
     'Unit Converters', 'Social Media Tools', 'Miscellaneous Tools'
 ];
 
