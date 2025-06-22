@@ -237,28 +237,6 @@
         </div>
     </header>
 
-    <!-- Quick Search Section -->
-    <section class="quick-search-section">
-        <div class="search-container">
-            <div class="search-box">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" id="quickSearchInput" placeholder="Search for any tool (e.g., 'Image Compressor', 'PDF to Word', 'Calculator')...">
-                <button id="clearSearch" class="clear-search-btn" style="display: none;">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="searchResults" class="search-results" style="display: none;">
-                <div class="results-header">
-                    <h4 id="resultsCount"></h4>
-                    <button id="closeResults" class="close-results-btn">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div id="resultsList" class="results-list"></div>
-            </div>
-        </div>
-    </section>
-
     <main class="home-page">
         <!-- Hero Section -->
         <section class="hero-section">
@@ -270,6 +248,50 @@
                     Discover 80+ powerful tools for developers, designers, and everyday users. 
                     Everything you need, all in one place.
                 </p>
+                
+                <!-- Search Section -->
+                <div class="search-section">
+                    <div class="search-container">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="toolSearch" class="search-input" placeholder="Search for tools (e.g., calculator, converter, generator...)" autocomplete="off">
+                            <button class="search-clear" id="searchClear" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="search-suggestions" id="searchSuggestions">
+                            <div class="suggestion-header">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Popular Searches</span>
+                            </div>
+                            <div class="suggestion-tags">
+                                <span class="suggestion-tag" data-search="calculator">Calculator</span>
+                                <span class="suggestion-tag" data-search="converter">Converter</span>
+                                <span class="suggestion-tag" data-search="generator">Generator</span>
+                                <span class="suggestion-tag" data-search="image">Image</span>
+                                <span class="suggestion-tag" data-search="pdf">PDF</span>
+                                <span class="suggestion-tag" data-search="text">Text</span>
+                                <span class="suggestion-tag" data-search="image to pdf">Image to PDF</span>
+                                <span class="suggestion-tag" data-search="pdf to word">PDF to Word</span>
+                                <span class="suggestion-tag" data-search="word to pdf">Word to PDF</span>
+                                <span class="suggestion-tag" data-search="qr code">QR Code</span>
+                                <span class="suggestion-tag" data-search="compressor">Compressor</span>
+                                <span class="suggestion-tag" data-search="resizer">Resizer</span>
+                                <span class="suggestion-tag" data-search="all tools">Show All Tools</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search-results" id="searchResults" style="display: none;">
+                        <div class="results-header">
+                            <span id="resultsCount">0 results found</span>
+                            <button class="close-results" id="closeResults">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="results-list" id="resultsList"></div>
+                    </div>
+                </div>
+                
                 <div class="hero-buttons">
                     <a href="#tools" class="btn btn-primary">
                         <i class="fas fa-rocket"></i>
@@ -548,9 +570,121 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- Customer Reviews Section -->
+                <section class="reviews-section">
+                    <div class="section-header">
+                        <h2>What Our Users Say</h2>
+                        <p>Real feedback from our community</p>
+                    </div>
+                    <div class="reviews-container">
+                        <div class="reviews-stats">
+                            <div class="overall-rating">
+                                <div class="rating-number">4.8</div>
+                                <div class="rating-stars-large">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="total-reviews">Based on <span id="totalReviews">0</span> reviews</div>
+                            </div>
+                            <div class="rating-breakdown">
+                                <div class="rating-bar">
+                                    <span>5★</span>
+                                    <div class="bar"><div class="fill" style="width: 75%"></div></div>
+                                    <span id="fiveStarCount">0</span>
+                                </div>
+                                <div class="rating-bar">
+                                    <span>4★</span>
+                                    <div class="bar"><div class="fill" style="width: 15%"></div></div>
+                                    <span id="fourStarCount">0</span>
+                                </div>
+                                <div class="rating-bar">
+                                    <span>3★</span>
+                                    <div class="bar"><div class="fill" style="width: 7%"></div></div>
+                                    <span id="threeStarCount">0</span>
+                                </div>
+                                <div class="rating-bar">
+                                    <span>2★</span>
+                                    <div class="bar"><div class="fill" style="width: 2%"></div></div>
+                                    <span id="twoStarCount">0</span>
+                                </div>
+                                <div class="rating-bar">
+                                    <span>1★</span>
+                                    <div class="bar"><div class="fill" style="width: 1%"></div></div>
+                                    <span id="oneStarCount">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reviews-grid" id="reviewsGrid">
+                            <!-- Reviews will be loaded here dynamically -->
+                        </div>
+                        <div class="reviews-actions">
+                            <button class="btn btn-primary" onclick="showFeedbackModal()">
+                                <i class="fas fa-star"></i>
+                                Write a Review
+                            </button>
+                            <button class="btn btn-secondary" onclick="loadAllReviews()">
+                                <i class="fas fa-eye"></i>
+                                View All Reviews
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Author Section -->
+                <section class="author-section">
+                    <div class="section-header">
+                        <h2>Meet the Creator</h2>
+                        <p>The developer behind Multi-Tools</p>
+                    </div>
+                    <div class="author-card">
+                        <div class="author-image">
+                            <img src="_DSC1644.jpg" alt="Partha Goswami" id="authorImage">
+                        </div>
+                        <div class="author-info">
+                            <h3 class="author-name">Partha Goswami</h3>
+                            <p class="author-title">Azure Data Engineer</p>
+                            <p class="author-bio">
+                                Having around 4 years of IT experience at Infosys in automating processes utilizing ADF, ADB, Python, SQL 
+                                and Azure to build data pipelines, integrate data sources, perform data analysis and create data visualizations. 
+                                Designed and implemented robust Extract, Transform, Load (ETL) pipelines to efficiently move and process 
+                                large volumes of data from diverse sources into a centralized data warehouse. Knowledge in Monitoring & 
+                                create pipelines using Azure Data Factory. Performed Data Analysis using Databricks for usage of 
+                                EDA (Data cleaning, smoothing, missing data imputation, data validation).
+                            </p>
+                            <div class="author-stats">
+                                <div class="author-stat">
+                                    <span class="stat-number">4+</span>
+                                    <span class="stat-label">Years Experience</span>
+                                </div>
+                                <div class="author-stat">
+                                    <span class="stat-number">80+</span>
+                                    <span class="stat-label">Tools Created</span>
+                                </div>
+                                <div class="author-stat">
+                                    <span class="stat-number">10K+</span>
+                                    <span class="stat-label">Happy Users</span>
+                                </div>
+                            </div>
+                            <div class="author-social">
+                                <a href="#" class="social-link" title="GitHub" onclick="window.open('https://github.com/parthagoswami15', '_blank')">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="#" class="social-link" title="LinkedIn" onclick="window.open('https://www.linkedin.com/in/partha-goswami-568a98184', '_blank')">
+                                    <i class="fab fa-linkedin"></i>
+                                </a>
+                                <a href="#" class="social-link" title="Portfolio" onclick="window.open('https://parthagoswami.com', '_blank')">
+                                    <i class="fas fa-globe"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
-
     </main>
 
     <footer class="footer">
@@ -661,6 +795,6 @@
     </div>
 
     <script src="main.js"></script>
-    <script src="quick-search.js"></script>
+    <script src="social-feedback.js"></script>
 </body>
 </html> 

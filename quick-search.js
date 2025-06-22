@@ -160,6 +160,10 @@ function initializeQuickSearch() {
             hideSearchResults();
         }
     });
+
+    if (resultsContainer) {
+        resultsContainer.style.display = 'none';
+    }
 }
 
 // Perform quick search
@@ -241,16 +245,5 @@ function hideSearchResults() {
     }
 }
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    initializeQuickSearch();
-    
-    // Initialize category toggles
-    const categoryHeaders = document.querySelectorAll('.category-header');
-    categoryHeaders.forEach(header => {
-        header.addEventListener('click', function() {
-            const card = this.closest('.category-card');
-            card.classList.toggle('active');
-        });
-    });
-}); 
+// The DOMContentLoaded listener is removed. 
+// initializeQuickSearch() will now be called by initializeApp() in main.js. 
