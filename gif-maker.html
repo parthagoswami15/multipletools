@@ -170,160 +170,169 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
     <script src="main.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            let uploadedImages = [];
-            let generatedGifBlob = null;
-            let workerScriptUrl = null;
+        let uploadedImages = [];
+        let generatedGifBlob = null;
+        let workerScriptUrl = null;
 
-            // --- UI Elements ---
-            const steps = {
-                step1: document.getElementById('step1'),
-                step2: document.getElementById('step2'),
-                step3: document.getElementById('step3'),
-            };
-            const uploadArea = document.getElementById('uploadArea');
-            const imageInput = document.getElementById('imageInput');
-            const imagePreview = document.getElementById('imagePreview');
-            const toStep2Btn = document.getElementById('toStep2Btn');
-            const backToStep1Btn = document.getElementById('backToStep1Btn');
-            const toStep3Btn = document.getElementById('toStep3Btn');
-            const startOverBtn = document.getElementById('startOverBtn');
-            const generatedGif = document.getElementById('generatedGif');
-            const finalGif = document.getElementById('finalGif');
-            const downloadGifBtn = document.getElementById('downloadGifBtn');
-            const frameDelay = document.getElementById('frameDelay');
-            const gifQuality = document.getElementById('gifQuality');
-            const frameDelayValue = document.getElementById('frameDelayValue');
-            const gifQualityValue = document.getElementById('gifQualityValue');
-            const regenerateBtn = document.getElementById('regenerateBtn');
-            const loadingSpinner = document.getElementById('loading-spinner');
+        // --- UI Elements ---
+        const steps = {
+            step1: document.getElementById('step1'),
+            step2: document.getElementById('step2'),
+            step3: document.getElementById('step3'),
+        };
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const toStep2Btn = document.getElementById('toStep2Btn');
+        const backToStep1Btn = document.getElementById('backToStep1Btn');
+        const toStep3Btn = document.getElementById('toStep3Btn');
+        const startOverBtn = document.getElementById('startOverBtn');
+        const generatedGif = document.getElementById('generatedGif');
+        const finalGif = document.getElementById('finalGif');
+        const downloadGifBtn = document.getElementById('downloadGifBtn');
+        const frameDelay = document.getElementById('frameDelay');
+        const gifQuality = document.getElementById('gifQuality');
+        const frameDelayValue = document.getElementById('frameDelayValue');
+        const gifQualityValue = document.getElementById('gifQualityValue');
+        const regenerateBtn = document.getElementById('regenerateBtn');
+        const loadingSpinner = document.getElementById('loading-spinner');
 
-            // --- Navigation ---
-            const navigateTo = (step) => {
-                Object.values(steps).forEach(s => s.classList.remove('active'));
-                steps[step].classList.add('active');
-            };
+        // --- Navigation ---
+        const navigateTo = (step) => {
+            Object.values(steps).forEach(s => s.classList.remove('active'));
+            steps[step].classList.add('active');
+        };
 
-            toStep2Btn.addEventListener('click', () => {
-                navigateTo('step2');
-                generatePreview();
-            });
-
-            backToStep1Btn.addEventListener('click', () => navigateTo('step1'));
-            
-            toStep3Btn.addEventListener('click', () => {
-                finalGif.src = generatedGif.src;
-                downloadGifBtn.href = URL.createObjectURL(generatedGifBlob);
-                navigateTo('step3');
-            });
-
-            startOverBtn.addEventListener('click', () => {
-                uploadedImages = [];
-                generatedGifBlob = null;
-                imageInput.value = '';
-                imagePreview.innerHTML = '';
-                toStep2Btn.disabled = true;
-                navigateTo('step1');
-            });
-            
-            regenerateBtn.addEventListener('click', () => generatePreview());
-            frameDelay.addEventListener('input', (e) => frameDelayValue.textContent = e.target.value);
-            gifQuality.addEventListener('input', (e) => gifQualityValue.textContent = e.target.value);
-
-
-            // --- File Upload ---
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('drag-over');
-            });
-            uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('drag-over');
-                handleFiles(e.dataTransfer.files);
-            });
-            imageInput.addEventListener('change', (e) => handleFiles(e.target.files));
-
-            const handleFiles = (files) => {
-                uploadedImages = [];
-                imagePreview.innerHTML = '';
-                const imageFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-                if (imageFiles.length === 0) return;
-
-                imageFiles.forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const img = new Image();
-                        img.src = e.target.result;
-                        img.className = 'img-thumbnail';
-                        uploadedImages.push(img);
-                        
-                        const wrapper = document.createElement('div');
-                        wrapper.className = 'img-thumbnail-wrapper';
-                        wrapper.appendChild(img);
-                        imagePreview.appendChild(wrapper);
-                    };
-                    reader.readAsDataURL(file);
-                });
-                toStep2Btn.disabled = false;
-            };
-            
-            // --- GIF Generation ---
-            const prepareWorker = async () => {
-                if (workerScriptUrl) return workerScriptUrl;
-                try {
-                    const response = await fetch('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    const scriptText = await response.text();
-                    const blob = new Blob([scriptText], { type: 'application/javascript' });
-                    workerScriptUrl = URL.createObjectURL(blob);
-                    return workerScriptUrl;
-                } catch (error) {
-                    console.error('Failed to create worker from blob:', error);
-                    alert(`Could not fetch the GIF worker script. Please check your internet connection. Details: ${error.message}`);
-                    return 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js'; // Fallback
-                }
-            };
-            
-            const generatePreview = async () => {
-                if (uploadedImages.length === 0) return;
-
-                loadingSpinner.style.display = 'block';
-                generatedGif.style.display = 'none';
-                
-                const workerUrl = await prepareWorker();
-
-                const gif = new GIF({
-                    workers: 2,
-                    quality: parseInt(gifQuality.value, 10),
-                    workerScript: workerUrl
-                });
-
-                uploadedImages.forEach(img => {
-                    gif.addFrame(img, { delay: parseInt(frameDelay.value, 10) });
-                });
-
-                gif.on('finished', (blob) => {
-                    generatedGifBlob = blob;
-                    const url = URL.createObjectURL(blob);
-                    generatedGif.src = url;
-                    loadingSpinner.style.display = 'none';
-                    generatedGif.style.display = 'block';
-                });
-
-                gif.on('abort', () => {
-                     alert('GIF creation aborted. Please try again.');
-                     loadingSpinner.style.display = 'none';
-                });
-
-                try {
-                    gif.render();
-                } catch (error) {
-                    alert(`An error occurred while creating the GIF preview. Details: ${error.message}`);
-                    loadingSpinner.style.display = 'none';
-                }
-            };
+        toStep2Btn.addEventListener('click', () => {
+            navigateTo('step2');
+            generatePreview();
         });
+
+        backToStep1Btn.addEventListener('click', () => navigateTo('step1'));
+        
+        toStep3Btn.addEventListener('click', () => {
+            finalGif.src = generatedGif.src;
+            downloadGifBtn.href = URL.createObjectURL(generatedGifBlob);
+            navigateTo('step3');
+        });
+
+        startOverBtn.addEventListener('click', () => {
+            uploadedImages = [];
+            generatedGifBlob = null;
+            imageInput.value = '';
+            imagePreview.innerHTML = '';
+            toStep2Btn.disabled = true;
+            navigateTo('step1');
+        });
+        
+        regenerateBtn.addEventListener('click', () => generatePreview());
+        frameDelay.addEventListener('input', (e) => frameDelayValue.textContent = e.target.value);
+        gifQuality.addEventListener('input', (e) => gifQualityValue.textContent = e.target.value);
+
+
+        // --- File Upload ---
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            handleFiles(e.dataTransfer.files);
+        });
+        imageInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+        const handleFiles = (files) => {
+            uploadedImages = [];
+            imagePreview.innerHTML = '';
+            const imageFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+
+            if (imageFiles.length === 0) {
+                alert('Please select valid image files.');
+                return;
+            }
+
+            imageFiles.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'img-thumbnail';
+                    
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'img-thumbnail-wrapper';
+                    wrapper.appendChild(img);
+                    imagePreview.appendChild(wrapper);
+
+                    uploadedImages.push({
+                        element: img,
+                        src: e.target.result
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+            toStep2Btn.disabled = false;
+        };
+        
+        // --- GIF Generation ---
+        const getWorkerUrl = async () => {
+            if (workerScriptUrl) {
+                return workerScriptUrl;
+            }
+            try {
+                 console.log('Fetching worker script...');
+                const response = await fetch('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const scriptText = await response.text();
+                const blob = new Blob([scriptText], { type: 'application/javascript' });
+                workerScriptUrl = URL.createObjectURL(blob);
+                console.log('Worker script fetched and blob URL created:', workerScriptUrl);
+                return workerScriptUrl;
+            } catch (error) {
+                console.error('Failed to fetch and create worker URL:', error);
+                // Fallback or error handling
+                alert('Could not load a critical component for GIF creation. Please check your internet connection and try again.');
+                return null;
+            }
+        };
+        
+        const generatePreview = async () => {
+            if (uploadedImages.length === 0) return;
+
+            loadingSpinner.style.display = 'block';
+            generatedGif.style.display = 'none';
+
+             const workerUrl = await getWorkerUrl();
+            if (!workerUrl) {
+                loadingSpinner.style.display = 'none';
+                return;
+            }
+
+            const gif = new GIF({
+                workers: 2,
+                quality: parseInt(gifQuality.value, 10),
+                workerScript: workerUrl,
+            });
+
+            uploadedImages.forEach(img => {
+                gif.addFrame(img.element, {
+                    delay: parseInt(frameDelay.value, 10)
+                });
+            });
+
+            gif.on('finished', (blob) => {
+                generatedGifBlob = blob;
+                const url = URL.createObjectURL(blob);
+                generatedGif.src = url;
+                loadingSpinner.style.display = 'none';
+                generatedGif.style.display = 'block';
+            });
+
+            gif.render();
+        };
     </script>
 </body>
 </html> 

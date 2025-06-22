@@ -58,46 +58,43 @@ function loadComponents() {
     const footerPlaceholder = document.getElementById('footer-placeholder');
     const adPlaceholder = document.getElementById('ad-placeholder');
 
-    if (headerPlaceholder) {
-        fetch('header.html')
+    const loadHTML = (placeholder, url) => {
+        if (!placeholder) return;
+
+        fetch(url)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error(`Failed to load ${url}: ${response.statusText}`);
                 }
                 return response.text();
             })
             .then(data => {
-                headerPlaceholder.innerHTML = data;
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = data;
+                
+                // Append all child nodes from tempDiv to placeholder
+                while (tempDiv.firstChild) {
+                    placeholder.appendChild(tempDiv.firstChild);
+                }
 
-                // We need to make sure the scripts are loaded and the DOM is ready
-                // so we re-initialize the dropdowns from bootstrap
-                var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'))
-                var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-                  return new bootstrap.Dropdown(dropdownToggleEl)
-                })
-
-                initializeSearch(); // Initialize search after header is loaded
+                // After header is loaded, initialize components that are inside it
+                if (placeholder.id === 'header-placeholder') {
+                    // Initialize Bootstrap Dropdowns
+                    const dropdownElementList = [].slice.call(placeholder.querySelectorAll('[data-bs-toggle="dropdown"]'));
+                    dropdownElementList.map(function (dropdownToggleEl) {
+                        return new bootstrap.Dropdown(dropdownToggleEl);
+                    });
+                    
+                    // Initialize search functionality
+                    initializeSearch();
+                }
             })
-            .catch(error => console.error('Error loading header:', error));
-    }
+            .catch(error => console.error(`Error loading component from ${url}:`, error));
+    };
 
-    if (footerPlaceholder) {
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                footerPlaceholder.innerHTML = data;
-            })
-            .catch(error => console.error('Error loading footer:', error));
-    }
-
-    if (adPlaceholder) {
-        fetch('ad-section.html')
-            .then(response => response.text())
-            .then(data => {
-                adPlaceholder.innerHTML = data;
-            })
-            .catch(error => console.error('Error loading ad section:', error));
-    }
+    loadHTML(headerPlaceholder, 'header.html');
+    loadHTML(footerPlaceholder, 'footer.html');
+    loadHTML(adPlaceholder, 'ad-section.html');
 }
 
 function updateLiveViewers() {
