@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .search-results {
+            margin-top: 20px;
+        }
+        .result-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <h1>Search Test</h1>
+        <input type="text" id="testSearch" class="search-input" placeholder="Type to search...">
+        <div>
+            <button class="test-button" onclick="testSearch('image to pdf')">Test: image to pdf</button>
+            <button class="test-button" onclick="testSearch('pdf to word')">Test: pdf to word</button>
+            <button class="test-button" onclick="testSearch('calculator')">Test: calculator</button>
+            <button class="test-button" onclick="testSearch('all tools')">Test: all tools</button>
+        </div>
+        <div id="testResults" class="search-results"></div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        function testSearch(query) {
+            document.getElementById('testSearch').value = query;
+            performHeaderSearch(query);
+            
+            // Display results in test area
+            const results = toolsDatabase.filter(tool => {
+                const toolName = tool.name.toLowerCase();
+                const toolCategory = tool.category.toLowerCase();
+                const toolKeywords = tool.keywords.toLowerCase();
+                const searchTerm = query.toLowerCase();
+                
+                return toolName.includes(searchTerm) || 
+                       toolKeywords.includes(searchTerm) || 
+                       toolCategory.includes(searchTerm);
+            });
+            
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = `<h3>Results for "${query}" (${results.length} found):</h3>`;
+            
+            results.forEach(tool => {
+                resultsDiv.innerHTML += `
+                    <div class="result-item">
+                        <strong>${tool.name}</strong><br>
+                        Category: ${tool.category}<br>
+                        Keywords: ${tool.keywords}<br>
+                        URL: ${tool.url}
+                    </div>
+                `;
+            });
+        }
+        
+        // Test on page load
+        window.onload = function() {
+            console.log('Tools database loaded:', toolsDatabase.length, 'tools');
+            console.log('Sample tool:', toolsDatabase[0]);
+        };
+    </script>
+</body>
+</html> 

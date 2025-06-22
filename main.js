@@ -1,5 +1,4 @@
-window.onload = function() {
-    // Initialize header search elements
+function initializeSearch() {
     const searchInput = document.getElementById('toolSearch');
     const searchClear = document.getElementById('searchClear');
     const searchSuggestions = document.getElementById('searchSuggestions');
@@ -9,13 +8,205 @@ window.onload = function() {
     const closeResults = document.getElementById('closeResults');
     const suggestionTags = document.querySelectorAll('.suggestion-tag');
 
-    // Check if the tool-search element exists before adding an event listener
-    const toolSearch = document.getElementById('tool-search');
-    if (toolSearch) {
-        renderTools();
-        toolSearch.addEventListener('input', searchTools);
+    if (!searchInput) return;
+
+    searchInput.addEventListener('focus', showHeaderSuggestions);
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim();
+        if (query) {
+            hideHeaderSuggestions();
+            performHeaderSearch(query);
+            searchClear.style.display = 'block';
+        } else {
+            showHeaderSuggestions();
+            hideHeaderResults();
+            searchClear.style.display = 'none';
+        }
+    });
+
+    searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        hideHeaderResults();
+        showHeaderSuggestions();
+        searchClear.style.display = 'none';
+    });
+
+    closeResults.addEventListener('click', () => {
+        hideHeaderResults();
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+            hideHeaderResults();
+            hideHeaderSuggestions();
+        }
+    });
+
+    suggestionTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            const query = tag.dataset.query;
+            searchInput.value = query;
+            searchInput.focus();
+            performHeaderSearch(query);
+            hideHeaderSuggestions();
+        });
+    });
+}
+
+function loadComponents() {
+    const headerPlaceholder = document.getElementById('header-placeholder');
+    const footerPlaceholder = document.getElementById('footer-placeholder');
+    const adPlaceholder = document.getElementById('ad-placeholder');
+
+    if (headerPlaceholder) {
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                headerPlaceholder.innerHTML = data;
+                initializeSearch(); // Initialize search after header is loaded
+            })
+            .catch(error => console.error('Error loading header:', error));
     }
-};
+
+    if (footerPlaceholder) {
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                footerPlaceholder.innerHTML = data;
+                updateLiveViewers(); // Initialize live viewers count
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    }
+
+    if (adPlaceholder) {
+        fetch('ad-section.html')
+            .then(response => response.text())
+            .then(data => {
+                adPlaceholder.innerHTML = data;
+            })
+            .catch(error => console.error('Error loading ad section:', error));
+    }
+}
+
+function updateLiveViewers() {
+    const viewerElement = document.getElementById('live-viewers');
+    if (!viewerElement) return;
+
+    const countSpan = viewerElement.querySelector('span');
+    if (!countSpan) return;
+
+    let viewerCount = Math.floor(Math.random() * (500 - 150 + 1)) + 150; // Base count
+
+    const updateCount = () => {
+        const fluctuation = Math.floor(Math.random() * 7) - 3; // Fluctuate between -3 and +3
+        viewerCount += fluctuation;
+
+        if (viewerCount < 120) { // Set a minimum threshold
+            viewerCount = 120 + Math.floor(Math.random() * 10);
+        }
+
+        countSpan.textContent = `${viewerCount} users online`;
+    };
+
+    setInterval(updateCount, 3000); // Update every 3 seconds
+    updateCount(); // Initial call
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadComponents();
+    
+    // Check if we are on the homepage
+    if (document.getElementById('tool-categories')) {
+        renderTools();
+    }
+
+    // Accordion functionality for category cards
+    const categoryCards = document.querySelectorAll('.category-card');
+    
+    categoryCards.forEach(card => {
+        const header = card.querySelector('.category-header');
+        const content = card.querySelector('.category-content');
+        
+        if(header && content) {
+            header.addEventListener('click', function() {
+                const isActive = card.classList.contains('active');
+                
+                // Close all other cards
+                categoryCards.forEach(otherCard => {
+                    otherCard.classList.remove('active');
+                });
+                
+                // Toggle current card
+                if (!isActive) {
+                    card.classList.add('active');
+                }
+            });
+        }
+    });
+
+    // Mobile navigation toggle
+    const mobileToggle = document.querySelector('.mobile-nav-toggle');
+    const nav = document.querySelector('.nav');
+    
+    if (mobileToggle && nav) {
+        mobileToggle.addEventListener('click', function() {
+            nav.classList.toggle('active');
+        });
+    }
+
+    // --- ANIMATION ON SCROLL ---
+    const animatedSections = document.querySelectorAll('.stats-section, .features-section, .author-section, .reviews-section');
+
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                
+                // Animate numbers if it's the stats section
+                if (entry.target.classList.contains('stats-section')) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(number => {
+                        const target = parseInt(number.dataset.target, 10);
+                        if (!isNaN(target)) {
+                            countUp(number, target);
+                        }
+                    });
+                }
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    animatedSections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+
+    // Prepare stat numbers for animation
+    const statNumbers = document.querySelectorAll('.stats-section .stat-number');
+    statNumbers.forEach(number => {
+        const value = number.textContent.trim();
+        number.dataset.target = value.replace('+', '');
+        number.textContent = '0';
+    });
+});
+
+function countUp(element, target) {
+    let current = 0;
+    const increment = target / 100;
+    
+    const counter = () => {
+        current += increment;
+        if (current < target) {
+            element.textContent = Math.ceil(current);
+            requestAnimationFrame(counter);
+        } else {
+            element.textContent = target + '+';
+        }
+    };
+    
+    counter();
+}
 
 // Complete tool data with all Image Tools, Text Tools, Convert Tools, Math & Calculators, SEO Tools, Developer Tools, Unit Converters, and Social Media Tools
 const tools = [
@@ -31,6 +222,8 @@ const tools = [
     { name: 'QR Code Generator', category: 'Image Tools', file: 'qr-code-generator.html' },
     { name: 'Screenshot to PDF Converter', category: 'Image Tools', file: 'screenshot-to-pdf.html' },
     { name: 'Image to JPEG', category: 'Image Tools', file: 'image-to-jpeg.html' },
+    { name: 'Remove Background', category: 'Image Tools', file: 'remove-background.html' },
+    { name: 'Video Editor', category: 'Miscellaneous Tools', file: 'video-editor.html' },
     
     // Text Tools
     { name: 'Word Counter', category: 'Text Tools', file: 'word-counter.html' },
@@ -92,6 +285,7 @@ const tools = [
     { name: "Daily Planner Creator", category: "Miscellaneous Tools", file: "daily-planner-creator.html" },
     { name: "Wedding Invitation Generator", category: "Miscellaneous Tools", file: "wedding-invitation-generator.html" },
     { name: "Story Plot Generator", category: "Miscellaneous Tools", file: "story-plot-generator.html" },
+    { name: "Video Editor", category: "Miscellaneous Tools", file: "video-editor.html" },
     
     // Developer Tools
     { name: 'JSON Formatter', category: 'Developer Tools', file: 'json-formatter.html' },
@@ -135,6 +329,15 @@ const categories = [
     'Unit Converters', 'Social Media Tools', 'Miscellaneous Tools'
 ];
 
+// Create toolsDatabase for search functionality
+const toolsDatabase = tools.map(tool => ({
+    name: tool.name,
+    url: tool.file,
+    category: tool.category,
+    icon: getToolIcon(tool.name, tool.category),
+    keywords: getToolKeywords(tool.name, tool.category)
+}));
+
 function renderTools(filter = '') {
     const container = document.getElementById('tool-categories');
     if (container) {
@@ -168,703 +371,391 @@ function searchTools(e) {
     renderTools(e.target.value);
 }
 
-// Accordion functionality for category cards
-document.addEventListener('DOMContentLoaded', function() {
-    const categoryCards = document.querySelectorAll('.category-card');
-    
-    categoryCards.forEach(card => {
-        const header = card.querySelector('.category-header');
-        const content = card.querySelector('.category-content');
-        
-        header.addEventListener('click', function() {
-            const isActive = card.classList.contains('active');
-            
-            // Close all other cards
-            categoryCards.forEach(otherCard => {
-                otherCard.classList.remove('active');
-            });
-            
-            // Toggle current card
-            if (!isActive) {
-                card.classList.add('active');
-            }
-        });
-    });
-});
+// Enhanced Search Functionality for Header
+let searchInput, searchClear, searchSuggestions, searchResults, resultsList, resultsCount, closeResults, suggestionTags;
 
-// Mobile navigation toggle
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileToggle = document.querySelector('.mobile-nav-toggle');
-    const nav = document.querySelector('.nav');
+// Function to get appropriate icon for each tool
+function getToolIcon(name, category) {
+    const lowerCaseName = name.toLowerCase();
     
-    if (mobileToggle && nav) {
-        mobileToggle.addEventListener('click', function() {
-            nav.classList.toggle('active');
-        });
+    // Icon mapping based on tool name keywords
+    const iconMap = {
+        'png': 'fas fa-file-image',
+        'jpg': 'fas fa-file-image',
+        'jpeg': 'fas fa-file-image',
+        'resizer': 'fas fa-expand-arrows-alt',
+        'compressor': 'fas fa-compress-arrows-alt',
+        'cropper': 'fas fa-crop-alt',
+        'base64': 'fas fa-file-code',
+        'webp': 'fas fa-image',
+        'gif': 'fas fa-film',
+        'qr code': 'fas fa-qrcode',
+        'screenshot to pdf': 'fas fa-camera-retro',
+        'remove background': 'fas fa-magic',
+        'video editor': 'fas fa-video',
+        'word counter': 'fas fa-file-word',
+        'character counter': 'fas fa-font',
+        'case converter': 'fas fa-exchange-alt',
+        'plagiarism': 'fas fa-search',
+        'grammar': 'fas fa-spell-check',
+        'text-to-speech': 'fas fa-volume-up',
+        'speech-to-text': 'fas fa-microphone-alt',
+        'url encoder': 'fas fa-link',
+        'fancy text': 'fas fa-magic',
+        'random text': 'fas fa-random',
+        'word to pdf': 'fas fa-file-pdf',
+        'pdf to word': 'fas fa-file-word',
+        'image to pdf': 'fas fa-file-pdf',
+        'pdf to ppt': 'fas fa-file-powerpoint',
+        'ppt to pdf': 'fas fa-file-pdf',
+        'word to ppt': 'fas fa-file-powerpoint',
+        'ppt to word': 'fas fa-file-word',
+        'percentage': 'fas fa-percentage',
+        'age': 'fas fa-calendar-alt',
+        'bmi': 'fas fa-heartbeat',
+        'loan': 'fas fa-university',
+        'scientific': 'fas fa-calculator',
+        'discount': 'fas fa-tags',
+        'currency': 'fas fa-dollar-sign',
+        'time zone': 'fas fa-globe',
+        'binary': 'fas fa-microchip',
+        'tip': 'fas fa-concierge-bell',
+        'mobile-friendly': 'fas fa-mobile-alt',
+        'page speed': 'fas fa-tachometer-alt',
+        'keyword density': 'fas fa-search-dollar',
+        'backlink': 'fas fa-link',
+        'domain authority': 'fas fa-chart-line',
+        'google index': 'fab fa-google',
+        'meta tag': 'fas fa-code',
+        'robots.txt': 'fas fa-robot',
+        'sitemap': 'fas fa-sitemap',
+        'xml sitemap': 'fas fa-file-code',
+        'barcode': 'fas fa-barcode',
+        'meme': 'fas fa-smile',
+        'resume': 'fas fa-file-alt',
+        'invoice': 'fas fa-file-invoice-dollar',
+        'business name': 'fas fa-briefcase',
+        'lottery': 'fas fa-ticket-alt',
+        'flip a coin': 'fas fa-coins',
+        'random number': 'fas fa-random',
+        'dice roller': 'fas fa-dice',
+        'password strength': 'fas fa-key',
+        'color palette': 'fas fa-palette',
+        'daily planner': 'fas fa-calendar-check',
+        'wedding invitation': 'fas fa-envelope-open-text',
+        'story plot': 'fas fa-book-open',
+        'json formatter': 'fas fa-code',
+        'html to markdown': 'fab fa-markdown',
+        'css minifier': 'fab fa-css3-alt',
+        'javascript minifier': 'fab fa-js-square',
+        'sql formatter': 'fas fa-database',
+        'htaccess': 'fas fa-cogs',
+        'markdown to html': 'fab fa-html5',
+        'color code': 'fas fa-eye-dropper',
+        'ip address': 'fas fa-map-marker-alt',
+        'length': 'fas fa-ruler-horizontal',
+        'weight': 'fas fa-weight-hanging',
+        'speed': 'fas fa-tachometer-alt',
+        'temperature': 'fas fa-thermometer-half',
+        'volume': 'fas fa-flask',
+        'data storage': 'fas fa-hdd',
+        'energy': 'fas fa-bolt',
+        'pressure': 'fas fa-compress-alt',
+        'fuel efficiency': 'fas fa-gas-pump',
+        'angle': 'fas fa-ruler-combined',
+        'youtube thumbnail': 'fab fa-youtube',
+        'instagram photo': 'fab fa-instagram',
+        'twitter video': 'fab fa-twitter',
+        'facebook video': 'fab fa-facebook',
+        'tiktok video': 'fab fa-tiktok',
+        'youtube tags': 'fas fa-tags',
+        'hashtag': 'fas fa-hashtag',
+        'social media post': 'fas fa-share-square',
+        'emoji keyboard': 'fas fa-smile',
+        'twitter character': 'fab fa-twitter'
+    };
+    
+    for (const keyword in iconMap) {
+        if (lowerCaseName.includes(keyword)) {
+            return iconMap[keyword];
+        }
     }
 
-    // --- ANIMATION ON SCROLL ---
-    const animatedSections = document.querySelectorAll('.stats-section, .features-section, .author-section, .reviews-section');
-
-    const sectionObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                
-                // Animate numbers if it's the stats section
-                if (entry.target.classList.contains('stats-section')) {
-                    const statNumbers = entry.target.querySelectorAll('.stat-number');
-                    statNumbers.forEach(number => {
-                        const target = parseInt(number.dataset.target, 10);
-                        if (!isNaN(target)) {
-                            countUp(number, target);
-                        }
-                    });
-                }
-                
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
-
-    animatedSections.forEach(section => {
-        sectionObserver.observe(section);
-    });
-
-    // Prepare stat numbers for animation
-    const statNumbers = document.querySelectorAll('.stats-section .stat-number');
-    statNumbers.forEach(number => {
-        const value = number.textContent.trim();
-        number.dataset.target = value.replace('+', '');
-        number.textContent = '0' + (value.includes('+') ? '+' : '');
-    });
-});
-
-function countUp(element, target) {
-    let start = 0;
-    const duration = 2000; // 2 seconds
-    const increment = target / (duration / 16); // 16ms for ~60fps
-
-    const counter = () => {
-        start += increment;
-        if (start < target) {
-            element.textContent = Math.ceil(start) + (element.dataset.target.includes('+') ? '+' : '');
-            requestAnimationFrame(counter);
-        } else {
-            element.textContent = element.dataset.target + (element.dataset.target.includes('+') ? '' : '');
-        }
-    };
-    counter();
+    // Default icons based on category
+    switch (category) {
+        case 'Image Tools': return 'fas fa-image';
+        case 'Text Tools': return 'fas fa-font';
+        case 'Convert Tools': return 'fas fa-exchange-alt';
+        case 'SEO Tools': return 'fas fa-chart-line';
+        case 'Developer Tools': return 'fas fa-code';
+        case 'Math & Calculators': return 'fas fa-calculator';
+        case 'Unit Converters': return 'fas fa-ruler-combined';
+        case 'Social Media Tools': return 'fas fa-share-alt';
+        case 'Miscellaneous Tools': return 'fas fa-star';
+        default: return 'fas fa-toolbox';
+    }
 }
 
-// Enhanced Search Functionality for Header
-const searchInput = document.getElementById('toolSearch');
-const searchClear = document.getElementById('searchClear');
-const searchSuggestions = document.getElementById('searchSuggestions');
-const searchResults = document.getElementById('searchResults');
-const resultsList = document.getElementById('resultsList');
-const resultsCount = document.getElementById('resultsCount');
-const closeResults = document.getElementById('closeResults');
-const suggestionTags = document.querySelectorAll('.suggestion-tag');
+// Function to generate keywords for each tool
+function getToolKeywords(name, category) {
+    const lowerCaseName = name.toLowerCase();
+    let keywords = [name, category];
 
-// Enhanced tools database for search with icons and keywords
-const toolsDatabase = [
-    // Calculators
-    { name: 'Age Calculator', url: 'age-calculator.html', category: 'Calculators', icon: 'fas fa-birthday-cake', keywords: 'age, birthday, date, calculator' },
-    { name: 'BMI Calculator', url: 'bmi-calculator.html', category: 'Calculators', icon: 'fas fa-weight', keywords: 'bmi, body mass index, health, calculator' },
-    { name: 'Discount Calculator', url: 'discount-calculator.html', category: 'Calculators', icon: 'fas fa-tags', keywords: 'discount, sale, price, calculator' },
-    { name: 'Loan EMI Calculator', url: 'loan-emi-calculator.html', category: 'Calculators', icon: 'fas fa-money-bill-wave', keywords: 'loan, emi, finance, calculator' },
-    { name: 'Percentage Calculator', url: 'percentage-calculator.html', category: 'Calculators', icon: 'fas fa-percentage', keywords: 'percentage, math, calculator' },
-    { name: 'Scientific Calculator', url: 'scientific-calculator.html', category: 'Calculators', icon: 'fas fa-square-root-alt', keywords: 'scientific, math, calculator' },
-    { name: 'Tip Calculator', url: 'tip-calculator.html', category: 'Calculators', icon: 'fas fa-hand-holding-usd', keywords: 'tip, restaurant, calculator' },
-    
-    // Converters
-    { name: 'Angle Converter', url: 'angle-converter.html', category: 'Converters', icon: 'fas fa-compass', keywords: 'angle, degree, radian, converter' },
-    { name: 'Binary to Decimal Converter', url: 'binary-to-decimal-converter.html', category: 'Converters', icon: 'fas fa-1', keywords: 'binary, decimal, number, converter' },
-    { name: 'Case Converter', url: 'case-converter.html', category: 'Converters', icon: 'fas fa-exchange-alt', keywords: 'case, text, uppercase, lowercase, converter' },
-    { name: 'Data Storage Converter', url: 'data-storage-converter.html', category: 'Converters', icon: 'fas fa-hdd', keywords: 'data, storage, byte, converter' },
-    { name: 'Energy Converter', url: 'energy-converter.html', category: 'Converters', icon: 'fas fa-bolt', keywords: 'energy, joule, calorie, converter' },
-    { name: 'Fuel Efficiency Converter', url: 'fuel-efficiency-converter.html', category: 'Converters', icon: 'fas fa-gas-pump', keywords: 'fuel, efficiency, mpg, converter' },
-    { name: 'Length Converter', url: 'length-converter.html', category: 'Converters', icon: 'fas fa-ruler-horizontal', keywords: 'length, meter, feet, converter' },
-    { name: 'Pressure Converter', url: 'pressure-converter.html', category: 'Converters', icon: 'fas fa-compress-arrows-alt', keywords: 'pressure, pascal, bar, converter' },
-    { name: 'Speed Converter', url: 'speed-converter.html', category: 'Converters', icon: 'fas fa-tachometer-alt', keywords: 'speed, kmh, mph, converter' },
-    { name: 'Temperature Converter', url: 'temperature-converter.html', category: 'Converters', icon: 'fas fa-thermometer-half', keywords: 'temperature, celsius, fahrenheit, converter' },
-    { name: 'Volume Converter', url: 'volume-converter.html', category: 'Converters', icon: 'fas fa-cube', keywords: 'volume, liter, gallon, converter' },
-    { name: 'Weight Converter', url: 'weight-converter.html', category: 'Converters', icon: 'fas fa-weight-hanging', keywords: 'weight, kg, pound, converter' },
-    
-    // Image Tools
-    { name: 'Image Compressor', url: 'image-compressor.html', category: 'Image Tools', icon: 'fas fa-compress-alt', keywords: 'image, compress, reduce, size' },
-    { name: 'Image Cropper', url: 'image-cropper.html', category: 'Image Tools', icon: 'fas fa-crop-alt', keywords: 'image, crop, resize, edit' },
-    { name: 'Image Resizer', url: 'image-resizer.html', category: 'Image Tools', icon: 'fas fa-expand-arrows-alt', keywords: 'image, resize, dimensions, scale' },
-    { name: 'Image to Base64', url: 'image-to-base64.html', category: 'Image Tools', icon: 'fas fa-code', keywords: 'image, base64, encode, convert' },
-    { name: 'Image to JPEG', url: 'image-to-jpeg.html', category: 'Image Tools', icon: 'fas fa-file-image', keywords: 'image, jpeg, convert, format' },
-    { name: 'Image to JPG', url: 'image-to-jpg.html', category: 'Image Tools', icon: 'fas fa-file-image', keywords: 'image, jpg, convert, format' },
-    { name: 'Image to PDF', url: 'image-to-pdf.html', category: 'Image Tools', icon: 'fas fa-file-pdf', keywords: 'image, pdf, convert, document' },
-    { name: 'Image to PNG', url: 'image-to-png.html', category: 'Image Tools', icon: 'fas fa-file-image', keywords: 'image, png, convert, format' },
-    { name: 'Remove Background', url: 'remove-background.html', category: 'Image Tools', icon: 'fas fa-cut', keywords: 'image, background, remove, transparent' },
-    { name: 'WebP to PNG', url: 'webp-to-png.html', category: 'Image Tools', icon: 'fas fa-exchange-alt', keywords: 'webp, png, convert, format' },
-    
-    // PDF Tools
-    { name: 'PDF to PPT', url: 'pdf-to-ppt.html', category: 'PDF Tools', icon: 'fas fa-file-powerpoint', keywords: 'pdf, ppt, powerpoint, convert' },
-    { name: 'PDF to Word', url: 'pdf-to-word.html', category: 'PDF Tools', icon: 'fas fa-file-word', keywords: 'pdf, word, document, convert' },
-    { name: 'PPT to PDF', url: 'ppt-to-pdf.html', category: 'PDF Tools', icon: 'fas fa-file-pdf', keywords: 'ppt, pdf, powerpoint, convert' },
-    { name: 'Word to PDF', url: 'word-to-pdf.html', category: 'PDF Tools', icon: 'fas fa-file-pdf', keywords: 'word, pdf, document, convert' },
-    
-    // Generators
-    { name: 'Barcode Generator', url: 'barcode-generator.html', category: 'Generators', icon: 'fas fa-barcode', keywords: 'barcode, generate, code, scanner' },
-    { name: 'Business Name Generator', url: 'business-name-generator.html', category: 'Generators', icon: 'fas fa-building', keywords: 'business, name, company, generate' },
-    { name: 'Color Palette Generator', url: 'color-palette-generator.html', category: 'Generators', icon: 'fas fa-palette', keywords: 'color, palette, generate, design' },
-    { name: 'Fancy Text Generator', url: 'fancy-text-generator.html', category: 'Generators', icon: 'fas fa-magic', keywords: 'fancy, text, style, generate' },
-    { name: 'Hashtag Generator', url: 'hashtag-generator.html', category: 'Generators', icon: 'fas fa-hashtag', keywords: 'hashtag, social media, generate' },
-    { name: 'HTAccess Redirect Generator', url: 'htaccess-redirect-generator.html', category: 'Generators', icon: 'fas fa-arrow-right', keywords: 'htaccess, redirect, apache, generate' },
-    { name: 'Invoice Generator', url: 'invoice-generator.html', category: 'Generators', icon: 'fas fa-receipt', keywords: 'invoice, bill, generate, business' },
-    { name: 'Lottery Number Generator', url: 'lottery-number-generator.html', category: 'Generators', icon: 'fas fa-dice', keywords: 'lottery, number, random, generate' },
-    { name: 'Meta Tag Generator', url: 'meta-tag-generator.html', category: 'Generators', icon: 'fas fa-tags', keywords: 'meta, tag, seo, generate' },
-    { name: 'QR Code Generator', url: 'qr-code-generator.html', category: 'Generators', icon: 'fas fa-qrcode', keywords: 'qr, code, generate, scan' },
-    { name: 'Random Number Generator', url: 'random-number-generator.html', category: 'Generators', icon: 'fas fa-dice', keywords: 'random, number, generate' },
-    { name: 'Robots.txt Generator', url: 'robots-txt-generator.html', category: 'Generators', icon: 'fas fa-robot', keywords: 'robots, txt, seo, generate' },
-    { name: 'Sitemap Generator', url: 'sitemap-generator.html', category: 'Generators', icon: 'fas fa-sitemap', keywords: 'sitemap, xml, seo, generate' },
-    { name: 'Story Plot Generator', url: 'story-plot-generator.html', category: 'Generators', icon: 'fas fa-book', keywords: 'story, plot, creative, generate' },
-    { name: 'Wedding Invitation Generator', url: 'wedding-invitation-generator.html', category: 'Generators', icon: 'fas fa-heart', keywords: 'wedding, invitation, generate' },
-    
-    // Web Tools
-    { name: 'Backlink Checker', url: 'backlink-checker.html', category: 'Web Tools', icon: 'fas fa-link', keywords: 'backlink, seo, check, analyze' },
-    { name: 'Color Code Picker', url: 'color-code-picker.html', category: 'Web Tools', icon: 'fas fa-palette', keywords: 'color, picker, hex, rgb' },
-    { name: 'CSS Minifier', url: 'css-minifier.html', category: 'Web Tools', icon: 'fas fa-compress', keywords: 'css, minify, compress, optimize' },
-    { name: 'Domain Authority Checker', url: 'domain-authority-checker.html', category: 'Web Tools', icon: 'fas fa-shield-alt', keywords: 'domain, authority, seo, check' },
-    { name: 'Google Index Checker', url: 'google-index-checker.html', category: 'Web Tools', icon: 'fas fa-google', keywords: 'google, index, seo, check' },
-    { name: 'HTML to Markdown', url: 'html-to-markdown.html', category: 'Web Tools', icon: 'fas fa-file-code', keywords: 'html, markdown, convert' },
-    { name: 'IP Address Lookup', url: 'ip-address-lookup.html', category: 'Web Tools', icon: 'fas fa-globe', keywords: 'ip, address, lookup, location' },
-    { name: 'JavaScript Minifier', url: 'javascript-minifier.html', category: 'Web Tools', icon: 'fab fa-js-square', keywords: 'javascript, minify, compress, optimize' },
-    { name: 'JSON Formatter', url: 'json-formatter.html', category: 'Web Tools', icon: 'fas fa-brackets-curly', keywords: 'json, format, beautify, validate' },
-    { name: 'Keyword Density Checker', url: 'keyword-density-checker.html', category: 'Web Tools', icon: 'fas fa-key', keywords: 'keyword, density, seo, analyze' },
-    { name: 'Markdown to HTML', url: 'markdown-to-html.html', category: 'Web Tools', icon: 'fas fa-file-code', keywords: 'markdown, html, convert' },
-    { name: 'Mobile Friendly Test', url: 'mobile-friendly-test.html', category: 'Web Tools', icon: 'fas fa-mobile-alt', keywords: 'mobile, friendly, test, responsive' },
-    { name: 'Page Speed Checker', url: 'page-speed-checker.html', category: 'Web Tools', icon: 'fas fa-tachometer-alt', keywords: 'page, speed, performance, check' },
-    { name: 'SQL Formatter', url: 'sql-formatter.html', category: 'Web Tools', icon: 'fas fa-database', keywords: 'sql, format, beautify, query' },
-    { name: 'URL Encoder/Decoder', url: 'url-encoder-decoder.html', category: 'Web Tools', icon: 'fas fa-link', keywords: 'url, encode, decode, convert' },
-    { name: 'XML Sitemap Validator', url: 'xml-sitemap-validator.html', category: 'Web Tools', icon: 'fas fa-check-circle', keywords: 'xml, sitemap, validate, seo' },
-    { name: 'YouTube Tags Extractor', url: 'youtube-tags-extractor.html', category: 'Web Tools', icon: 'fas fa-tags', keywords: 'youtube, tags, extract, analyze' },
-    
-    // Miscellaneous Tools
-    { name: 'Character Counter', url: 'character-counter.html', category: 'Miscellaneous', icon: 'fas fa-text-width', keywords: 'character, count, text, length' },
-    { name: 'Currency Converter', url: 'currency-converter.html', category: 'Miscellaneous', icon: 'fas fa-dollar-sign', keywords: 'currency, convert, exchange, rate' },
-    { name: 'Daily Planner Creator', url: 'daily-planner-creator.html', category: 'Miscellaneous', icon: 'fas fa-calendar', keywords: 'daily, planner, schedule, create' },
-    { name: 'Dice Roller Simulator', url: 'dice-roller-simulator.html', category: 'Miscellaneous', icon: 'fas fa-dice-d6', keywords: 'dice, roll, random, game' },
-    { name: 'Emoji Keyboard', url: 'emoji-keyboard.html', category: 'Miscellaneous', icon: 'fas fa-smile', keywords: 'emoji, keyboard, symbols, copy' },
-    { name: 'Facebook Video Downloader', url: 'facebook-video-downloader.html', category: 'Miscellaneous', icon: 'fab fa-facebook', keywords: 'facebook, video, download' },
-    { name: 'Flip a Coin Simulator', url: 'flip-a-coin-simulator.html', category: 'Miscellaneous', icon: 'fas fa-circle', keywords: 'coin, flip, random, heads tails' },
-    { name: 'GIF Maker', url: 'gif-maker.html', category: 'Miscellaneous', icon: 'fas fa-film', keywords: 'gif, maker, animate, create' },
-    { name: 'Grammar Checker', url: 'grammar-checker.html', category: 'Miscellaneous', icon: 'fas fa-spell-check', keywords: 'grammar, check, spell, correct' },
-    { name: 'Instagram Photo Downloader', url: 'instagram-photo-downloader.html', category: 'Miscellaneous', icon: 'fab fa-instagram', keywords: 'instagram, photo, download' },
-    { name: 'Internet Speed Test', url: 'internet-speed-test.html', category: 'Miscellaneous', icon: 'fas fa-tachometer-alt', keywords: 'internet, speed, test, bandwidth' },
-    { name: 'Meme Generator', url: 'meme-generator.html', category: 'Miscellaneous', icon: 'fas fa-laugh', keywords: 'meme, generator, create, funny' },
-    { name: 'Password Strength Checker', url: 'password-strength-checker.html', category: 'Miscellaneous', icon: 'fas fa-shield-alt', keywords: 'password, strength, check, secure' },
-    { name: 'Plagiarism Checker', url: 'plagiarism-checker.html', category: 'Miscellaneous', icon: 'fas fa-search', keywords: 'plagiarism, check, duplicate, content' },
-    { name: 'Random Text Generator', url: 'random-text-generator.html', category: 'Miscellaneous', icon: 'fas fa-random', keywords: 'random, text, generate, lorem' },
-    { name: 'Resume Builder', url: 'resume-builder.html', category: 'Miscellaneous', icon: 'fas fa-file-alt', keywords: 'resume, builder, cv, create' },
-    { name: 'Screenshot to PDF', url: 'screenshot-to-pdf.html', category: 'Miscellaneous', icon: 'fas fa-camera', keywords: 'screenshot, pdf, convert, capture' },
-    { name: 'Social Media Post Generator', url: 'social-media-post-generator.html', category: 'Miscellaneous', icon: 'fas fa-edit', keywords: 'social, media, post, generate' },
-    { name: 'Speech to Text', url: 'speech-to-text.html', category: 'Miscellaneous', icon: 'fas fa-microphone', keywords: 'speech, text, voice, convert' },
-    { name: 'Text to Speech', url: 'text-to-speech.html', category: 'Miscellaneous', icon: 'fas fa-volume-up', keywords: 'text, speech, voice, convert' },
-    { name: 'TikTok Video Downloader', url: 'tiktok-video-downloader.html', category: 'Miscellaneous', icon: 'fab fa-tiktok', keywords: 'tiktok, video, download' },
-    { name: 'Time Zone Converter', url: 'time-zone-converter.html', category: 'Miscellaneous', icon: 'fas fa-clock', keywords: 'time, zone, convert, world' },
-    { name: 'Twitter Character Counter', url: 'twitter-character-counter.html', category: 'Miscellaneous', icon: 'fas fa-text-width', keywords: 'twitter, character, count, limit' },
-    { name: 'Twitter Video Downloader', url: 'twitter-video-downloader.html', category: 'Miscellaneous', icon: 'fab fa-twitter', keywords: 'twitter, video, download' },
-    { name: 'Word Counter', url: 'word-counter.html', category: 'Miscellaneous', icon: 'fas fa-calculator', keywords: 'word, count, text, analyze' },
-    { name: 'YouTube Thumbnail Downloader', url: 'youtube-thumbnail-downloader.html', category: 'Miscellaneous', icon: 'fab fa-youtube', keywords: 'youtube, thumbnail, download' }
-];
+    // Synonyms and variations dictionary
+    const synonyms = {
+        // Image Tools
+        'image to png converter': ['image to png', 'convert to png', 'png converter'],
+        'image to jpg converter': ['image to jpg', 'convert to jpg', 'jpg converter', 'image to jpeg'],
+        'image resizer': ['resize image', 'photo resizer', 'image scaler'],
+        'image compressor': ['compress image', 'reduce image size', 'photo compressor'],
+        'image cropper': ['crop image', 'photo cropper', 'image cutter'],
+        'convert image to base64': ['image to base64', 'base64 encoder'],
+        'convert webp to png': ['webp to png', 'convert webp'],
+        'gif maker': ['create gif', 'animated gif maker', 'gif generator'],
+        'qr code generator': ['create qr code', 'qr code maker'],
+        'screenshot to pdf converter': ['screenshot to pdf', 'convert screenshot to pdf'],
+        'remove background': ['background remover', 'transparent background', 'png background'],
+        'video editor': ['edit video', 'video trimmer', 'video cutter'],
+
+        // Text Tools
+        'word counter': ['count words', 'word count', 'text counter'],
+        'character counter': ['count characters', 'character count'],
+        'case converter': ['change case', 'uppercase', 'lowercase', 'toggle case'],
+        'plagiarism checker': ['check for plagiarism', 'similarity checker'],
+        'grammar checker': ['check grammar', 'proofread', 'spell check'],
+        'text-to-speech': ['tts', 'read aloud', 'voice generator'],
+        'speech-to-text': ['stt', 'transcribe', 'voice to text'],
+        'url encoder & decoder': ['url encode', 'url decode', 'percent encoding'],
+        'fancy text generator': ['cool text', 'stylish text', 'font generator'],
+        'random text generator': ['lorem ipsum', 'placeholder text'],
+
+        // Convert Tools
+        'word to pdf': ['convert word to pdf', 'doc to pdf'],
+        'pdf to word': ['convert pdf to word', 'pdf to doc'],
+        'image to pdf': ['convert image to pdf', 'jpg to pdf', 'png to pdf'],
+        'pdf to ppt': ['convert pdf to powerpoint'],
+        'ppt to pdf': ['convert powerpoint to pdf'],
+        'word to ppt': ['convert word to powerpoint'],
+        'ppt to word': ['convert powerpoint to word'],
+        
+        // Math & Calculators
+        'percentage calculator': ['calculate percentage', 'percent calculator'],
+        'age calculator': ['calculate age', 'how old am i'],
+        'bmi calculator': ['body mass index', 'bmi chart'],
+        'loan emi calculator': ['emi calculator', 'loan calculator'],
+        'scientific calculator': ['online scientific calculator'],
+        'discount calculator': ['calculate discount', 'sale price calculator'],
+        'currency converter': ['exchange rate', 'money converter'],
+        'time zone converter': ['world clock', 'time difference'],
+        'binary to decimal converter': ['binary to decimal', 'bin to dec'],
+        'tip calculator': ['calculate tip', 'gratuity calculator'],
+
+        // SEO Tools
+        'mobile-friendly test': ['responsive test', 'mobile test'],
+        'page speed checker': ['website speed test', 'gtmetrix', 'pingdom'],
+        'keyword density checker': ['check keyword density'],
+        'backlink checker': ['check backlinks', 'link analysis'],
+        'domain authority checker': ['da checker', 'website authority'],
+        'google index checker': ['check if site is indexed'],
+        'meta tag generator': ['create meta tags', 'seo meta tags'],
+        'robots.txt generator': ['create robots.txt'],
+        'sitemap generator': ['create sitemap', 'xml sitemap'],
+        'xml sitemap validator': ['validate sitemap'],
+        
+        // Developer Tools
+        'json formatter': ['format json', 'json viewer', 'json beautifier'],
+        'html to markdown': ['convert html to markdown'],
+        'css minifier': ['minify css', 'compress css'],
+        'javascript minifier': ['minify js', 'compress js'],
+        'sql formatter': ['format sql', 'sql beautifier'],
+        'htaccess redirect generator': ['generate htaccess redirects'],
+        'markdown to html': ['convert markdown to html'],
+        'color code picker': ['color picker', 'hex code picker'],
+        'base64 encoder & decoder': ['base64 encode', 'base64 decode'],
+        'ip address lookup': ['my ip address', 'geoip'],
+
+        // Unit Converters
+        'length converter': ['convert length', 'cm to inches', 'meters to feet'],
+        'weight converter': ['convert weight', 'kg to lbs', 'grams to ounces'],
+        'speed converter': ['convert speed', 'kph to mph'],
+        'temperature converter': ['convert temperature', 'celsius to fahrenheit'],
+        'volume converter': ['convert volume', 'liters to gallons'],
+        'data storage converter': ['convert data storage', 'mb to gb'],
+        'energy converter': ['convert energy', 'joules to calories'],
+        'pressure converter': ['convert pressure', 'psi to bar'],
+        'fuel efficiency converter': ['convert fuel efficiency', 'mpg to l/100km'],
+        'angle converter': ['convert angle', 'degrees to radians'],
+
+        // Social Media Tools
+        'youtube thumbnail downloader': ['download youtube thumbnail'],
+        'instagram photo downloader': ['download instagram photo'],
+        'twitter video downloader': ['download twitter video'],
+        'facebook video downloader': ['download facebook video'],
+        'tiktok video downloader': ['download tiktok video'],
+        'youtube tags extractor': ['extract youtube tags'],
+        'hashtag generator': ['generate hashtags', 'instagram hashtags'],
+        'social media post generator': ['create social media post'],
+        'emoji keyboard': ['online emoji keyboard'],
+        'twitter character counter': ['tweet character count']
+    };
+
+    if (synonyms[lowerCaseName]) {
+        keywords = keywords.concat(synonyms[lowerCaseName]);
+    }
+
+    return [...new Set(keywords)]; // Remove duplicates
+}
 
 // Enhanced search functionality
 function performHeaderSearch(query) {
-    if (!query.trim()) {
+    query = query.toLowerCase().trim();
+    if (!query) {
         hideHeaderResults();
-        showHeaderSuggestions();
         return;
     }
     
-    const searchTerm = query.toLowerCase();
-    
-    // Special case: Show all tools when user types "all tools" or similar
-    if (searchTerm.includes('all') && searchTerm.includes('tool')) {
-        displayAllTools();
-        return;
-    }
-    
-    // Enhanced search algorithm with better matching
     const results = toolsDatabase.filter(tool => {
-        const toolName = tool.name.toLowerCase();
-        const toolCategory = tool.category.toLowerCase();
-        const toolKeywords = tool.keywords.toLowerCase();
+        const queryWords = query.split(' ').filter(w => w.length > 0);
         
-        // Exact match for tool names
-        if (toolName === searchTerm) {
-            return true;
-        }
-        
-        // Partial match for tool names (more flexible)
-        if (toolName.includes(searchTerm)) {
-            return true;
-        }
-        
-        // Search in keywords
-        if (toolKeywords.includes(searchTerm)) {
-            return true;
-        }
-        
-        // Search in category
-        if (toolCategory.includes(searchTerm)) {
-            return true;
-        }
-        
-        // Split search term into words and check if all words are found
-        const searchWords = searchTerm.split(' ').filter(word => word.length > 0);
-        if (searchWords.length > 1) {
-            const allWordsFound = searchWords.every(word => 
-                toolName.includes(word) || 
-                toolKeywords.includes(word) || 
-                toolCategory.includes(word)
-            );
-            if (allWordsFound) {
-                return true;
-            }
-        }
-        
-        // Check for common abbreviations and variations
-        const variations = {
-            'pdf': 'pdf',
-            'word': 'word',
-            'image': 'image',
-            'png': 'png',
-            'jpg': 'jpg',
-            'jpeg': 'jpeg',
-            'webp': 'webp',
-            'calc': 'calculator',
-            'conv': 'converter',
-            'gen': 'generator',
-            'comp': 'compressor',
-            'resize': 'resizer',
-            'crop': 'cropper',
-            'qr': 'qr code',
-            'barcode': 'barcode',
-            'hash': 'hashtag',
-            'url': 'url',
-            'json': 'json',
-            'sql': 'sql',
-            'css': 'css',
-            'js': 'javascript',
-            'html': 'html',
-            'markdown': 'markdown',
-            'base64': 'base64',
-            'ip': 'ip address',
-            'seo': 'seo',
-            'speed': 'speed',
-            'mobile': 'mobile',
-            'grammar': 'grammar',
-            'spell': 'spell',
-            'plagiarism': 'plagiarism',
-            'text': 'text',
-            'speech': 'speech',
-            'voice': 'voice',
-            'audio': 'audio',
-            'video': 'video',
-            'photo': 'photo',
-            'thumbnail': 'thumbnail',
-            'download': 'downloader',
-            'upload': 'upload',
-            'convert': 'convert',
-            'transform': 'transform',
-            'format': 'format',
-            'compress': 'compress',
-            'resize': 'resize',
-            'crop': 'crop',
-            'edit': 'edit',
-            'create': 'create',
-            'generate': 'generate',
-            'build': 'build',
-            'make': 'make',
-            'check': 'check',
-            'test': 'test',
-            'validate': 'validate',
-            'analyze': 'analyze',
-            'count': 'count',
-            'calculate': 'calculate',
-            'measure': 'measure',
-            'weigh': 'weight',
-            'length': 'length',
-            'temperature': 'temperature',
-            'time': 'time',
-            'date': 'date',
-            'age': 'age',
-            'bmi': 'bmi',
-            'percentage': 'percentage',
-            'discount': 'discount',
-            'tip': 'tip',
-            'currency': 'currency',
-            'money': 'money',
-            'loan': 'loan',
-            'emi': 'emi',
-            'random': 'random',
-            'dice': 'dice',
-            'coin': 'coin',
-            'lottery': 'lottery',
-            'password': 'password',
-            'security': 'security',
-            'encrypt': 'encrypt',
-            'encode': 'encode',
-            'decode': 'decode',
-            'hash': 'hash',
-            'color': 'color',
-            'palette': 'palette',
-            'hex': 'hex',
-            'rgb': 'rgb',
-            'background': 'background',
-            'remove': 'remove',
-            'screenshot': 'screenshot',
-            'meme': 'meme',
-            'gif': 'gif',
-            'animation': 'animation',
-            'social': 'social',
-            'media': 'media',
-            'facebook': 'facebook',
-            'instagram': 'instagram',
-            'twitter': 'twitter',
-            'youtube': 'youtube',
-            'tiktok': 'tiktok',
-            'linkedin': 'linkedin',
-            'whatsapp': 'whatsapp',
-            'emoji': 'emoji',
-            'smile': 'smile',
-            'hashtag': 'hashtag',
-            'tag': 'tag',
-            'meta': 'meta',
-            'robots': 'robots',
-            'sitemap': 'sitemap',
-            'xml': 'xml',
-            'backlink': 'backlink',
-            'domain': 'domain',
-            'authority': 'authority',
-            'google': 'google',
-            'index': 'index',
-            'keyword': 'keyword',
-            'density': 'density',
-            'mobile': 'mobile',
-            'friendly': 'friendly',
-            'responsive': 'responsive',
-            'speed': 'speed',
-            'performance': 'performance',
-            'minify': 'minify',
-            'compress': 'compress',
-            'optimize': 'optimize',
-            'format': 'format',
-            'beautify': 'beautify',
-            'validate': 'validate',
-            'check': 'check',
-            'test': 'test',
-            'analyze': 'analyze',
-            'lookup': 'lookup',
-            'find': 'find',
-            'search': 'search',
-            'extract': 'extract',
-            'parse': 'parse',
-            'encode': 'encode',
-            'decode': 'decode',
-            'convert': 'convert',
-            'transform': 'transform',
-            'change': 'change',
-            'modify': 'modify',
-            'edit': 'edit',
-            'create': 'create',
-            'generate': 'generate',
-            'build': 'build',
-            'make': 'make',
-            'produce': 'produce',
-            'create': 'create',
-            'design': 'design',
-            'develop': 'develop',
-            'program': 'program',
-            'code': 'code',
-            'script': 'script',
-            'function': 'function',
-            'utility': 'utility',
-            'tool': 'tool',
-            'app': 'app',
-            'application': 'application',
-            'service': 'service',
-            'helper': 'helper',
-            'assistant': 'assistant',
-            'calculator': 'calculator',
-            'converter': 'converter',
-            'generator': 'generator',
-            'formatter': 'formatter',
-            'compressor': 'compressor',
-            'resizer': 'resizer',
-            'cropper': 'cropper',
-            'downloader': 'downloader',
-            'uploader': 'uploader',
-            'checker': 'checker',
-            'validator': 'validator',
-            'analyzer': 'analyzer',
-            'tester': 'tester',
-            'builder': 'builder',
-            'maker': 'maker',
-            'creator': 'creator',
-            'designer': 'designer',
-            'developer': 'developer',
-            'programmer': 'programmer',
-            'coder': 'coder',
-            'scripter': 'scripter',
-            'functioner': 'functioner',
-            'utility': 'utility',
-            'tool': 'tool',
-            'app': 'app',
-            'application': 'application',
-            'service': 'service',
-            'helper': 'helper',
-            'assistant': 'assistant'
-        };
-        
-        // Check for variations
-        for (const [abbreviation, fullWord] of Object.entries(variations)) {
-            if (searchTerm.includes(abbreviation) && 
-                (toolName.includes(fullWord) || toolKeywords.includes(fullWord))) {
-                return true;
-            }
-        }
-        
-        return false;
+        // Check if all query words are found in the tool's keywords
+        return queryWords.every(word => 
+            tool.keywords.some(kw => kw.toLowerCase().includes(word))
+        );
     });
-    
-    // Sort results by relevance
-    results.sort((a, b) => {
-        const aName = a.name.toLowerCase();
-        const bName = b.name.toLowerCase();
-        
-        // Exact name match gets highest priority
-        if (aName === searchTerm && bName !== searchTerm) return -1;
-        if (bName === searchTerm && aName !== searchTerm) return 1;
-        
-        // Name starts with search term gets higher priority
-        if (aName.startsWith(searchTerm) && !bName.startsWith(searchTerm)) return -1;
-        if (bName.startsWith(searchTerm) && !aName.startsWith(searchTerm)) return 1;
-        
-        // Name contains search term gets higher priority
-        if (aName.includes(searchTerm) && !bName.includes(searchTerm)) return -1;
-        if (bName.includes(searchTerm) && !aName.includes(searchTerm)) return 1;
-        
-        // Alphabetical order for same relevance
-        return aName.localeCompare(bName);
-    });
-    
+
     displayHeaderResults(results, query);
 }
 
 function displayHeaderResults(results, query) {
-    hideHeaderSuggestions();
+    const searchResults = document.getElementById('searchResults');
+    const resultsList = document.getElementById('resultsList');
+    const resultsCount = document.getElementById('resultsCount');
+
+    resultsList.innerHTML = '';
     
-    if (results.length === 0) {
-        resultsList.innerHTML = `
-            <div class="search-result-item" style="text-align: center; color: #666;">
-                <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                <div>No tools found for "${query}"</div>
-                <div style="font-size: 0.8rem; margin-top: 0.5rem;">Try different keywords or browse all tools</div>
-                <div style="margin-top: 1rem;">
-                    <a href="#tools" class="btn btn-primary" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
-                        <i class="fas fa-list"></i> Browse All Tools
-                    </a>
-                </div>
-            </div>
-        `;
-    } else {
-        resultsList.innerHTML = results.map(tool => `
-            <a href="${tool.url}" class="search-result-item">
-                <div class="result-icon">
-                    <i class="${tool.icon}"></i>
-                </div>
-                <div class="result-content">
-                    <div class="result-title">${tool.name}</div>
-                    <div class="result-category">${tool.category}</div>
-                </div>
-            </a>
-        `).join('');
-        
-        // Add "View All Tools" link if there are many results
-        if (results.length > 5) {
-            resultsList.innerHTML += `
-                <div class="search-result-item" style="text-align: center; border-top: 1px solid #eee; margin-top: 0.5rem; padding-top: 1rem;">
-                    <a href="#tools" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
-                        <i class="fas fa-list"></i> View All ${toolsDatabase.length} Tools
-                    </a>
-                </div>
+    if (results.length > 0) {
+        resultsCount.textContent = `${results.length} results found`;
+        results.forEach(tool => {
+            const li = document.createElement('li');
+            li.className = 'result-item';
+            
+            // Highlight matching words
+            let highlightedName = tool.name;
+            const queryWords = query.split(' ').filter(w => w.length > 0);
+            queryWords.forEach(word => {
+                const regex = new RegExp(word, 'gi');
+                highlightedName = highlightedName.replace(regex, `<span class="highlight">$&</span>`);
+            });
+            
+            li.innerHTML = `
+                <a href="${tool.url}">
+                    <div class="result-icon">
+                        <i class="${tool.icon}"></i>
+                    </div>
+                    <div class="result-details">
+                        <div class="result-name">${highlightedName}</div>
+                        <div class="result-category">${tool.category}</div>
+                    </div>
+                </a>
             `;
-        }
+            resultsList.appendChild(li);
+        });
+    } else {
+        resultsCount.textContent = 'No results found';
+        resultsList.innerHTML = `<li class="no-results">Try a different search term.</li>`;
     }
-    
-    resultsCount.textContent = `${results.length} result${results.length !== 1 ? 's' : ''} found`;
+
     searchResults.style.display = 'block';
 }
 
 function showHeaderSuggestions() {
+    const searchSuggestions = document.getElementById('searchSuggestions');
     if (searchSuggestions) {
-        searchSuggestions.classList.add('show');
+        searchSuggestions.style.display = 'block';
     }
 }
 
 function hideHeaderSuggestions() {
+    const searchSuggestions = document.getElementById('searchSuggestions');
     if (searchSuggestions) {
-        searchSuggestions.classList.remove('show');
+        searchSuggestions.style.display = 'none';
     }
 }
 
 function hideHeaderResults() {
+    const searchResults = document.getElementById('searchResults');
     if (searchResults) {
         searchResults.style.display = 'none';
     }
 }
 
-// Header search event listeners
-if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value;
-        
-        if (query.length > 0) {
-            if (searchClear) searchClear.style.display = 'block';
-            performHeaderSearch(query);
-        } else {
-            if (searchClear) searchClear.style.display = 'none';
-            hideHeaderResults();
-            showHeaderSuggestions();
-        }
-    });
-    
-    searchInput.addEventListener('focus', () => {
-        if (searchInput.value.length === 0) {
-            showHeaderSuggestions();
-        }
-    });
-    
-    searchInput.addEventListener('blur', () => {
-        // Delay hiding suggestions to allow for clicks
-        setTimeout(() => {
-            hideHeaderSuggestions();
-        }, 200);
-    });
-}
-
-if (searchClear) {
-    searchClear.addEventListener('click', () => {
-        searchInput.value = '';
-        searchClear.style.display = 'none';
-        hideHeaderResults();
-        showHeaderSuggestions();
-        searchInput.focus();
-    });
-}
-
-if (closeResults) {
-    closeResults.addEventListener('click', () => {
-        hideHeaderResults();
-        searchInput.focus();
-    });
-}
-
-// Suggestion tag clicks
-if (suggestionTags) {
-    suggestionTags.forEach(tag => {
-        tag.addEventListener('click', () => {
-            const searchTerm = tag.getAttribute('data-search');
-            searchInput.value = searchTerm;
-            if (searchClear) searchClear.style.display = 'block';
-            performHeaderSearch(searchTerm);
-            hideHeaderSuggestions();
-        });
-    });
-}
-
-// Close search results when clicking outside
-document.addEventListener('click', (e) => {
-    if (searchInput && searchResults && searchSuggestions) {
-        if (!searchInput.contains(e.target) && 
-            !searchResults.contains(e.target) && 
-            !searchSuggestions.contains(e.target)) {
-            hideHeaderSuggestions();
-            hideHeaderResults();
-        }
-    }
-});
-
-// Keyboard navigation for header search
-if (searchInput) {
-    searchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            hideHeaderResults();
-            hideHeaderSuggestions();
-            searchInput.blur();
-        }
-    });
-}
-
-// Initialize search elements when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('toolSearch');
-    const searchClear = document.getElementById('searchClear');
-    const searchSuggestions = document.getElementById('searchSuggestions');
-    const searchResults = document.getElementById('searchResults');
-    const resultsList = document.getElementById('resultsList');
-    const resultsCount = document.getElementById('resultsCount');
-    const closeResults = document.getElementById('closeResults');
+document.addEventListener('DOMContentLoaded', () => {
+    const toolSearchInput = document.getElementById('tool-search');
     const suggestionTags = document.querySelectorAll('.suggestion-tag');
 
-    // Initialize header search if elements exist
-    if (searchInput && searchResults && resultsList && resultsCount) {
-        console.log('Header search initialized successfully');
-    }
-});
-
-// Function to display all tools
-function displayAllTools() {
-    hideHeaderSuggestions();
-    
-    // Group tools by category
-    const categories = {};
-    toolsDatabase.forEach(tool => {
-        if (!categories[tool.category]) {
-            categories[tool.category] = [];
-        }
-        categories[tool.category].push(tool);
-    });
-    
-    let allToolsHTML = '';
-    
-    // Create sections for each category
-    Object.keys(categories).forEach(category => {
-        allToolsHTML += `
-            <div class="search-category-section">
-                <h4 class="category-title">${category}</h4>
-                <div class="category-tools">
-        `;
-        
-        categories[category].forEach(tool => {
-            allToolsHTML += `
-                <a href="${tool.url}" class="search-result-item">
-                    <div class="result-icon">
-                        <i class="${tool.icon}"></i>
-                    </div>
-                    <div class="result-content">
-                        <div class="result-title">${tool.name}</div>
-                        <div class="result-category">${tool.category}</div>
-                    </div>
-                </a>
-            `;
+    if (toolSearchInput) {
+        toolSearchInput.addEventListener('input', (e) => {
+            const query = e.target.value;
+            performHeaderSearch(query);
         });
         
-        allToolsHTML += `
-                </div>
-            </div>
-        `;
+        toolSearchInput.addEventListener('focus', () => {
+             if (!toolSearchInput.value) {
+                showHeaderSuggestions();
+             }
+        });
+    }
+
+    suggestionTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            const query = tag.dataset.query;
+            toolSearchInput.value = query;
+            performHeaderSearch(query);
+            hideHeaderSuggestions();
+        });
     });
-    
-    resultsList.innerHTML = allToolsHTML;
-    resultsCount.textContent = `All ${toolsDatabase.length} Tools`;
-    searchResults.style.display = 'block';
+
+    document.addEventListener('click', (e) => {
+        const searchContainer = document.querySelector('.search-container');
+        if (searchContainer && !searchContainer.contains(e.target)) {
+            hideHeaderResults();
+            hideHeaderSuggestions();
+        }
+    });
+
+    displayAllTools();
+});
+
+function displayAllTools() {
+    const container = document.getElementById('all-tools-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+    categories.forEach(category => {
+        const categoryTools = toolsDatabase.filter(tool => tool.category === category);
+        if (categoryTools.length > 0) {
+            const categorySection = document.createElement('div');
+            categorySection.className = 'category-section';
+
+            let toolsHTML = '';
+            categoryTools.forEach(tool => {
+                toolsHTML += `
+                    <a href="${tool.url}" class="tool-card">
+                        <div class="tool-icon">
+                            <i class="${tool.icon}"></i>
+                        </div>
+                        <div class="tool-name">${tool.name}</div>
+                    </a>
+                `;
+            });
+            
+            categorySection.innerHTML = `
+                <h3 class="category-title">${category}</h3>
+                <div class="tool-grid">
+                    ${toolsHTML}
+                </div>
+            `;
+            container.appendChild(categorySection);
+        }
+    });
 }
