@@ -136,7 +136,7 @@
             });
         });
 
-        createGifBtn.addEventListener('click', function() {
+        createGifBtn.addEventListener('click', async function() {
             if (uploadedImages.length < 1) {
                 alert('Please upload at least 1 image to create a GIF.');
                 return;
@@ -150,10 +150,20 @@
             const frameDelay = parseInt(document.getElementById('frameDelay').value, 10);
             const gifQuality = parseInt(document.getElementById('gifQuality').value, 10);
             
+            let workerScript = 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js';
+            try {
+                const response = await fetch(workerScript);
+                const scriptText = await response.text();
+                const blob = new Blob([scriptText], { type: 'application/javascript' });
+                workerScript = URL.createObjectURL(blob);
+            } catch (error) {
+                console.error('Failed to create worker from blob:', error);
+            }
+
             const gif = new GIF({
                 workers: 2,
                 quality: gifQuality,
-                workerScript: 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js'
+                workerScript: workerScript
             });
 
             gif.on('abort', function() {
