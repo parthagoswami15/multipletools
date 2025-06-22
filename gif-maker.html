@@ -180,7 +180,17 @@
                     progressBar.textContent = '0%';
                 });
 
-                gif.render();
+                try {
+                    gif.render();
+                } catch (error) {
+                    console.error('Error rendering GIF:', error);
+                    alert('An error occurred while creating the GIF. Please try again with different images or settings.');
+                    createGifBtn.disabled = false;
+                    createGifBtn.innerHTML = '<i class="fas fa-play"></i> Create GIF';
+                    document.getElementById('progress-container').style.display = 'none';
+                    progressBar.style.width = '0%';
+                    progressBar.textContent = '0%';
+                }
             });
 
             downloadGifBtn.addEventListener('click', function() {
