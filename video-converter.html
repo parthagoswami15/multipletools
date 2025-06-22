@@ -312,189 +312,189 @@
 </head>
 <body>
     <div id="header-placeholder"></div>
-    <div class="video-converter-container">
+        <div class="video-converter-container">
         <h1 class="main-title">Video Converter</h1>
         <p class="sub-title">Convert your videos to different formats quickly and easily.</p>
         
-        <div class="upload-area" id="uploadArea">
-            <div class="upload-icon">
-                <i class="fas fa-cloud-upload-alt"></i>
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">Drop your video here or click to browse</div>
+                <div class="upload-subtext">Supports MP4, AVI, MOV, WMV, FLV, and more</div>
+                <input type="file" id="videoFile" class="file-input" accept="video/*">
             </div>
-            <div class="upload-text">Drop your video here or click to browse</div>
-            <div class="upload-subtext">Supports MP4, AVI, MOV, WMV, FLV, and more</div>
-            <input type="file" id="videoFile" class="file-input" accept="video/*">
-        </div>
 
-        <!-- Video Preview -->
-        <div class="video-preview" id="videoPreview" style="display: none;">
-            <video id="videoPlayer" controls>
-                Your browser does not support the video tag.
-            </video>
-        </div>
-
-        <!-- Video Info -->
-        <div class="video-info" id="videoInfo" style="display: none;">
-            <h3>Video Information</h3>
-            <div class="info-grid">
-                <div class="info-item">
-                    <div class="info-label">File Name</div>
-                    <div class="info-value" id="fileName">-</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">File Size</div>
-                    <div class="info-value" id="fileSize">-</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Duration</div>
-                    <div class="info-value" id="duration">-</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Resolution</div>
-                    <div class="info-value" id="resolution">-</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Format</div>
-                    <div class="info-value" id="format">-</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Bitrate</div>
-                    <div class="info-value" id="bitrate">-</div>
-                </div>
+            <!-- Video Preview -->
+            <div class="video-preview" id="videoPreview" style="display: none;">
+                <video id="videoPlayer" controls>
+                    Your browser does not support the video tag.
+                </video>
             </div>
-        </div>
 
-        <!-- Conversion Options -->
-        <div class="conversion-options" id="conversionOptions" style="display: none;">
-            <h3>Conversion Settings</h3>
-            
-            <!-- Format Selection -->
-            <div class="format-selector">
-                <div class="format-option" data-format="mp4">
-                    <div class="format-icon">📹</div>
-                    <div>MP4</div>
-                    <small>Most Compatible</small>
-                </div>
-                <div class="format-option" data-format="avi">
-                    <div class="format-icon">🎬</div>
-                    <div>AVI</div>
-                    <small>High Quality</small>
-                </div>
-                <div class="format-option" data-format="mov">
-                    <div class="format-icon">🍎</div>
-                    <div>MOV</div>
-                    <small>Apple Devices</small>
-                </div>
-                <div class="format-option" data-format="wmv">
-                    <div class="format-icon">🪟</div>
-                    <div>WMV</div>
-                    <small>Windows Media</small>
-                </div>
-                <div class="format-option" data-format="flv">
-                    <div class="format-icon">🌐</div>
-                    <div>FLV</div>
-                    <small>Web Streaming</small>
-                </div>
-                <div class="format-option" data-format="webm">
-                    <div class="format-icon">🌍</div>
-                    <div>WebM</div>
-                    <small>Web Optimized</small>
+            <!-- Video Info -->
+            <div class="video-info" id="videoInfo" style="display: none;">
+                <h3>Video Information</h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">File Name</div>
+                        <div class="info-value" id="fileName">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">File Size</div>
+                        <div class="info-value" id="fileSize">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Duration</div>
+                        <div class="info-value" id="duration">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Resolution</div>
+                        <div class="info-value" id="resolution">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Format</div>
+                        <div class="info-value" id="format">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Bitrate</div>
+                        <div class="info-value" id="bitrate">-</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Quality Settings -->
-            <div class="quality-settings">
-                <div class="setting-group">
-                    <label for="quality">Quality</label>
-                    <select id="quality">
-                        <option value="high">High Quality</option>
-                        <option value="medium" selected>Medium Quality</option>
-                        <option value="low">Low Quality</option>
-                    </select>
+            <!-- Conversion Options -->
+            <div class="conversion-options" id="conversionOptions" style="display: none;">
+                <h3>Conversion Settings</h3>
+                
+                <!-- Format Selection -->
+                <div class="format-selector">
+                    <div class="format-option" data-format="mp4">
+                        <div class="format-icon">📹</div>
+                        <div>MP4</div>
+                        <small>Most Compatible</small>
+                    </div>
+                    <div class="format-option" data-format="avi">
+                        <div class="format-icon">🎬</div>
+                        <div>AVI</div>
+                        <small>High Quality</small>
+                    </div>
+                    <div class="format-option" data-format="mov">
+                        <div class="format-icon">🍎</div>
+                        <div>MOV</div>
+                        <small>Apple Devices</small>
+                    </div>
+                    <div class="format-option" data-format="wmv">
+                        <div class="format-icon">🪟</div>
+                        <div>WMV</div>
+                        <small>Windows Media</small>
+                    </div>
+                    <div class="format-option" data-format="flv">
+                        <div class="format-icon">🌐</div>
+                        <div>FLV</div>
+                        <small>Web Streaming</small>
+                    </div>
+                    <div class="format-option" data-format="webm">
+                        <div class="format-icon">🌍</div>
+                        <div>WebM</div>
+                        <small>Web Optimized</small>
+                    </div>
                 </div>
-                <div class="setting-group">
-                    <label for="resolution">Resolution</label>
-                    <select id="resolution">
-                        <option value="original">Original</option>
-                        <option value="1080p">1080p (Full HD)</option>
-                        <option value="720p" selected>720p (HD)</option>
-                        <option value="480p">480p (SD)</option>
-                    </select>
+
+                <!-- Quality Settings -->
+                <div class="quality-settings">
+                    <div class="setting-group">
+                        <label for="quality">Quality</label>
+                        <select id="quality">
+                            <option value="high">High Quality</option>
+                            <option value="medium" selected>Medium Quality</option>
+                            <option value="low">Low Quality</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label for="resolution">Resolution</label>
+                        <select id="resolution">
+                            <option value="original">Original</option>
+                            <option value="1080p">1080p (Full HD)</option>
+                            <option value="720p" selected>720p (HD)</option>
+                            <option value="480p">480p (SD)</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <label for="fps">Frame Rate</label>
+                        <select id="fps">
+                            <option value="original">Original</option>
+                            <option value="30" selected>30 FPS</option>
+                            <option value="24">24 FPS</option>
+                            <option value="60">60 FPS</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="setting-group">
-                    <label for="fps">Frame Rate</label>
-                    <select id="fps">
-                        <option value="original">Original</option>
-                        <option value="30" selected>30 FPS</option>
-                        <option value="24">24 FPS</option>
-                        <option value="60">60 FPS</option>
-                    </select>
+
+                <!-- Convert Button -->
+                <button class="convert-btn" id="convertBtn" onclick="convertVideo()">
+                    <i class="fas fa-cog"></i> Convert Video
+                </button>
+
+                <!-- Progress Bar -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
                 </div>
+                <div class="progress-text" id="progressText"></div>
             </div>
 
-            <!-- Convert Button -->
-            <button class="convert-btn" id="convertBtn" onclick="convertVideo()">
-                <i class="fas fa-cog"></i> Convert Video
-            </button>
-
-            <!-- Progress Bar -->
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar" id="progressBar"></div>
+            <!-- Download Section -->
+            <div class="download-section" id="downloadSection">
+                <h3><i class="fas fa-download"></i> Conversion Complete!</h3>
+                <p>Your video has been successfully converted. Click below to download.</p>
+                <a href="#" class="download-btn" id="downloadBtn" download>
+                    <i class="fas fa-download"></i> Download Video
+                </a>
+                <button class="download-btn" onclick="resetConverter()">
+                    <i class="fas fa-redo"></i> Convert Another Video
+                </button>
             </div>
-            <div class="progress-text" id="progressText"></div>
-        </div>
 
-        <!-- Download Section -->
-        <div class="download-section" id="downloadSection">
-            <h3><i class="fas fa-download"></i> Conversion Complete!</h3>
-            <p>Your video has been successfully converted. Click below to download.</p>
-            <a href="#" class="download-btn" id="downloadBtn" download>
-                <i class="fas fa-download"></i> Download Video
-            </a>
-            <button class="download-btn" onclick="resetConverter()">
-                <i class="fas fa-redo"></i> Convert Another Video
-            </button>
-        </div>
-
-        <!-- Supported Formats -->
-        <div class="supported-formats">
-            <h3>Supported Formats</h3>
-            <div class="formats-grid">
-                <div class="format-item">
-                    <div class="format-icon">📹</div>
-                    <div>MP4</div>
-                </div>
-                <div class="format-item">
-                    <div class="format-icon">🎬</div>
-                    <div>AVI</div>
-                </div>
-                <div class="format-item">
-                    <div class="format-icon">🍎</div>
-                    <div>MOV</div>
-                </div>
-                <div class="format-item">
-                    <div class="format-icon">🪟</div>
-                    <div>WMV</div>
-                </div>
-                <div class="format-item">
-                    <div class="format-icon">🌐</div>
-                    <div>FLV</div>
-                </div>
-                <div class="format-item">
-                    <div class="format-icon">🌍</div>
-                    <div>WebM</div>
-                </div>
-                <div class="format-item">
-                    <div class="format-icon">📱</div>
-                    <div>3GP</div>
-                </div>
-                <div class="format-item">
-                    <div class="format-icon">🎥</div>
-                    <div>MKV</div>
+            <!-- Supported Formats -->
+            <div class="supported-formats">
+                <h3>Supported Formats</h3>
+                <div class="formats-grid">
+                    <div class="format-item">
+                        <div class="format-icon">📹</div>
+                        <div>MP4</div>
+                    </div>
+                    <div class="format-item">
+                        <div class="format-icon">🎬</div>
+                        <div>AVI</div>
+                    </div>
+                    <div class="format-item">
+                        <div class="format-icon">🍎</div>
+                        <div>MOV</div>
+                    </div>
+                    <div class="format-item">
+                        <div class="format-icon">🪟</div>
+                        <div>WMV</div>
+                    </div>
+                    <div class="format-item">
+                        <div class="format-icon">🌐</div>
+                        <div>FLV</div>
+                    </div>
+                    <div class="format-item">
+                        <div class="format-icon">🌍</div>
+                        <div>WebM</div>
+                    </div>
+                    <div class="format-item">
+                        <div class="format-icon">📱</div>
+                        <div>3GP</div>
+                    </div>
+                    <div class="format-item">
+                        <div class="format-icon">🎥</div>
+                        <div>MKV</div>
+                    </div>
                 </div>
             </div>
-        </div>
         <button class="new-conversion-btn" id="newConversionBtn" style="display: none;">Convert Another Video</button>
-    </div>
+        </div>
     
     <div id="footer-placeholder"></div>
 

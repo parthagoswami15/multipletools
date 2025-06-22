@@ -64,6 +64,12 @@ function loadComponents() {
             .then(data => {
                 headerPlaceholder.innerHTML = data;
                 initializeSearch(); // Initialize search after header is loaded
+
+                // Manually initialize Bootstrap dropdowns for the dynamically loaded header
+                const dropdownToggles = headerPlaceholder.querySelectorAll('[data-bs-toggle="dropdown"]');
+                dropdownToggles.forEach(toggle => {
+                    new bootstrap.Dropdown(toggle);
+                });
             })
             .catch(error => console.error('Error loading header:', error));
     }
@@ -73,7 +79,6 @@ function loadComponents() {
             .then(response => response.text())
             .then(data => {
                 footerPlaceholder.innerHTML = data;
-                updateLiveViewers(); // Initialize live viewers count
             })
             .catch(error => console.error('Error loading footer:', error));
     }
@@ -116,8 +121,9 @@ document.addEventListener('DOMContentLoaded', function() {
     loadComponents();
     
     // Check if we are on the homepage
-    if (document.getElementById('tool-categories')) {
+    if (document.querySelector('.home-page')) {
         renderTools();
+        updateLiveViewers(); // Initialize live viewers count only on homepage
     }
 
     // Accordion functionality for category cards
