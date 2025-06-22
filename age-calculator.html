@@ -186,9 +186,6 @@
             interestingFacts.innerHTML = facts.map(fact => `<p>• ${fact}</p>`).join('');
             
             document.getElementById('ageResults').style.display = 'block';
-            
-            // Auto-scroll to results after calculation
-            scrollAfterCalculation();
         }
 
         function generateInterestingFacts(age) {
