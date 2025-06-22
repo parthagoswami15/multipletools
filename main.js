@@ -129,7 +129,7 @@ function renderTools(filter = '') {
     const container = document.getElementById('tool-categories');
     if (container) {
         container.innerHTML = '';
-        categories.forEach((cat, index) => {
+        categories.forEach(cat => {
             const catTools = tools.filter(t => t.category === cat && t.name.toLowerCase().includes(filter.toLowerCase()));
             if (catTools.length) {
                 let toolLinks = '';
@@ -137,20 +137,11 @@ function renderTools(filter = '') {
                     toolLinks += `<a href="${tool.file}" class="list-group-item list-group-item-action">${tool.name}</a>`;
                 });
 
-                // Unique IDs for collapse functionality
-                const collapseId = `collapse-${index}`;
-                const headerId = `header-${index}`;
-
                 container.innerHTML += `
-                    <div class="col-md-6 col-lg-4">
-                        <div class="category-card">
-                            <div class="category-header" data-bs-toggle="collapse" data-bs-target="#${collapseId}" aria-expanded="true" aria-controls="${collapseId}">
-                                <h5 class="category-title d-flex justify-content-between align-items-center">
-                                    ${cat}
-                                    <i class="fas fa-chevron-down"></i>
-                                </h5>
-                            </div>
-                            <div id="${collapseId}" class="collapse show" aria-labelledby="${headerId}">
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 category-card">
+                            <div class="card-body">
+                                <h5 class="card-title category-title">${cat}</h5>
                                 <div class="list-group list-group-flush tool-list">
                                     ${toolLinks}
                                 </div>
@@ -159,21 +150,6 @@ function renderTools(filter = '') {
                     </div>
                 `;
             }
-        });
-        
-        // Add event listeners for rotating the chevron icons
-        const headers = document.querySelectorAll('.category-header');
-        headers.forEach(header => {
-            const collapseElement = document.getElementById(header.getAttribute('data-bs-target').substring(1));
-            const icon = header.querySelector('i');
-
-            collapseElement.addEventListener('show.bs.collapse', function () {
-                icon.style.transform = 'rotate(-180deg)';
-            });
-
-            collapseElement.addEventListener('hide.bs.collapse', function () {
-                icon.style.transform = 'rotate(0deg)';
-            });
         });
     }
 }
