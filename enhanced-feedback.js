@@ -1,4 +1,4 @@
-// Social Sharing and Feedback System for Multi-Tools
+// Enhanced Social Sharing and Feedback System for Multi-Tools
 
 // Social Sharing Functions
 function shareOnFacebook() {

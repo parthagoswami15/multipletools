@@ -192,4 +192,57 @@ document.addEventListener('DOMContentLoaded', function() {
             nav.classList.toggle('active');
         });
     }
+
+    // --- ANIMATION ON SCROLL ---
+    const animatedSections = document.querySelectorAll('.stats-section, .features-section, .author-section, .reviews-section');
+
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                
+                // Animate numbers if it's the stats section
+                if (entry.target.classList.contains('stats-section')) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(number => {
+                        const target = parseInt(number.dataset.target, 10);
+                        if (!isNaN(target)) {
+                            countUp(number, target);
+                        }
+                    });
+                }
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    animatedSections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+
+    // Prepare stat numbers for animation
+    const statNumbers = document.querySelectorAll('.stats-section .stat-number');
+    statNumbers.forEach(number => {
+        const value = number.textContent.trim();
+        number.dataset.target = value.replace('+', '');
+        number.textContent = '0' + (value.includes('+') ? '+' : '');
+    });
 });
+
+function countUp(element, target) {
+    let start = 0;
+    const duration = 2000; // 2 seconds
+    const increment = target / (duration / 16); // 16ms for ~60fps
+
+    const counter = () => {
+        start += increment;
+        if (start < target) {
+            element.textContent = Math.ceil(start) + (element.dataset.target.includes('+') ? '+' : '');
+            requestAnimationFrame(counter);
+        } else {
+            element.textContent = element.dataset.target + (element.dataset.target.includes('+') ? '' : '');
+        }
+    };
+    counter();
+}
