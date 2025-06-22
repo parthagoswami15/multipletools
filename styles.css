@@ -2735,4 +2735,317 @@ button:hover {
         font-size: 0.75rem;
         margin: 0.2rem;
     }
+}
+
+/* Quick Search Section Styles */
+.quick-search-section {
+    position: fixed;
+    top: 110px;
+    right: 20px;
+    width: 350px;
+    z-index: 1200;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.quick-search-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 25px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.search-box:focus-within {
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.3);
+    transform: scale(1.02);
+}
+
+.search-icon {
+    color: #667eea;
+    font-size: 1rem;
+    margin-right: 0.75rem;
+}
+
+#quickSearchInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.9rem;
+    color: #333;
+    padding: 0.5rem 0;
+}
+
+#quickSearchInput::placeholder {
+    color: #999;
+    font-weight: 400;
+    font-size: 0.85rem;
+}
+
+.clear-search-btn {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.clear-search-btn:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(15px);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    margin-top: 0.5rem;
+    max-height: 350px;
+    overflow-y: auto;
+    z-index: 1000;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 12px 12px 0 0;
+}
+
+.results-header h4 {
+    margin: 0;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.close-results-btn {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.close-results-btn:hover {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff4444;
+}
+
+.results-list {
+    padding: 0.25rem 0;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.search-result-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.search-result-item:hover {
+    background: rgba(102, 126, 234, 0.05);
+    transform: translateX(3px);
+}
+
+.search-result-item:hover::before {
+    left: 100%;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.result-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    color: white;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.search-result-item:hover .result-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.result-content {
+    flex: 1;
+}
+
+.result-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.2rem;
+    font-size: 0.85rem;
+}
+
+.result-category {
+    font-size: 0.75rem;
+    color: #667eea;
+    font-weight: 500;
+}
+
+.search-result-item:hover .result-category {
+    color: #764ba2;
+}
+
+/* No results styling */
+.no-results {
+    text-align: center;
+    padding: 1.5rem;
+    color: #999;
+}
+
+.no-results i {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    color: #ccc;
+}
+
+.no-results p {
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* Responsive design for quick search */
+@media (max-width: 1200px) {
+    .quick-search-section {
+        width: 320px;
+        right: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .quick-search-section {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        margin: 1rem;
+        border-radius: 12px;
+    }
+    
+    .search-box {
+        padding: 0.5rem 1rem;
+    }
+    
+    #quickSearchInput {
+        font-size: 1rem;
+    }
+    
+    .search-results {
+        max-height: 300px;
+    }
+    
+    .search-result-item {
+        padding: 0.5rem 1rem;
+    }
+    
+    .result-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .result-title {
+        font-size: 0.9rem;
+    }
+    
+    .result-category {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-search-section {
+        margin: 0.5rem;
+        padding: 0.75rem;
+    }
+    
+    .search-box {
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+    }
+    
+    .search-icon {
+        font-size: 0.9rem;
+        margin-right: 0.5rem;
+    }
+    
+    #quickSearchInput {
+        font-size: 0.9rem;
+        padding: 0.4rem 0;
+    }
+    
+    .results-header {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .results-header h4 {
+        font-size: 0.75rem;
+    }
 } 

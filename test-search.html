@@ -3,95 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Test</title>
+    <title>Search Test - Multi-Tools</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
-        .search-container {
-            max-width: 600px;
+        .test-container {
+            max-width: 800px;
             margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
         }
-        .search-input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
         }
-        .search-results {
-            margin-top: 20px;
+        .test-header h1 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
         }
-        .result-item {
-            padding: 10px;
-            border: 1px solid #ddd;
-            margin: 5px 0;
-            border-radius: 5px;
+        .test-header p {
+            color: #666;
         }
-        .test-button {
-            background: #007bff;
+        .search-demo {
+            margin-bottom: 2rem;
+        }
+        .demo-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .instructions {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        .instructions ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+        .back-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 10px 5px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div class="search-container">
-        <h1>Search Test</h1>
-        <input type="text" id="testSearch" class="search-input" placeholder="Type to search...">
-        <div>
-            <button class="test-button" onclick="testSearch('image to pdf')">Test: image to pdf</button>
-            <button class="test-button" onclick="testSearch('pdf to word')">Test: pdf to word</button>
-            <button class="test-button" onclick="testSearch('calculator')">Test: calculator</button>
-            <button class="test-button" onclick="testSearch('all tools')">Test: all tools</button>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🔍 Search Functionality Test</h1>
+            <p>Test the enhanced search features of Multi-Tools</p>
         </div>
-        <div id="testResults" class="search-results"></div>
+
+        <div class="search-demo">
+            <div class="demo-title">📱 Floating Search (Global)</div>
+            <div class="instructions">
+                <h3>How to use:</h3>
+                <ul>
+                    <li><strong>Click the floating search button</strong> (bottom-right corner)</li>
+                    <li><strong>Use keyboard shortcut:</strong> Ctrl+K (or Cmd+K on Mac)</li>
+                    <li><strong>Search for any tool:</strong> Try "calculator", "converter", "image", etc.</li>
+                    <li><strong>Click on results</strong> to navigate to tools</li>
+                    <li><strong>Press Escape</strong> to close the search</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="search-demo">
+            <div class="demo-title">🏠 Homepage Search</div>
+            <div class="instructions">
+                <h3>Features:</h3>
+                <ul>
+                    <li><strong>Real-time search</strong> as you type</li>
+                    <li><strong>Search suggestions</strong> with popular categories</li>
+                    <li><strong>Grouped results</strong> by tool category</li>
+                    <li><strong>Highlighted matches</strong> in search results</li>
+                    <li><strong>Quick navigation</strong> to any tool</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="search-demo">
+            <div class="demo-title">🎯 Search Examples</div>
+            <div class="instructions">
+                <h3>Try these searches:</h3>
+                <ul>
+                    <li><strong>"calculator"</strong> - Find all calculator tools</li>
+                    <li><strong>"image"</strong> - Find image processing tools</li>
+                    <li><strong>"pdf"</strong> - Find PDF conversion tools</li>
+                    <li><strong>"converter"</strong> - Find all converter tools</li>
+                    <li><strong>"generator"</strong> - Find all generator tools</li>
+                    <li><strong>"text"</strong> - Find text processing tools</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-home"></i>
+                Back to Homepage
+            </a>
+        </div>
+    </div>
+
+    <!-- Floating Search Button -->
+    <div class="floating-search-btn" onclick="toggleFloatingSearch()">
+        <i class="fas fa-search"></i>
+    </div>
+    
+    <!-- Floating Search Modal -->
+    <div class="floating-search-modal" id="floatingSearchModal">
+        <div class="floating-search-content">
+            <div class="floating-search-header">
+                <h3><i class="fas fa-search"></i> Quick Tool Search</h3>
+                <button class="close-floating-search" onclick="toggleFloatingSearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="floating-search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="floatingSearchInput" placeholder="Search for any tool..." autocomplete="off">
+                <button class="floating-search-clear" id="floatingSearchClear">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="floating-search-suggestions" id="floatingSearchSuggestions">
+                <div class="suggestion-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Popular Tools</span>
+                </div>
+                <div class="suggestion-tags">
+                    <span class="suggestion-tag" onclick="searchFloating('calculator')">Calculator</span>
+                    <span class="suggestion-tag" onclick="searchFloating('converter')">Converter</span>
+                    <span class="suggestion-tag" onclick="searchFloating('generator')">Generator</span>
+                    <span class="suggestion-tag" onclick="searchFloating('image')">Image Tools</span>
+                    <span class="suggestion-tag" onclick="searchFloating('pdf')">PDF Tools</span>
+                    <span class="suggestion-tag" onclick="searchFloating('text')">Text Tools</span>
+                </div>
+            </div>
+            <div class="floating-search-results" id="floatingSearchResults" style="display: none;">
+                <div class="floating-results-header">
+                    <span id="floatingResultsCount">0 results found</span>
+                </div>
+                <div class="floating-results-list" id="floatingResultsList"></div>
+            </div>
+        </div>
     </div>
 
     <script src="main.js"></script>
+    
     <script>
-        function testSearch(query) {
-            document.getElementById('testSearch').value = query;
-            performHeaderSearch(query);
+        // Test homepage search functionality
+        function testHomepageSearch() {
+            console.log('Testing homepage search...');
             
-            // Display results in test area
-            const results = toolsDatabase.filter(tool => {
-                const toolName = tool.name.toLowerCase();
-                const toolCategory = tool.category.toLowerCase();
-                const toolKeywords = tool.keywords.toLowerCase();
-                const searchTerm = query.toLowerCase();
-                
-                return toolName.includes(searchTerm) || 
-                       toolKeywords.includes(searchTerm) || 
-                       toolCategory.includes(searchTerm);
-            });
+            // Test if elements exist
+            const homepageSearchInput = document.getElementById('homepageSearch');
+            const homepageSearchSuggestions = document.getElementById('homepageSearchSuggestions');
+            const homepageSearchResults = document.getElementById('homepageSearchResults');
             
-            const resultsDiv = document.getElementById('testResults');
-            resultsDiv.innerHTML = `<h3>Results for "${query}" (${results.length} found):</h3>`;
+            console.log('Homepage search input:', !!homepageSearchInput);
+            console.log('Homepage search suggestions:', !!homepageSearchSuggestions);
+            console.log('Homepage search results:', !!homepageSearchResults);
             
-            results.forEach(tool => {
-                resultsDiv.innerHTML += `
-                    <div class="result-item">
-                        <strong>${tool.name}</strong><br>
-                        Category: ${tool.category}<br>
-                        Keywords: ${tool.keywords}<br>
-                        URL: ${tool.url}
-                    </div>
-                `;
-            });
+            // Test search functionality
+            if (homepageSearchInput) {
+                homepageSearchInput.value = 'calculator';
+                performHomepageSearch('calculator');
+                console.log('Homepage search test completed');
+            }
         }
         
-        // Test on page load
-        window.onload = function() {
-            console.log('Tools database loaded:', toolsDatabase.length, 'tools');
-            console.log('Sample tool:', toolsDatabase[0]);
-        };
+        // Run test when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                testHomepageSearch();
+            }, 1000);
+        });
     </script>
 </body>
 </html> 
