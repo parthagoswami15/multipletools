@@ -248,6 +248,50 @@
                     Discover 80+ powerful tools for developers, designers, and everyday users. 
                     Everything you need, all in one place.
                 </p>
+                
+                <!-- Search Section -->
+                <div class="search-section">
+                    <div class="search-container">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" id="toolSearch" class="search-input" placeholder="Search for tools (e.g., calculator, converter, generator...)" autocomplete="off">
+                            <button class="search-clear" id="searchClear" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="search-suggestions" id="searchSuggestions">
+                            <div class="suggestion-header">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Popular Searches</span>
+                            </div>
+                            <div class="suggestion-tags">
+                                <span class="suggestion-tag" data-search="calculator">Calculator</span>
+                                <span class="suggestion-tag" data-search="converter">Converter</span>
+                                <span class="suggestion-tag" data-search="generator">Generator</span>
+                                <span class="suggestion-tag" data-search="image">Image</span>
+                                <span class="suggestion-tag" data-search="pdf">PDF</span>
+                                <span class="suggestion-tag" data-search="text">Text</span>
+                                <span class="suggestion-tag" data-search="image to pdf">Image to PDF</span>
+                                <span class="suggestion-tag" data-search="pdf to word">PDF to Word</span>
+                                <span class="suggestion-tag" data-search="word to pdf">Word to PDF</span>
+                                <span class="suggestion-tag" data-search="qr code">QR Code</span>
+                                <span class="suggestion-tag" data-search="compressor">Compressor</span>
+                                <span class="suggestion-tag" data-search="resizer">Resizer</span>
+                                <span class="suggestion-tag" data-search="all tools">Show All Tools</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search-results" id="searchResults" style="display: none;">
+                        <div class="results-header">
+                            <span id="resultsCount">0 results found</span>
+                            <button class="close-results" id="closeResults">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="results-list" id="resultsList"></div>
+                    </div>
+                </div>
+                
                 <div class="hero-buttons">
                     <a href="#tools" class="btn btn-primary">
                         <i class="fas fa-rocket"></i>
