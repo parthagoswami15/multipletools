@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Creator | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .clip-list-item { display: flex; align-items: center; justify-content: space-between; padding: 5px; border-bottom: 1px solid #ddd; }
+        .clip-list-item span { flex-grow: 1; }
+    </style>
+</head>
+<body>
+    <!-- EMBEDDED HEADER -->
+    <header class="clean-header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html"><i class="fas fa-tools"></i> Multi-Tools</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                         <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="audioToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Audio Tools</a>
+                            <ul class="dropdown-menu" aria-labelledby="audioToolsDropdown">
+                                <li><a class="dropdown-item" href="video-editor.html">Video Editor</a></li>
+                                <li><a class="dropdown-item" href="video-creator.html">Video Creator</a></li>
+                                <li><a class="dropdown-item" href="audio-converter.html">Audio Converter</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4"><i class="fas fa-film"></i> Video Creator</h1>
+                        <p class="card-text">Combine multiple video clips and add an audio track to create a new video.</p>
+                        
+                        <div class="mb-3">
+                            <label for="videoClipsInput" class="form-label">Upload Video Clips</label>
+                            <input type="file" class="form-control" id="videoClipsInput" accept="video/*" multiple>
+                        </div>
+                        
+                        <div id="clipsList" class="mb-3"></div>
+
+                        <div class="mb-3">
+                            <label for="audioTrackInput" class="form-label">Upload Audio Track (Optional)</label>
+                            <input type="file" class="form-control" id="audioTrackInput" accept="audio/*">
+                        </div>
+
+                        <button id="createVideoBtn" class="btn btn-primary" disabled>Create Video</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Output</h5>
+                        <div id="output" style="display:none;">
+                           <video id="outputVideo" controls class="w-100 mb-3"></video>
+                           <a id="downloadLink" class="btn btn-success">Download Video</a>
+                        </div>
+                        <p id="processingMessage" style="display:none;">Processing...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMBEDDED FOOTER -->
+    <footer class="bg-light text-center mt-4 p-3">© 2024 Multi-Tools. All rights reserved.</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.2/dist/ffmpeg.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
+        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) { return new bootstrap.Dropdown(dropdownToggleEl) });
+    
+        const { createFFmpeg, fetchFile } = FFmpeg;
+        let ffmpeg;
+
+        const videoClipsInput = document.getElementById('videoClipsInput');
+        const audioTrackInput = document.getElementById('audioTrackInput');
+        const clipsList = document.getElementById('clipsList');
+        const createVideoBtn = document.getElementById('createVideoBtn');
+        const output = document.getElementById('output');
+        const outputVideo = document.getElementById('outputVideo');
+        const downloadLink = document.getElementById('downloadLink');
+        const processingMessage = document.getElementById('processingMessage');
+
+        let videoFiles = [];
+        let audioFile = null;
+
+        const loadFFmpeg = async () => {
+            processingMessage.style.display = 'block';
+            if (!ffmpeg) {
+                ffmpeg = createFFmpeg({
+                    log: true,
+                    corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+                });
+            }
+            if (!ffmpeg.isLoaded()) {
+                await ffmpeg.load();
+            }
+            processingMessage.style.display = 'none';
+        };
+        loadFFmpeg();
+
+
+        videoClipsInput.addEventListener('change', (e) => {
+            videoFiles = Array.from(e.target.files);
+            renderClips();
+            updateCreateButton();
+        });
+
+        audioTrackInput.addEventListener('change', (e) => {
+            audioFile = e.target.files[0];
+            updateCreateButton();
+        });
+
+        function renderClips() {
+            clipsList.innerHTML = '';
+            videoFiles.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'clip-list-item';
+                item.innerHTML =
+                    '<span>' + (index + 1) + '. ' + file.name + '</span>' +
+                    '<div>' +
+                    '<button class="btn btn-sm btn-secondary me-1" onclick="moveClip(' + index + ', -1)">▲</button>' +
+                    '<button class="btn btn-sm btn-secondary" onclick="moveClip(' + index + ', 1)">▼</button>' +
+                    '</div>';
+                clipsList.appendChild(item);
+            });
+        }
+        
+        window.moveClip = (index, direction) => {
+            if (index + direction < 0 || index + direction >= videoFiles.length) return;
+            const temp = videoFiles[index];
+            videoFiles[index] = videoFiles[index + direction];
+            videoFiles[index + direction] = temp;
+            renderClips();
+        };
+
+        function updateCreateButton() {
+            createVideoBtn.disabled = videoFiles.length === 0;
+        }
+
+        createVideoBtn.addEventListener('click', async () => {
+            if (videoFiles.length === 0) return;
+
+            output.style.display = 'none';
+            processingMessage.style.display = 'block';
+            
+            await loadFFmpeg();
+
+            // Write video files to ffmpeg's virtual filesystem
+            for (let i = 0; i < videoFiles.length; i++) {
+                ffmpeg.FS('writeFile', \`input\${i}.mp4\`, await fetchFile(videoFiles[i]));
+            }
+
+            // Create a file list for concatenation
+            const fileList = videoFiles.map((_, i) => \`file 'input\${i}.mp4'\`).join('\\n');
+            ffmpeg.FS('writeFile', 'concat.txt', fileList);
+            
+            let ffmpeg_cmd = ['-f', 'concat', '-safe', '0', '-i', 'concat.txt'];
+
+            if (audioFile) {
+                ffmpeg.FS('writeFile', 'audio.mp3', await fetchFile(audioFile));
+                ffmpeg_cmd.push('-i', 'audio.mp3', '-c:v', 'copy', '-c:a', 'aac', '-shortest');
+            } else {
+                ffmpeg_cmd.push('-c', 'copy');
+            }
+            
+            ffmpeg_cmd.push('output.mp4');
+
+            await ffmpeg.run(...ffmpeg_cmd);
+            
+            const data = ffmpeg.FS('readFile', 'output.mp4');
+            const videoBlob = new Blob([data.buffer], { type: 'video/mp4' });
+            const videoUrl = URL.createObjectURL(videoBlob);
+
+            outputVideo.src = videoUrl;
+            downloadLink.href = videoUrl;
+            downloadLink.download = 'created-video.mp4';
+
+            processingMessage.style.display = 'none';
+            output.style.display = 'block';
+        });
+
+    });
+    </script>
+</body>
+</html> 
