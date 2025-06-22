@@ -82,6 +82,18 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
+        #videoPreview {
+            max-width: 100%;
+            border-radius: 8px;
+            background-color: #000;
+        }
+        .nav-tabs .nav-link {
+            color: #6a11cb;
+        }
+        .nav-tabs .nav-link.active {
+            color: #2575fc;
+            border-color: #2575fc #2575fc #fff;
+        }
     </style>
 </head>
 <body>
@@ -89,76 +101,143 @@
     <div id="ad-placeholder"></div>
 
     <div class="gif-maker-container">
-        <!-- Step 1: Upload -->
-        <div id="step1" class="step active">
-            <div class="step-header">
-                <h1><i class="fas fa-upload"></i> Step 1: Upload Your Images</h1>
-            </div>
-            <div class="step-content">
-                <div id="uploadArea" class="upload-area">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <p class="mt-3 mb-1"><strong>Drag & drop files here</strong></p>
-                    <p class="text-muted">or</p>
-                    <input type="file" id="imageInput" multiple accept="image/*" class="d-none">
-                    <button class="btn btn-primary" onclick="document.getElementById('imageInput').click();">Browse Files</button>
-                </div>
-                <div id="imagePreview" class="image-preview-grid"></div>
-                <div class="text-end mt-4">
-                    <button class="btn btn-success btn-lg" id="toStep2Btn" disabled>Next <i class="fas fa-arrow-right"></i></button>
-                </div>
-            </div>
-        </div>
+        <ul class="nav nav-tabs" id="gifModeTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="images-tab" data-bs-toggle="tab" data-bs-target="#images-mode" type="button" role="tab" aria-controls="images-mode" aria-selected="true">
+                    <i class="fas fa-images"></i> Images to GIF
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="video-tab" data-bs-toggle="tab" data-bs-target="#video-mode" type="button" role="tab" aria-controls="video-mode" aria-selected="false">
+                    <i class="fas fa-video"></i> Video to GIF
+                </button>
+            </li>
+        </ul>
 
-        <!-- Step 2: Customize & Preview -->
-        <div id="step2" class="step">
-            <div class="step-header">
-                <h1><i class="fas fa-sliders-h"></i> Step 2: Customize & Preview</h1>
-            </div>
-            <div class="step-content">
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <div id="gif-preview-container" class="text-center">
-                            <p><strong>Live Preview</strong></p>
-                            <img id="generatedGif" alt="GIF Preview">
-                            <div id="loading-spinner" class="spinner-border text-primary my-4" role="status" style="display: none;">
-                                <span class="visually-hidden">Loading...</span>
+        <div class="tab-content" id="gifModeTabContent">
+            <!-- Images to GIF Mode -->
+            <div class="tab-pane fade show active" id="images-mode" role="tabpanel" aria-labelledby="images-tab">
+                <!-- Step 1: Upload Images -->
+                <div id="step1" class="step active">
+                    <div class="step-header">
+                        <h1><i class="fas fa-upload"></i> Step 1: Upload Your Images</h1>
+                    </div>
+                    <div class="step-content">
+                        <div id="uploadArea" class="upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p class="mt-3 mb-1"><strong>Drag & drop files here</strong></p>
+                            <p class="text-muted">or</p>
+                            <input type="file" id="imageInput" multiple accept="image/*" class="d-none">
+                            <button class="btn btn-primary" onclick="document.getElementById('imageInput').click();">Browse Files</button>
+                        </div>
+                        <div id="imagePreview" class="image-preview-grid"></div>
+                        <div class="text-end mt-4">
+                            <button class="btn btn-success btn-lg" id="toStep2Btn" disabled>Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Customize & Preview -->
+                <div id="step2" class="step">
+                    <div class="step-header">
+                        <h1><i class="fas fa-sliders-h"></i> Step 2: Customize & Preview</h1>
+                    </div>
+                    <div class="step-content">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div id="gif-preview-container" class="text-center">
+                                    <p><strong>Live Preview</strong></p>
+                                    <img id="generatedGif" alt="GIF Preview">
+                                    <div id="loading-spinner" class="spinner-border text-primary my-4" role="status" style="display: none;">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="slider-container mb-4">
+                                    <label for="frameDelay" class="form-label">Frame Delay: <span id="frameDelayValue">500</span> ms</label>
+                                    <input type="range" class="form-range" id="frameDelay" value="500" min="100" max="2000" step="50">
+                                </div>
+                                <div class="slider-container mb-4">
+                                    <label for="gifQuality" class="form-label">Quality (1 is best): <span id="gifQualityValue">10</span></label>
+                                    <input type="range" class="form-range" id="gifQuality" value="10" min="1" max="30" step="1">
+                                </div>
+                                 <div class="d-grid gap-2">
+                                     <button class="btn btn-info" id="regenerateBtn"><i class="fas fa-sync-alt"></i> Regenerate Preview</button>
+                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="slider-container mb-4">
-                            <label for="frameDelay" class="form-label">Frame Delay: <span id="frameDelayValue">500</span> ms</label>
-                            <input type="range" class="form-range" id="frameDelay" value="500" min="100" max="2000" step="50">
+                         <div class="d-flex justify-content-between mt-4">
+                            <button class="btn btn-secondary" id="backToStep1Btn"><i class="fas fa-arrow-left"></i> Back</button>
+                            <button class="btn btn-success btn-lg" id="toStep3Btn">Finalize & Download <i class="fas fa-check"></i></button>
                         </div>
-                        <div class="slider-container mb-4">
-                            <label for="gifQuality" class="form-label">Quality (1 is best): <span id="gifQualityValue">10</span></label>
-                            <input type="range" class="form-range" id="gifQuality" value="10" min="1" max="30" step="1">
-                        </div>
-                         <div class="d-grid gap-2">
-                             <button class="btn btn-info" id="regenerateBtn"><i class="fas fa-sync-alt"></i> Regenerate Preview</button>
-                         </div>
                     </div>
                 </div>
-                 <div class="d-flex justify-content-between mt-4">
-                    <button class="btn btn-secondary" id="backToStep1Btn"><i class="fas fa-arrow-left"></i> Back</button>
-                    <button class="btn btn-success btn-lg" id="toStep3Btn">Finalize & Download <i class="fas fa-check"></i></button>
-                </div>
-            </div>
-        </div>
 
-        <!-- Step 3: Download -->
-        <div id="step3" class="step">
-             <div class="step-header">
-                <h1><i class="fas fa-download"></i> Step 3: Download Your GIF</h1>
+                <!-- Step 3: Download GIF from Images -->
+                <div id="step3" class="step">
+                     <div class="step-header">
+                        <h1><i class="fas fa-download"></i> Step 3: Download Your GIF</h1>
+                    </div>
+                    <div class="step-content text-center">
+                        <p class="lead">Your GIF is ready!</p>
+                        <img id="finalGif" class="img-fluid border rounded shadow-sm mb-4" alt="Final GIF">
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <a href="#" class="btn btn-success btn-lg" id="downloadGifBtn" download="made-with-multitools.gif">
+                                <i class="fas fa-download"></i> Download GIF
+                            </a>
+                            <button class="btn btn-outline-primary" id="startOverBtn"><i class="fas fa-redo"></i> Create Another</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="step-content text-center">
-                <p class="lead">Your GIF is ready!</p>
-                <img id="finalGif" class="img-fluid border rounded shadow-sm mb-4" alt="Final GIF">
-                <div class="d-grid gap-2 col-6 mx-auto">
-                    <a href="#" class="btn btn-success btn-lg" id="downloadGifBtn" download="made-with-multitools.gif">
-                        <i class="fas fa-download"></i> Download GIF
-                    </a>
-                    <button class="btn btn-outline-primary" id="startOverBtn"><i class="fas fa-redo"></i> Create Another</button>
+
+            <!-- Video to GIF Mode -->
+            <div class="tab-pane fade" id="video-mode" role="tabpanel" aria-labelledby="video-tab">
+                <div class="step-header">
+                    <h1><i class="fas fa-film"></i> Create GIF from Video</h1>
+                </div>
+                <div class="step-content">
+                    <div id="videoUploadArea" class="upload-area mb-4">
+                        <i class="fas fa-video"></i>
+                        <p class="mt-3 mb-1"><strong>Click to select a video file</strong></p>
+                        <input type="file" id="videoInput" accept="video/mp4,video/webm" class="d-none">
+                        <button class="btn btn-primary" onclick="document.getElementById('videoInput').click();">Browse Video</button>
+                    </div>
+
+                    <div id="videoWorkspace" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <video id="videoPreview" controls></video>
+                            </div>
+                            <div class="col-md-5">
+                                <h5>GIF Settings</h5>
+                                <div class="mb-3">
+                                    <label for="startTime" class="form-label">Start Time (seconds)</label>
+                                    <input type="number" class="form-control" id="startTime" value="0" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="endTime" class="form-label">End Time (seconds)</label>
+                                    <input type="number" class="form-control" id="endTime" value="5" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="videoGifQuality" class="form-label">Quality (1 is best): <span id="videoGifQualityValue">10</span></label>
+                                    <input type="range" class="form-range" id="videoGifQuality" value="10" min="1" max="30" step="1">
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success" id="createVideoGifBtn">
+                                        <span id="videoGifSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+                                        Create GIF
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="videoGifResult" class="mt-4 text-center" style="display:none;">
+                            <h5>Your GIF is Ready!</h5>
+                            <img id="videoGeneratedGif" class="img-fluid border rounded shadow-sm mb-3" alt="Generated GIF from video">
+                             <a href="#" class="btn btn-success" id="downloadVideoGifBtn" download="video-gif.gif"><i class="fas fa-download"></i> Download GIF</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -196,6 +275,22 @@
         const gifQualityValue = document.getElementById('gifQualityValue');
         const regenerateBtn = document.getElementById('regenerateBtn');
         const loadingSpinner = document.getElementById('loading-spinner');
+
+        // --- Video UI Elements ---
+        const videoInput = document.getElementById('videoInput');
+        const videoUploadArea = document.getElementById('videoUploadArea');
+        const videoWorkspace = document.getElementById('videoWorkspace');
+        const videoPreview = document.getElementById('videoPreview');
+        const startTimeInput = document.getElementById('startTime');
+        const endTimeInput = document.getElementById('endTime');
+        const videoGifQuality = document.getElementById('videoGifQuality');
+        const videoGifQualityValue = document.getElementById('videoGifQualityValue');
+        const createVideoGifBtn = document.getElementById('createVideoGifBtn');
+        const videoGifSpinner = document.getElementById('videoGifSpinner');
+        const videoGifResult = document.getElementById('videoGifResult');
+        const videoGeneratedGif = document.getElementById('videoGeneratedGif');
+        const downloadVideoGifBtn = document.getElementById('downloadVideoGifBtn');
+
 
         // --- Navigation ---
         const navigateTo = (step) => {
@@ -275,7 +370,97 @@
             toStep2Btn.disabled = false;
         };
 
-        // --- GIF Generation ---
+        // --- Video to GIF Logic ---
+        videoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('video/')) {
+                const videoURL = URL.createObjectURL(file);
+                videoPreview.src = videoURL;
+                videoWorkspace.style.display = 'block';
+                videoUploadArea.style.display = 'none';
+
+                videoPreview.onloadedmetadata = () => {
+                    endTimeInput.value = Math.min(5, Math.floor(videoPreview.duration));
+                    endTimeInput.max = Math.floor(videoPreview.duration);
+                    startTimeInput.max = Math.floor(videoPreview.duration);
+                };
+            } else {
+                alert('Please select a valid video file (MP4 or WebM).');
+            }
+        });
+        
+        videoGifQuality.addEventListener('input', (e) => videoGifQualityValue.textContent = e.target.value);
+
+        createVideoGifBtn.addEventListener('click', async () => {
+            videoGifSpinner.style.display = 'inline-block';
+            createVideoGifBtn.disabled = true;
+
+            const startTime = parseFloat(startTimeInput.value);
+            const endTime = parseFloat(endTimeInput.value);
+
+            if (startTime >= endTime) {
+                alert('Start time must be less than end time.');
+                videoGifSpinner.style.display = 'none';
+                createVideoGifBtn.disabled = false;
+                return;
+            }
+
+            const workerUrl = await getWorkerUrl();
+            if (!workerUrl) {
+                alert('Failed to initialize GIF encoder.');
+                videoGifSpinner.style.display = 'none';
+                createVideoGifBtn.disabled = false;
+                return;
+            }
+            
+            const gif = new GIF({
+                workers: 2,
+                quality: parseInt(videoGifQuality.value, 10),
+                workerScript: workerUrl,
+                width: videoPreview.videoWidth,
+                height: videoPreview.videoHeight
+            });
+
+            const frameDelay = 100; // approx 10 FPS
+            
+            let currentTime = startTime;
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = videoPreview.videoWidth;
+            canvas.height = videoPreview.videoHeight;
+            const ctx = canvas.getContext('2d');
+
+            const addFrame = () => {
+                return new Promise(resolve => {
+                    videoPreview.currentTime = currentTime;
+                    videoPreview.onseeked = () => {
+                        ctx.drawImage(videoPreview, 0, 0, canvas.width, canvas.height);
+                        gif.addFrame(canvas, {copy: true, delay: frameDelay});
+                        currentTime += frameDelay / 1000;
+                        resolve();
+                    };
+                });
+            };
+
+            while (currentTime < endTime) {
+                await addFrame();
+            }
+
+            gif.on('finished', (blob) => {
+                const url = URL.createObjectURL(blob);
+                videoGeneratedGif.src = url;
+                downloadVideoGifBtn.href = url;
+                videoGifResult.style.display = 'block';
+
+                videoGifSpinner.style.display = 'none';
+                createVideoGifBtn.disabled = false;
+            });
+
+            gif.render();
+        });
+
+
+        // --- GIF Generation (from images) ---
         const getWorkerUrl = async () => {
             if (workerScriptUrl) {
                 return workerScriptUrl;
