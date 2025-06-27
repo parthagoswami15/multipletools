@@ -1,234 +1,369 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Character Counter - Multi-Tools</title>
+    <title>Character Counter | Multi-Tools</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-
 <body>
-    <header class="header">
-        <div class="logo">
-            <a href="index.html">Multi-Tools</a>
-        </div>
-        <nav class="nav">
-            <ul class="nav-list">
-                <li class="nav-item dropdown">
-                    <a href="#" class="dropbtn">Calculators</a>
-                    <div class="dropdown-content">
-                        <a href="age-calculator.html">Age Calculator</a>
-                        <a href="bmi-calculator.html">BMI Calculator</a>
-                        <a href="discount-calculator.html">Discount Calculator</a>
-                        <a href="loan-emi-calculator.html">Loan EMI Calculator</a>
-                        <a href="percentage-calculator.html">Percentage Calculator</a>
-                        <a href="scientific-calculator.html">Scientific Calculator</a>
-                        <a href="tip-calculator.html">Tip Calculator</a>
-                            </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="dropbtn">Converters</a>
-                    <div class="dropdown-content">
-                        <a href="angle-converter.html">Angle Converter</a>
-                        <a href="binary-to-decimal-converter.html">Binary to Decimal Converter</a>
-                        <a href="case-converter.html">Case Converter</a>
-                        <a href="data-storage-converter.html">Data Storage Converter</a>
-                        <a href="energy-converter.html">Energy Converter</a>
-                        <a href="fuel-efficiency-converter.html">Fuel Efficiency Converter</a>
-                        <a href="length-converter.html">Length Converter</a>
-                        <a href="pressure-converter.html">Pressure Converter</a>
-                        <a href="speed-converter.html">Speed Converter</a>
-                        <a href="temperature-converter.html">Temperature Converter</a>
-                        <a href="volume-converter.html">Volume Converter</a>
-                        <a href="weight-converter.html">Weight Converter</a>
-                                        </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="dropbtn">Image Tools</a>
-                    <div class="dropdown-content">
-                        <a href="image-compressor.html">Image Compressor</a>
-                        <a href="image-cropper.html">Image Cropper</a>
-                        <a href="image-resizer.html">Image Resizer</a>
-                        <a href="image-to-base64.html">Image to Base64</a>
-                        <a href="image-to-jpeg.html">Image to JPEG</a>
-                        <a href="image-to-jpg.html">Image to JPG</a>
-                        <a href="image-to-pdf.html">Image to PDF</a>
-                        <a href="image-to-png.html">Image to PNG</a>
-                        <a href="webp-to-png.html">WebP to PNG</a>
-                                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="dropbtn">PDF Tools</a>
-                    <div class="dropdown-content">
-                        <a href="pdf-to-ppt.html">PDF to PPT</a>
-                        <a href="pdf-to-word.html">PDF to Word</a>
-                        <a href="ppt-to-pdf.html">PPT to PDF</a>
-                        <a href="word-to-pdf.html">Word to PDF</a>
-                                </div>
-                </li>
-                 <li class="nav-item dropdown">
-                    <a href="#" class="dropbtn">Generators</a>
-                    <div class="dropdown-content">
-                        <a href="barcode-generator.html">Barcode Generator</a>
-                        <a href="business-name-generator.html">Business Name Generator</a>
-                        <a href="color-palette-generator.html">Color Palette Generator</a>
-                        <a href="fancy-text-generator.html">Fancy Text Generator</a>
-                        <a href="hashtag-generator.html">Hashtag Generator</a>
-                        <a href="htaccess-redirect-generator.html">HTAccess Redirect Generator</a>
-                        <a href="invoice-generator.html">Invoice Generator</a>
-                        <a href="lottery-number-generator.html">Lottery Number Generator</a>
-                        <a href="meta-tag-generator.html">Meta Tag Generator</a>
-                        <a href="qr-code-generator.html">QR Code Generator</a>
-                        <a href="random-number-generator.html">Random Number Generator</a>
-                        <a href="robots-txt-generator.html">Robots.txt Generator</a>
-                        <a href="sitemap-generator.html">Sitemap Generator</a>
-                        <a href="story-plot-generator.html">Story Plot Generator</a>
-                        <a href="wedding-invitation-generator.html">Wedding Invitation Generator</a>
-                                        </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="dropbtn">Web Tools</a>
-                    <div class="dropdown-content">
-                        <a href="backlink-checker.html">Backlink Checker</a>
-                        <a href="color-code-picker.html">Color Code Picker</a>
-                        <a href="css-minifier.html">CSS Minifier</a>
-                        <a href="domain-authority-checker.html">Domain Authority Checker</a>
-                        <a href="google-index-checker.html">Google Index Checker</a>
-                        <a href="html-to-markdown.html">HTML to Markdown</a>
-                        <a href="ip-address-lookup.html">IP Address Lookup</a>
-                        <a href="javascript-minifier.html">JavaScript Minifier</a>
-                        <a href="json-formatter.html">JSON Formatter</a>
-                        <a href="keyword-density-checker.html">Keyword Density Checker</a>
-                        <a href="markdown-to-html.html">Markdown to HTML</a>
-                        <a href="mobile-friendly-test.html">Mobile Friendly Test</a>
-                        <a href="page-speed-checker.html">Page Speed Checker</a>
-                        <a href="sql-formatter.html">SQL Formatter</a>
-                        <a href="url-encoder-decoder.html">URL Encoder/Decoder</a>
-                        <a href="xml-sitemap-validator.html">XML Sitemap Validator</a>
-                        <a href="youtube-tags-extractor.html">YouTube Tags Extractor</a>
-                                    </div>
-                </li>
-                 <li class="nav-item dropdown">
-                    <a href="#" class="dropbtn">Miscellaneous Tools</a>
-                    <div class="dropdown-content">
-                        <a href="character-counter.html">Character Counter</a>
-                        <a href="currency-converter.html">Currency Converter</a>
-                        <a href="daily-planner-creator.html">Daily Planner Creator</a>
-                        <a href="dice-roller-simulator.html">Dice Roller Simulator</a>
-                        <a href="emoji-keyboard.html">Emoji Keyboard</a>
-                        <a href="facebook-video-downloader.html">Facebook Video Downloader</a>
-                        <a href="flip-a-coin-simulator.html">Flip a Coin Simulator</a>
-                        <a href="gif-maker.html">GIF Maker</a>
-                        <a href="grammar-checker.html">Grammar Checker</a>
-                        <a href="instagram-photo-downloader.html">Instagram Photo Downloader</a>
-                        <a href="internet-speed-test.html">Internet Speed Test</a>
-                        <a href="meme-generator.html">Meme Generator</a>
-                        <a href="password-strength-checker.html">Password Strength Checker</a>
-                        <a href="plagiarism-checker.html">Plagiarism Checker</a>
-                        <a href="random-text-generator.html">Random Text Generator</a>
-                        <a href="resume-builder.html">Resume Builder</a>
-                        <a href="screenshot-to-pdf.html">Screenshot to PDF</a>
-                        <a href="social-media-post-generator.html">Social Media Post Generator</a>
-                        <a href="speech-to-text.html">Speech to Text</a>
-                        <a href="text-to-speech.html">Text to Speech</a>
-                        <a href="tiktok-video-downloader.html">TikTok Video Downloader</a>
-                        <a href="time-zone-converter.html">Time Zone Converter</a>
-                        <a href="twitter-character-counter.html">Twitter Character Counter</a>
-                        <a href="twitter-video-downloader.html">Twitter Video Downloader</a>
-                        <a href="word-counter.html">Word Counter</a>
-                        <a href="youtube-thumbnail-downloader.html">YouTube Thumbnail Downloader</a>
-                                </div>
-                </li>
+    <header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">
+        <i class="fas fa-tools"></i> Multi-Tools
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">
+              <i class="fas fa-home"></i> Home
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="imageToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-image"></i> Image Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="imageToolsDropdown">
+              <li><a class="dropdown-item" href="image-to-png.html">Image to PNG</a></li>
+              <li><a class="dropdown-item" href="image-to-jpg.html">Image to JPG</a></li>
+              <li><a class="dropdown-item" href="image-resizer.html">Image Resizer</a></li>
+              <li><a class="dropdown-item" href="image-compressor.html">Image Compressor</a></li>
+              <li><a class="dropdown-item" href="image-cropper.html">Image Cropper</a></li>
+              <li><a class="dropdown-item" href="image-to-base64.html">Image to Base64</a></li>
+              <li><a class="dropdown-item" href="webp-to-png.html">WebP to PNG</a></li>
+              <li><a class="dropdown-item" href="gif-maker.html">GIF Maker</a></li>
+              <li><a class="dropdown-item" href="qr-code-generator.html">QR Code Generator</a></li>
+              <li><a class="dropdown-item" href="screenshot-to-pdf.html">Screenshot to PDF</a></li>
+              <li><a class="dropdown-item" href="image-to-jpeg.html">Image to JPEG</a></li>
             </ul>
-        </nav>
-        <div class="mobile-nav-toggle">
-            <i class="fas fa-bars"></i>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="textToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-font"></i> Text Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="textToolsDropdown">
+              <li><a class="dropdown-item" href="word-counter.html">Word Counter</a></li>
+              <li><a class="dropdown-item" href="character-counter.html">Character Counter</a></li>
+              <li><a class="dropdown-item" href="case-converter.html">Case Converter</a></li>
+              <li><a class="dropdown-item" href="plagiarism-checker.html">Plagiarism Checker</a></li>
+              <li><a class="dropdown-item" href="grammar-checker.html">Grammar Checker</a></li>
+              <li><a class="dropdown-item" href="text-to-speech.html">Text-to-Speech</a></li>
+              <li><a class="dropdown-item" href="speech-to-text.html">Speech-to-Text</a></li>
+              <li><a class="dropdown-item" href="url-encoder-decoder.html">URL Encoder/Decoder</a></li>
+              <li><a class="dropdown-item" href="fancy-text-generator.html">Fancy Text Generator</a></li>
+              <li><a class="dropdown-item" href="random-text-generator.html">Random Text Generator</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="convertToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-exchange-alt"></i> Convert Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="convertToolsDropdown">
+              <li><a class="dropdown-item" href="word-to-pdf.html">Word to PDF</a></li>
+              <li><a class="dropdown-item" href="pdf-to-word.html">PDF to Word</a></li>
+              <li><a class="dropdown-item" href="image-to-pdf.html">Image to PDF</a></li>
+              <li><a class="dropdown-item" href="pdf-to-ppt.html">PDF to PPT</a></li>
+              <li><a class="dropdown-item" href="ppt-to-pdf.html">PPT to PDF</a></li>
+              <li><a class="dropdown-item" href="word-to-ppt.html">Word to PPT</a></li>
+              <li><a class="dropdown-item" href="ppt-to-word.html">PPT to Word</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="unitConvertersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-ruler-combined"></i> Unit Converters
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="unitConvertersDropdown">
+              <li><a class="dropdown-item" href="length-converter.html">Length Converter</a></li>
+              <li><a class="dropdown-item" href="weight-converter.html">Weight Converter</a></li>
+              <li><a class="dropdown-item" href="speed-converter.html">Speed Converter</a></li>
+              <li><a class="dropdown-item" href="temperature-converter.html">Temperature Converter</a></li>
+              <li><a class="dropdown-item" href="volume-converter.html">Volume Converter</a></li>
+              <li><a class="dropdown-item" href="data-storage-converter.html">Data Storage Converter</a></li>
+              <li><a class="dropdown-item" href="energy-converter.html">Energy Converter</a></li>
+              <li><a class="dropdown-item" href="pressure-converter.html">Pressure Converter</a></li>
+              <li><a class="dropdown-item" href="fuel-efficiency-converter.html">Fuel Efficiency Converter</a></li>
+              <li><a class="dropdown-item" href="angle-converter.html">Angle Converter</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="seoToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-search"></i> SEO Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="seoToolsDropdown">
+              <li><a class="dropdown-item" href="mobile-friendly-test.html">Mobile-Friendly Test</a></li>
+              <li><a class="dropdown-item" href="page-speed-checker.html">Page Speed Checker</a></li>
+              <li><a class="dropdown-item" href="keyword-density-checker.html">Keyword Density Checker</a></li>
+              <li><a class="dropdown-item" href="backlink-checker.html">Backlink Checker</a></li>
+              <li><a class="dropdown-item" href="domain-authority-checker.html">Domain Authority Checker</a></li>
+              <li><a class="dropdown-item" href="google-index-checker.html">Google Index Checker</a></li>
+              <li><a class="dropdown-item" href="meta-tag-generator.html">Meta Tag Generator</a></li>
+              <li><a class="dropdown-item" href="robots-txt-generator.html">Robots.txt Generator</a></li>
+              <li><a class="dropdown-item" href="sitemap-generator.html">Sitemap Generator</a></li>
+              <li><a class="dropdown-item" href="xml-sitemap-validator.html">XML Sitemap Validator</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="developerToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-code"></i> Developer Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="developerToolsDropdown">
+              <li><a class="dropdown-item" href="json-formatter.html">JSON Formatter</a></li>
+              <li><a class="dropdown-item" href="html-to-markdown.html">HTML to Markdown</a></li>
+              <li><a class="dropdown-item" href="css-minifier.html">CSS Minifier</a></li>
+              <li><a class="dropdown-item" href="javascript-minifier.html">JavaScript Minifier</a></li>
+              <li><a class="dropdown-item" href="sql-formatter.html">SQL Formatter</a></li>
+              <li><a class="dropdown-item" href="htaccess-redirect-generator.html">HTACCESS Redirect</a></li>
+              <li><a class="dropdown-item" href="markdown-to-html.html">Markdown to HTML</a></li>
+              <li><a class="dropdown-item" href="color-code-picker.html">Color Code Picker</a></li>
+              <li><a class="dropdown-item" href="base64-encoder-decoder.html">Base64 Encoder/Decoder</a></li>
+              <li><a class="dropdown-item" href="ip-address-lookup.html">IP Address Lookup</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="socialMediaToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-share-alt"></i> Social Media Tools
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="socialMediaToolsDropdown">
+              <li><a class="dropdown-item" href="youtube-thumbnail-downloader.html">YouTube Thumbnail Downloader</a></li>
+              <li><a class="dropdown-item" href="instagram-photo-downloader.html">Instagram Photo Downloader</a></li>
+              <li><a class="dropdown-item" href="twitter-video-downloader.html">Twitter Video Downloader</a></li>
+              <li><a class="dropdown-item" href="facebook-video-downloader.html">Facebook Video Downloader</a></li>
+              <li><a class="dropdown-item" href="tiktok-video-downloader.html">TikTok Video Downloader</a></li>
+              <li><a class="dropdown-item" href="youtube-tags-extractor.html">YouTube Tags Extractor</a></li>
+              <li><a class="dropdown-item" href="hashtag-generator.html">Hashtag Generator</a></li>
+              <li><a class="dropdown-item" href="social-media-post-generator.html">Social Media Post Generator</a></li>
+              <li><a class="dropdown-item" href="emoji-keyboard.html">Emoji Keyboard</a></li>
+              <li><a class="dropdown-item" href="twitter-character-counter.html">Twitter Character Counter</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="mathToolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-calculator"></i> Math & Calculators
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="mathToolsDropdown">
+              <li><a class="dropdown-item" href="percentage-calculator.html">Percentage Calculator</a></li>
+              <li><a class="dropdown-item" href="age-calculator.html">Age Calculator</a></li>
+              <li><a class="dropdown-item" href="bmi-calculator.html">BMI Calculator</a></li>
+              <li><a class="dropdown-item" href="loan-emi-calculator.html">Loan EMI Calculator</a></li>
+              <li><a class="dropdown-item" href="scientific-calculator.html">Scientific Calculator</a></li>
+              <li><a class="dropdown-item" href="discount-calculator.html">Discount Calculator</a></li>
+              <li><a class="dropdown-item" href="currency-converter.html">Currency Converter</a></li>
+              <li><a class="dropdown-item" href="time-zone-converter.html">Time Zone Converter</a></li>
+              <li><a class="dropdown-item" href="binary-to-decimal-converter.html">Binary to Decimal</a></li>
+              <li><a class="dropdown-item" href="tip-calculator.html">Tip Calculator</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-info-circle"></i> About
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-envelope"></i> Contact
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+
+    <div class="container my-4">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="ad-placeholder" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title mb-4">Character Counter</h1>
+                        <div id="tool-ui">
+                            <div class="mb-3">
+                                <label for="textInput" class="form-label">Enter or paste your text</label>
+                                <textarea class="form-control" id="textInput" rows="10" placeholder="Type or paste your text here to analyze characters..."></textarea>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-3 col-sm-6 mb-2">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h3 class="text-primary" id="totalChars">0</h3>
+                                            <small class="text-muted">Total Characters</small>
                                         </div>
-    </header>
-    <main class="tool-page">
-        <div class="tool-container">
-            <h1>Character Counter</h1>
-            <div class="tool-content">
-                <div class="input-group">
-                    <label for="textInput">Enter Text:</label>
-                    <textarea id="textInput" placeholder="Type or paste your text here..."></textarea>
                                     </div>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-label">Characters (with spaces):</span>
-                        <span class="stat-value" id="charWithSpaces">0</span>
                                 </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Characters (without spaces):</span>
-                        <span class="stat-value" id="charWithoutSpaces">0</span>
+                                <div class="col-md-3 col-sm-6 mb-2">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h3 class="text-success" id="charsNoSpace">0</h3>
+                                            <small class="text-muted">Characters (no spaces)</small>
                                         </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Words:</span>
-                        <span class="stat-value" id="wordCount">0</span>
                                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Lines:</span>
-                        <span class="stat-value" id="lineCount">0</span>
                                 </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Sentences:</span>
-                        <span class="stat-value" id="sentenceCount">0</span>
+                                <div class="col-md-3 col-sm-6 mb-2">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h3 class="text-info" id="letters">0</h3>
+                                            <small class="text-muted">Letters</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-6 mb-2">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h3 class="text-warning" id="numbers">0</h3>
+                                            <small class="text-muted">Numbers</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Character Breakdown</h5>
+                                            <p class="mb-1">Spaces: <strong id="spaces">0</strong></p>
+                                            <p class="mb-1">Punctuation: <strong id="punctuation">0</strong></p>
+                                            <p class="mb-1">Special Characters: <strong id="specialChars">0</strong></p>
+                                            <p class="mb-1">Uppercase Letters: <strong id="uppercase">0</strong></p>
+                                            <p class="mb-1">Lowercase Letters: <strong id="lowercase">0</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Most Common Characters</h5>
+                                            <div id="charFrequency"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Paragraphs:</span>
-                        <span class="stat-value" id="paragraphCount">0</span>
+                </div>
+                <div class="ad-placeholder mt-4" style="height:90px; background:#f1f1f1; border:1px dashed #ccc;">Ad Space</div>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <div class="ad-placeholder mb-4" style="height:250px; background:#f1f1f1; border:1px dashed #ccc;">Sidebar Ad</div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Related Tools</h5>
+                        <ul class="list-unstyled mb-0" id="related-tools">
+                            <li><a href="word-counter.html">Word Counter</a></li>
+                            <li><a href="case-converter.html">Case Converter</a></li>
+                            <li><a href="fancy-text-generator.html">Fancy Text Generator</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2024 Multi-Tools. All rights reserved.</p>
-            <div class="social-links">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        </div>
     </div>
-    </footer>
+
+    <footer class="bg-light text-center text-lg-start mt-4">
+  <div class="container p-4">
+    <div class="row">
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Contact Us</h5>
+        <p>Email: info@multitools.com</p>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Follow Us</h5>
+        <a href="#" class="me-2">Twitter</a>
+        <a href="#" class="me-2">Facebook</a>
+        <a href="#">Instagram</a>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="text-uppercase">Legal</h5>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+    © 2024 Multi-Tools. All rights reserved.
+  </div>
+</footer> 
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="main.js"></script>
     <script>
         const textInput = document.getElementById('textInput');
         
-        function updateStats() {
+        textInput.addEventListener('input', function() {
+            analyzeCharacters();
+        });
+
+        function analyzeCharacters() {
             const text = textInput.value;
             
-            // Characters with spaces
-            document.getElementById('charWithSpaces').textContent = text.length;
+            // Total characters
+            document.getElementById('totalChars').textContent = text.length;
             
             // Characters without spaces
-            document.getElementById('charWithoutSpaces').textContent = text.replace(/\s/g, '').length;
+            document.getElementById('charsNoSpace').textContent = text.replace(/\s/g, '').length;
             
-            // Words
-            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
-            document.getElementById('wordCount').textContent = words.length;
+            // Letters
+            const letters = text.match(/[a-zA-Z]/g) || [];
+            document.getElementById('letters').textContent = letters.length;
             
-            // Lines
-            const lines = text.split('\n').filter(line => line.trim().length > 0);
-            document.getElementById('lineCount').textContent = lines.length;
+            // Numbers
+            const numbers = text.match(/[0-9]/g) || [];
+            document.getElementById('numbers').textContent = numbers.length;
             
-            // Sentences
-            const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0);
-            document.getElementById('sentenceCount').textContent = sentences.length;
+            // Spaces
+            const spaces = text.match(/\s/g) || [];
+            document.getElementById('spaces').textContent = spaces.length;
             
-            // Paragraphs
-            const paragraphs = text.split(/\n\s*\n/).filter(para => para.trim().length > 0);
-            document.getElementById('paragraphCount').textContent = paragraphs.length;
+            // Punctuation
+            const punctuation = text.match(/[.,!?;:'"()]/g) || [];
+            document.getElementById('punctuation').textContent = punctuation.length;
+            
+            // Special characters
+            const specialChars = text.match(/[^a-zA-Z0-9\s.,!?;:'"()]/g) || [];
+            document.getElementById('specialChars').textContent = specialChars.length;
+            
+            // Uppercase letters
+            const uppercase = text.match(/[A-Z]/g) || [];
+            document.getElementById('uppercase').textContent = uppercase.length;
+            
+            // Lowercase letters
+            const lowercase = text.match(/[a-z]/g) || [];
+            document.getElementById('lowercase').textContent = lowercase.length;
+            
+            // Character frequency
+            analyzeCharacterFrequency(text);
         }
-        
-        textInput.addEventListener('input', updateStats);
-        textInput.addEventListener('paste', updateStats);
+
+        function analyzeCharacterFrequency(text) {
+            const charCount = {};
+            const cleanText = text.toLowerCase().replace(/\s/g, '');
+            
+            for (let char of cleanText) {
+                charCount[char] = (charCount[char] || 0) + 1;
+            }
+            
+            const sortedChars = Object.entries(charCount)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5);
+            
+            let frequencyHtml = '';
+            sortedChars.forEach(([char, count]) => {
+                frequencyHtml += `<p class="mb-1">"${char}": <strong>${count}</strong></p>`;
+            });
+            
+            document.getElementById('charFrequency').innerHTML = frequencyHtml || '<p class="text-muted">No characters found</p>';
+        }
     </script>
 </body>
-
 </html> 
