@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image HD Enhance (Upscale)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div id="header"></div>
+  <div class="container mt-4">
+    <div class="ad-section" id="ad-header">Ad Space (Header)</div>
+    <h1>Image HD Enhance (Upscale)</h1>
+    <p>Upscale your image to a higher resolution. (Note: This does not add real detail, but increases the size using smooth interpolation.)</p>
+    <input type="file" id="image-input" accept="image/*" class="form-control mb-3">
+    <div class="form-group">
+      <label for="scale-select">Scale Factor:</label>
+      <select id="scale-select" class="form-control w-auto d-inline-block ml-2">
+        <option value="2">2x</option>
+        <option value="3">3x</option>
+        <option value="4">4x</option>
+      </select>
+      <button id="upscale-btn" class="btn btn-primary ml-3" disabled>Upscale Image</button>
+    </div>
+    <div id="preview" class="mb-3"></div>
+    <div id="result"></div>
+    <div class="ad-section" id="ad-footer">Ad Space (Footer)</div>
+  </div>
+  <div id="footer"></div>
+  <script src="../assets/js/header.js"></script>
+  <script src="../assets/js/footer.js"></script>
+  <script>
+    const imageInput = document.getElementById('image-input');
+    const upscaleBtn = document.getElementById('upscale-btn');
+    const scaleSelect = document.getElementById('scale-select');
+    const preview = document.getElementById('preview');
+    const result = document.getElementById('result');
+    let imageFile = null;
+    let img = null;
+
+    imageInput.addEventListener('change', function() {
+      imageFile = this.files[0];
+      result.innerHTML = '';
+      preview.innerHTML = '';
+      if (imageFile) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          img = new Image();
+          img.onload = function() {
+            preview.innerHTML = `<strong>Preview:</strong><br><img src="${img.src}" style="max-width:300px;max-height:200px;" class="img-thumbnail">`;
+            upscaleBtn.disabled = false;
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(imageFile);
+      } else {
+        upscaleBtn.disabled = true;
+      }
+    });
+
+    upscaleBtn.addEventListener('click', function() {
+      if (!img) return;
+      const scale = parseInt(scaleSelect.value);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        result.innerHTML = `<strong>Upscaled Image:</strong><br><img src="${url}" style="max-width:400px;max-height:300px;" class="img-thumbnail mb-2"><br><a href="${url}" download="upscaled.png" class="btn btn-success">Download Upscaled Image</a>`;
+      }, 'image/png');
+    });
+  </script>
+</body>
+</html> 

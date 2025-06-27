@@ -1,30 +1,127 @@
-<footer class="bg-light text-center text-lg-start mt-4">
-  <div class="container p-4">
+<footer class="bg-dark text-white mt-5">
+  <div class="container py-5">
     <div class="row">
-      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-        <h5 class="text-uppercase">Contact Us</h5>
-        <p>Email: info@multitools.com</p>
-      </div>
-      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-        <h5 class="text-uppercase">Follow Us</h5>
-        <a href="#" class="me-2">Twitter</a>
-        <a href="#" class="me-2">Facebook</a>
-        <a href="#">Instagram</a>
-      </div>
-      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-        <h5 class="text-uppercase">Legal</h5>
-        <a href="#">Privacy Policy</a>
-      </div>
-      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-        <h5 class="text-uppercase">Live Viewers</h5>
-        <p id="live-viewers" class="d-flex align-items-center justify-content-center justify-content-lg-start">
-            <i class="fas fa-circle text-success me-2" style="font-size: 0.5rem;"></i>
-            <span class="fw-bold">...</span>
+      <div class="col-lg-4 col-md-6 mb-4">
+        <h5 class="mb-3">
+          <i class="fas fa-tools text-primary mr-2"></i>
+          <span class="text-primary">Multi</span><span class="text-light">Tools</span>
+        </h5>
+        <p class="text-muted">
+          Your one-stop destination for 100+ free online tools. From image processing to text editing, 
+          SEO optimization to calculations - we've got everything you need.
         </p>
+        <div class="social-links">
+          <a href="#" class="text-white mr-3" title="Facebook">
+            <i class="fab fa-facebook-f fa-lg"></i>
+          </a>
+          <a href="#" class="text-white mr-3" title="Twitter">
+            <i class="fab fa-twitter fa-lg"></i>
+          </a>
+          <a href="#" class="text-white mr-3" title="Instagram">
+            <i class="fab fa-instagram fa-lg"></i>
+          </a>
+          <a href="#" class="text-white mr-3" title="LinkedIn">
+            <i class="fab fa-linkedin-in fa-lg"></i>
+          </a>
+          <a href="#" class="text-white" title="YouTube">
+            <i class="fab fa-youtube fa-lg"></i>
+          </a>
+        </div>
+      </div>
+      
+      <div class="col-lg-2 col-md-6 mb-4">
+        <h6 class="text-primary mb-3">Quick Links</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a href="index.html#image-tools" class="text-muted">Image Tools</a>
+          </li>
+          <li class="mb-2">
+            <a href="index.html#text-tools" class="text-muted">Text Tools</a>
+          </li>
+          <li class="mb-2">
+            <a href="index.html#developer-tools" class="text-muted">Developer Tools</a>
+          </li>
+          <li class="mb-2">
+            <a href="index.html#calculator-tools" class="text-muted">Calculators</a>
+          </li>
+          <li class="mb-2">
+            <a href="index.html#seo-tools" class="text-muted">SEO Tools</a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h6 class="text-primary mb-3">Popular Tools</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <a href="tools/image-to-png.html" class="text-muted">Image to PNG Converter</a>
+          </li>
+          <li class="mb-2">
+            <a href="tools/word-counter.html" class="text-muted">Word Counter</a>
+          </li>
+          <li class="mb-2">
+            <a href="tools/qr-code-generator.html" class="text-muted">QR Code Generator</a>
+          </li>
+          <li class="mb-2">
+            <a href="tools/password-generator.html" class="text-muted">Password Generator</a>
+          </li>
+          <li class="mb-2">
+            <a href="tools/color-picker.html" class="text-muted">Color Picker</a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="col-lg-3 col-md-6 mb-4">
+        <h6 class="text-primary mb-3">Contact Info</h6>
+        <ul class="list-unstyled">
+          <li class="mb-2">
+            <i class="fas fa-envelope text-primary mr-2"></i>
+            <a href="mailto:contact@multitools.com" class="text-muted">contact@multitools.com</a>
+          </li>
+          <li class="mb-2">
+            <i class="fas fa-globe text-primary mr-2"></i>
+            <a href="#" class="text-muted">www.multitools.com</a>
+          </li>
+          <li class="mb-2">
+            <i class="fas fa-clock text-primary mr-2"></i>
+            <span class="text-muted">24/7 Available</span>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
-  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-    © 2024 Multi-Tools. All rights reserved.
+  
+  <div class="bg-darker py-3">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <p class="mb-0 text-muted">
+            &copy; 2024 Multi-Tools. All rights reserved.
+          </p>
+        </div>
+        <div class="col-md-6 text-md-right">
+          <a href="#" class="text-muted mr-3">Privacy Policy</a>
+          <a href="#" class="text-muted mr-3">Terms of Service</a>
+          <a href="#" class="text-muted">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
   </div>
-</footer> 
+</footer>
+
+<style>
+.bg-darker {
+  background-color: #1a1a1a !important;
+}
+
+.social-links a:hover {
+  color: #007bff !important;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: #007bff !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+</style> 
