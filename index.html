@@ -536,21 +536,19 @@
 
   <div id="footer"></div>
 
-  <script src="script.js"></script>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+////
   <script>
   function sendHeightToParent() {
     if (window.parent !== window) {
-      window.parent.postMessage({
-        iframeHeight: document.body.scrollHeight
-      }, "*");
+      const height = document.documentElement.scrollHeight;
+      window.parent.postMessage({ iframeHeight: height }, "*");
     }
   }
 
   window.addEventListener("load", sendHeightToParent);
   window.addEventListener("resize", sendHeightToParent);
-  setTimeout(sendHeightToParent, 500); // fallback after render
+  setTimeout(sendHeightToParent, 500); // fallback after rendering
 </script>
 
 </body>
